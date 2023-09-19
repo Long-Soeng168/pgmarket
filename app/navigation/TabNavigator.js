@@ -1,0 +1,77 @@
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
+import HomeNavigator from "./HomeNavigator";
+import FavoriteNavigator from "./FavoriteNavigator";
+import CartNavigator from "./CartNavigator";
+import AccountNavigator from "./AccountNavigator";
+
+const Tab = createBottomTabNavigator();
+
+export default function TabNavigator() {
+    return (
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+            <Tab.Screen
+                name="Home"
+                component={HomeNavigator}
+                options={{
+                    tabBarLabel: "Home",
+                    tabBarStyle: { padding: 5 },
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons
+                            name="home-outline"
+                            color={color}
+                            size={size * 1.1}
+                        />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Favorite"
+                component={FavoriteNavigator}
+                options={{
+                    tabBarLabel: "Favorite",
+                    tabBarStyle: { padding: 5 },
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons
+                            name="cards-heart-outline"
+                            color={color}
+                            size={size * 1.1}
+                        />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Cart"
+                component={CartNavigator}
+                options={{
+                    tabBarLabel: "Cart",
+                    tabBarStyle: { padding: 5 },
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons
+                            name="cart-outline"
+                            color={color}
+                            size={size * 1.1}
+                        />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Account"
+                component={AccountNavigator}
+                options={{
+                    tabBarLabel: "Account",
+                    tabBarStyle: { padding: 5 },
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons
+                            name="account-outline"
+                            color={color}
+                            size={size * 1.1}
+                        />
+                    ),
+                }}
+            />
+        </Tab.Navigator>
+    );
+}
