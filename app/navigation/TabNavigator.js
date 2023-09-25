@@ -18,9 +18,9 @@ export default function TabNavigator() {
                 options={{
                     tabBarLabel: "Home",
                     tabBarStyle: { padding: 5 },
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size, focused }) => (
                         <MaterialCommunityIcons
-                            name="home-outline"
+                            name={focused ? "home" : "home-outline"}
                             color={color}
                             size={size * 1.1}
                         />
@@ -33,9 +33,11 @@ export default function TabNavigator() {
                 options={{
                     tabBarLabel: "Favorite",
                     tabBarStyle: { padding: 5 },
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size, focused }) => (
                         <MaterialCommunityIcons
-                            name="cards-heart-outline"
+                            name={
+                                focused ? "cards-heart" : "cards-heart-outline"
+                            }
                             color={color}
                             size={size * 1.1}
                         />
@@ -48,9 +50,9 @@ export default function TabNavigator() {
                 options={{
                     tabBarLabel: "Cart",
                     tabBarStyle: { padding: 5 },
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size, focused }) => (
                         <MaterialCommunityIcons
-                            name="cart-outline"
+                            name={focused ? "cart" : "cart-outline"}
                             color={color}
                             size={size * 1.1}
                         />
@@ -63,9 +65,9 @@ export default function TabNavigator() {
                 options={{
                     tabBarLabel: "Account",
                     tabBarStyle: { padding: 5 },
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color, size, focused }) => (
                         <MaterialCommunityIcons
-                            name="account-outline"
+                            name={focused ? "account" : "account-outline"}
                             color={color}
                             size={size * 1.1}
                         />

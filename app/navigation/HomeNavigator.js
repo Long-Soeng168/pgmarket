@@ -16,7 +16,10 @@ export default function HomeNavigator() {
             <Stack.Screen
                 name="ProductDetailScreen"
                 component={ProductDetailScreen}
-                options={{}}
+                options={{
+                    title: "Product Detail",
+                    headerTitleAlign: "center",
+                }}
             />
         </Stack.Navigator>
     );
