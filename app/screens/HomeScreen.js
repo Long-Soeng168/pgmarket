@@ -19,13 +19,12 @@ import ListHeader from "../components/ListHeader";
 import ImagesSlider from "../components/ImagesSlider";
 import categories from "../config/categories";
 import Card from "../components/Card";
-import Category from "../components/Category";
+import CategoryComponent from "../components/CategoryComponent";
 import ActivityIndicator from "../components/ActivityIndicator";
 import colors from "../config/colors";
 
 export default function HomeScreen() {
     const [isFetching, setIsFetching] = React.useState(true);
-    const [isError, setIsError] = React.useState(false);
     const [products, setProducts] = React.useState([]);
 
     const [images, setImages] = React.useState([
@@ -44,9 +43,8 @@ export default function HomeScreen() {
             .then((rest) => rest.json())
             .then((data) => {
                 setProducts(data);
-                setIsError(false);
             })
-            .catch((err) => setIsError(true))
+            .catch((err) => console.log(err))
             .finally(() => setIsFetching(false));
     };
     React.useEffect(() => {
@@ -56,81 +54,66 @@ export default function HomeScreen() {
     return (
         <View style={{ flex: 1 }}>
             <ActivityIndicator visibility={isFetching} />
-            {isError ? (
-                <View
-                    style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
-                    <Text>Cannot get data please retry again</Text>
-                </View>
-            ) : (
-                !isFetching && (
-                    <ScrollView>
-                        <View style={styles.body}>
-                            <Header />
-                            <ImagesSlider images={images} />
-                            {/* Categories */}
-                            <FlatList
-                                horizontal
-                                showsHorizontalScrollIndicator={false}
-                                data={categories}
-                                renderItem={({ item }) => (
-                                    <Category item={item} />
-                                )}
-                                contentContainerStyle={{
-                                    padding: 10,
-                                }}
-                            />
-                            {/* List items */}
-                            <View style={styles.listContainer}>
-                                {/* New Arrival */}
-                                <View style={{ marginBottom: 30 }}>
-                                    <ListHeader
-                                        title="New Arrival"
-                                        onPress={() => {}}
-                                    />
-                                    <FlatList
-                                        data={newArrival}
-                                        horizontal
-                                        showsHorizontalScrollIndicator={false}
-                                        renderItem={({ item }) => (
-                                            <Card item={item} />
-                                        )}
-                                        contentContainerStyle={{
-                                            gap: 20,
-                                            paddingHorizontal: 10,
-                                        }}
-                                    />
-                                    <View>
-                                        <Text>Last component</Text>
-                                    </View>
-                                </View>
-                                {/* All Product */}
-                                <View>
-                                    <ListHeader
-                                        title="All Product"
-                                        onPress={() => {}}
-                                    />
-                                    <FlatList
-                                        data={products}
-                                        horizontal
-                                        showsHorizontalScrollIndicator={false}
-                                        renderItem={({ item }) => (
-                                            <Card item={item} />
-                                        )}
-                                        contentContainerStyle={{
-                                            gap: 20,
-                                            paddingHorizontal: 10,
-                                        }}
-                                    />
-                                </View>
+            {!isFetching && (
+                <ScrollView>
+                    <View style={styles.body}>
+                        <Header />
+                        <ImagesSlider images={images} />
+                        {/* Categories */}
+                        <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={categories}
+                            renderItem={({ item }) => (
+                                <CategoryComponent item={item} />
+                            )}
+                            contentContainerStyle={{
+                                padding: 10,
+                            }}
+                        />
+                        {/* List items */}
+                        <View style={styles.listContainer}>
+                            {/* New Arrival */}
+                            <View style={{ marginBottom: 30 }}>
+                                <ListHeader
+                                    title="New Arrival"
+                                    onPress={() => {}}
+                                />
+                                <FlatList
+                                    data={newArrival}
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item }) => (
+                                        <Card item={item} />
+                                    )}
+                                    contentContainerStyle={{
+                                        gap: 20,
+                                        paddingHorizontal: 10,
+                                    }}
+                                />
+                            </View>
+                            {/* All Product */}
+                            <View>
+                                <ListHeader
+                                    title="All Product"
+                                    onPress={() => {}}
+                                />
+                                <FlatList
+                                    data={products}
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item }) => (
+                                        <Card item={item} />
+                                    )}
+                                    contentContainerStyle={{
+                                        gap: 20,
+                                        paddingHorizontal: 10,
+                                    }}
+                                />
                             </View>
                         </View>
-                    </ScrollView>
-                )
+                    </View>
+                </ScrollView>
             )}
 
             <StatusBar />

@@ -3,14 +3,14 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Card({ item }) {
+export default function Card({ item, width = 160 }) {
     const navigation = useNavigation();
 
     return (
         <TouchableOpacity
             onPress={() => navigation.push("ProductDetailScreen", item)}
         >
-            <View style={styles.container}>
+            <View style={[styles.container, { width: width }]}>
                 <Image
                     style={styles.image}
                     source={{
@@ -35,7 +35,7 @@ export default function Card({ item }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 160,
+        // width: 160,
         borderRadius: 15,
         overflow: "hidden",
         backgroundColor: colors.light,

@@ -40,28 +40,32 @@ export default function ProductDetailScreen({ route }) {
                     uri: item.image,
                 }}
             />
-            <View style={{ padding: 10 }}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.price}>$ {item.price}</Text>
-                <View>
-                    <Text style={{ fontSize: 18, fontWeight: "500" }}>
-                        Description :
-                    </Text>
-                    <Text style={styles.description}>{item.description}</Text>
+            <View style={{ backgroundColor: colors.white }}>
+                <View style={{ padding: 10 }}>
+                    <Text style={styles.title}>{item.title}</Text>
+                    <Text style={styles.price}>$ {item.price}</Text>
+                    <View>
+                        <Text style={{ fontSize: 18, fontWeight: "500" }}>
+                            Description :
+                        </Text>
+                        <Text style={styles.description}>
+                            {item.description}
+                        </Text>
+                    </View>
                 </View>
-            </View>
-            <View style={{ marginBottom: 30 }}>
-                <ListHeader title="Relate Product" onPress={() => {}} />
-                <FlatList
-                    data={products}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({ item }) => <Card item={item} />}
-                    contentContainerStyle={{
-                        gap: 20,
-                        paddingHorizontal: 10,
-                    }}
-                />
+                <View style={{ marginBottom: 30 }}>
+                    <ListHeader title="Relate Product" onPress={() => {}} />
+                    <FlatList
+                        data={products}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) => <Card item={item} />}
+                        contentContainerStyle={{
+                            gap: 20,
+                            paddingHorizontal: 10,
+                        }}
+                    />
+                </View>
             </View>
         </ScrollView>
     );
