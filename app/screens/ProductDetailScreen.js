@@ -10,6 +10,7 @@ import {
 import ListHeader from "../components/ListHeader";
 import Card from "../components/Card";
 import colors from "../config/colors";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 export default function ProductDetailScreen({ route }) {
     const item = route.params;
@@ -55,16 +56,19 @@ export default function ProductDetailScreen({ route }) {
                 </View>
                 <View style={{ marginBottom: 30 }}>
                     <ListHeader title="Relate Product" onPress={() => {}} />
-                    <FlatList
-                        data={products}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => <Card item={item} />}
-                        contentContainerStyle={{
-                            gap: 20,
-                            paddingHorizontal: 10,
-                        }}
-                    />
+                    <ActivityIndicator visibility={isFetching} />
+                    {!isFetching && (
+                        <FlatList
+                            data={products}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => <Card item={item} />}
+                            contentContainerStyle={{
+                                gap: 20,
+                                paddingHorizontal: 10,
+                            }}
+                        />
+                    )}
                 </View>
             </View>
         </ScrollView>

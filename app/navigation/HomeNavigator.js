@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
 import CategoryScreen from "../screens/CategoryScreen";
+import SearchScreen from "../screens/SearchScreen";
+import SeeMoreScreen from "../screens/SeeMoreScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +31,20 @@ export default function HomeNavigator() {
                     title: route.params.title,
                     headerTitleAlign: "center",
                 })}
+            />
+            <Stack.Screen
+                name="SeeMoreScreen"
+                component={SeeMoreScreen}
+                options={{
+                    // headerShown: false
+                    title: "All Product",
+                    headerTitleAlign: "center",
+                }}
+            />
+            <Stack.Screen
+                name="SearchScreen"
+                component={SearchScreen}
+                options={{ headerShown: false }}
             />
         </Stack.Navigator>
     );

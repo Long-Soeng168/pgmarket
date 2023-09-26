@@ -1,29 +1,22 @@
 import React from "react";
 import {
-    Button,
     FlatList,
-    Image,
     ScrollView,
     StatusBar,
     StyleSheet,
-    Text,
-    TouchableOpacity,
     View,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import ListCard from "../components/ListCard";
 import ListHeader from "../components/ListHeader";
 import ImagesSlider from "../components/ImagesSlider";
 import categories from "../config/categories";
 import Card from "../components/Card";
 import CategoryComponent from "../components/CategoryComponent";
 import ActivityIndicator from "../components/ActivityIndicator";
+import HomeHeader from "../components/HomeHeader";
 import colors from "../config/colors";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
     const [isFetching, setIsFetching] = React.useState(true);
     const [products, setProducts] = React.useState([]);
 
@@ -57,7 +50,7 @@ export default function HomeScreen() {
             {!isFetching && (
                 <ScrollView>
                     <View style={styles.body}>
-                        <Header />
+                        <HomeHeader />
                         <ImagesSlider images={images} />
                         {/* Categories */}
                         <FlatList
@@ -77,7 +70,9 @@ export default function HomeScreen() {
                             <View style={{ marginBottom: 30 }}>
                                 <ListHeader
                                     title="New Arrival"
-                                    onPress={() => {}}
+                                    onPress={() => {
+                                        navigation.navigate("SeeMoreScreen");
+                                    }}
                                 />
                                 <FlatList
                                     data={newArrival}
@@ -96,7 +91,9 @@ export default function HomeScreen() {
                             <View>
                                 <ListHeader
                                     title="All Product"
-                                    onPress={() => {}}
+                                    onPress={() => {
+                                        navigation.navigate("SeeMoreScreen");
+                                    }}
                                 />
                                 <FlatList
                                     data={products}
@@ -132,47 +129,3 @@ const styles = StyleSheet.create({
         // paddingTop: 20,
     },
 });
-
-//Header component
-function Header() {
-    return (
-        <View
-            style={{
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: 10,
-                backgroundColor: colors.white,
-            }}
-        >
-            <View
-                style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                }}
-            >
-                <Image
-                    style={{
-                        width: 140,
-                        height: 40,
-                        bottom: 3,
-                        objectFit: "contain",
-                    }}
-                    source={require("../assets/images/pgmarketLogo.jpg")}
-                />
-                {/* <Text style={{ fontSize: 20, fontWeight: "500" }}>
-                    PG Market
-                </Text> */}
-            </View>
-            <TouchableOpacity>
-                <Feather
-                    style={{ paddingRight: 10 }}
-                    name="search"
-                    size={30}
-                    color="black"
-                />
-            </TouchableOpacity>
-        </View>
-    );
-}
