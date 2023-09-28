@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     image: {
+        backgroundColor: colors.white,
         aspectRatio: 1,
         borderRadius: 10,
         objectFit: "contain",

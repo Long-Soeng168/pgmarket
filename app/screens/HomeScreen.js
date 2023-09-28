@@ -1,10 +1,12 @@
 import React from "react";
 import {
     FlatList,
+    SafeAreaView,
     ScrollView,
     StatusBar,
     StyleSheet,
     View,
+    Platform,
 } from "react-native";
 
 import ListHeader from "../components/ListHeader";
@@ -49,7 +51,7 @@ export default function HomeScreen({ navigation }) {
             <ActivityIndicator visibility={isFetching} />
             {!isFetching && (
                 <ScrollView>
-                    <View style={styles.body}>
+                    <View style={[styles.body]}>
                         <HomeHeader />
                         <ImagesSlider images={images} />
                         {/* Categories */}

@@ -6,7 +6,12 @@ import {
     StyleSheet,
     Text,
     View,
+    TouchableOpacity,
 } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+
+import { favoritesContext } from "../../App";
+
 import ListHeader from "../components/ListHeader";
 import Card from "../components/Card";
 import colors from "../config/colors";
@@ -18,6 +23,8 @@ export default function ProductDetailScreen({ route }) {
     const [isFetching, setIsFetching] = React.useState(true);
     const [isError, setIsError] = React.useState(false);
     const [products, setProducts] = React.useState([]);
+
+    const [favorites, setFavorites] = React.useContext(favoritesContext);
 
     const getData = () => {
         fetch(`https://fakestoreapi.com/products/category/${category}`)
@@ -35,6 +42,40 @@ export default function ProductDetailScreen({ route }) {
     }, []);
     return (
         <ScrollView>
+            {/* Add and Remove to Favorite */}
+            {favorites.includes(item) ? (
+                <TouchableOpacity
+                    onPress={() => {
+                        setFavorites((preFavorites) =>
+                            preFavorites.filter((data) => data.id !== item.id)
+                        );
+                    }}
+                    style={{
+                        position: "absolute",
+                        zIndex: 100,
+                        right: 10,
+                        top: 10,
+                    }}
+                >
+                    <FontAwesome name="heart" size={30} color="dodgerblue" />
+                </TouchableOpacity>
+            ) : (
+                <TouchableOpacity
+                    onPress={() => {
+                        setFavorites([...favorites, item]);
+                    }}
+                    style={{
+                        position: "absolute",
+                        zIndex: 100,
+                        right: 10,
+                        top: 10,
+                    }}
+                >
+                    <FontAwesome name="heart" size={30} color="grey" />
+                </TouchableOpacity>
+            )}
+
+            {/* End Add to favorite */}
             <Image
                 style={styles.image}
                 source={{

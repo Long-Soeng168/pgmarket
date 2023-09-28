@@ -1,7 +1,7 @@
 // import { StyleSheet } from "react-native";
 
 export default {
-    primary: "#126867",
+    primary: "dodgerblue",
     secondary: "#D4D4F7",
     accent: "#26D9D6",
     white: "white",
