@@ -5,6 +5,7 @@ import ProductDetailScreen from "../screens/ProductDetailScreen";
 import CategoryScreen from "../screens/CategoryScreen";
 import SearchScreen from "../screens/SearchScreen";
 import SeeMoreScreen from "../screens/SeeMoreScreen";
+import ShopScreen from "../screens/ShopScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,11 @@ export default function HomeNavigator() {
             <Stack.Screen
                 name="SearchScreen"
                 component={SearchScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ShopScreen"
+                component={ShopScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

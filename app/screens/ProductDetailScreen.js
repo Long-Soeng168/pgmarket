@@ -43,7 +43,7 @@ export default function ProductDetailScreen({ route }) {
     return (
         <ScrollView>
             {/* Add and Remove to Favorite */}
-            {favorites.includes(item) ? (
+            {favorites.some((favorite) => favorite.id === item.id) ? (
                 <TouchableOpacity
                     onPress={() => {
                         setFavorites((preFavorites) =>

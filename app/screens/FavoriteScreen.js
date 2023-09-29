@@ -22,7 +22,6 @@ export default function FavoriteScreen() {
                         numColumns={2}
                         data={favorites}
                         scrollEnabled={false}
-                        showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <Card item={item} width={width} />
                         )}
