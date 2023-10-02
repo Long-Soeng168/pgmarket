@@ -6,7 +6,7 @@ export default function Category({ item }) {
     const navigation = useNavigation();
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate("CategoryScreen", item)}
+            onPress={() => navigation.navigate("ShopCategoryScreen", item)}
         >
             <View
                 style={{

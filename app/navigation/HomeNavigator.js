@@ -6,6 +6,7 @@ import CategoryScreen from "../screens/CategoryScreen";
 import SearchScreen from "../screens/SearchScreen";
 import SeeMoreScreen from "../screens/SeeMoreScreen";
 import ShopScreen from "../screens/ShopScreen";
+import ShopCategoryScreen from "../screens/ShopCategoryScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,14 +26,14 @@ export default function HomeNavigator() {
                     headerTitleAlign: "center",
                 }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="CategoryScreen"
                 component={CategoryScreen}
                 options={({ route }) => ({
                     title: route.params.title,
                     headerTitleAlign: "center",
                 })}
-            />
+            /> */}
             <Stack.Screen
                 name="SeeMoreScreen"
                 component={SeeMoreScreen}
@@ -46,6 +47,11 @@ export default function HomeNavigator() {
                 name="SearchScreen"
                 component={SearchScreen}
                 options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ShopCategoryScreen"
+                component={ShopCategoryScreen}
+                options={{ title: "Shop Category" }}
             />
             <Stack.Screen
                 name="ShopScreen"

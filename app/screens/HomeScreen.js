@@ -68,10 +68,10 @@ export default function HomeScreen({ navigation }) {
                         />
                         {/* List items */}
                         <View style={styles.listContainer}>
-                            {/* New Arrival */}
+                            {/* New Products */}
                             <View style={{ marginBottom: 30 }}>
                                 <ListHeader
-                                    title="New Arrival"
+                                    title="New Products"
                                     onPress={() => {
                                         navigation.navigate("SeeMoreScreen");
                                     }}
@@ -89,10 +89,10 @@ export default function HomeScreen({ navigation }) {
                                     }}
                                 />
                             </View>
-                            {/* All Product */}
+                            {/* Best Selling */}
                             <View>
                                 <ListHeader
-                                    title="All Product"
+                                    title="Best Selling"
                                     onPress={() => {
                                         navigation.navigate("SeeMoreScreen");
                                     }}

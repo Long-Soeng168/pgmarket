@@ -9,10 +9,11 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
+import BackButton from "../components/BackButton";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
-export default function ShopScreen() {
+export default function ShopScreen({ navigation }) {
     const [selected, setSelected] = React.useState("Products");
 
     const [isFetching, setIsFetching] = React.useState(true);
@@ -41,6 +42,11 @@ export default function ShopScreen() {
                 <ActivityIndicator visibility={isFetching} />
                 {!isFetching && (
                     <ScrollView>
+                        <BackButton
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        />
                         {/* Shop Profile */}
                         <View style={{ marginBottom: 100 }}>
                             <Image
