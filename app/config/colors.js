@@ -3,7 +3,7 @@
 export default {
     primary: "dodgerblue",
     secondary: "#D4D4F7",
-    accent: "#26D9D6",
+    accent: "tomato",
     white: "white",
     black: "black",
     dark: "#343a40",

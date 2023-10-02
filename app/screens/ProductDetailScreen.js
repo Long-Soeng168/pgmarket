@@ -1,3 +1,4 @@
+import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import {
     FlatList,
@@ -5,17 +6,17 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    View,
     TouchableOpacity,
+    View,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 
 import { favoritesContext } from "../../App";
+import { cartContext } from "../../App";
 
-import ListHeader from "../components/ListHeader";
-import Card from "../components/Card";
-import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
+import Card from "../components/Card";
+import ListHeader from "../components/ListHeader";
+import colors from "../config/colors";
 
 export default function ProductDetailScreen({ route }) {
     const item = route.params;
@@ -25,6 +26,7 @@ export default function ProductDetailScreen({ route }) {
     const [products, setProducts] = React.useState([]);
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
+    const [cartItems, setCartItems] = React.useContext(cartContext);
 
     const getData = () => {
         fetch(`https://fakestoreapi.com/products/category/${category}`)
@@ -44,38 +46,26 @@ export default function ProductDetailScreen({ route }) {
         <ScrollView>
             {/* Add and Remove to Favorite */}
             {favorites.some((favorite) => favorite.id === item.id) ? (
-                <TouchableOpacity
+                // Remove Item
+                <FavoriteButton
                     onPress={() => {
                         setFavorites((preFavorites) =>
                             preFavorites.filter((data) => data.id !== item.id)
                         );
                     }}
-                    style={{
-                        position: "absolute",
-                        zIndex: 100,
-                        right: 10,
-                        top: 10,
-                    }}
-                >
-                    <FontAwesome name="heart" size={30} color="dodgerblue" />
-                </TouchableOpacity>
+                    color={colors.accent}
+                />
             ) : (
-                <TouchableOpacity
+                // Add Item
+                <FavoriteButton
                     onPress={() => {
                         setFavorites([...favorites, item]);
                     }}
-                    style={{
-                        position: "absolute",
-                        zIndex: 100,
-                        right: 10,
-                        top: 10,
-                    }}
-                >
-                    <FontAwesome name="heart" size={30} color="grey" />
-                </TouchableOpacity>
+                    color={colors.medium}
+                />
             )}
-
             {/* End Add to favorite */}
+
             <Image
                 style={styles.image}
                 source={{
@@ -86,8 +76,42 @@ export default function ProductDetailScreen({ route }) {
                 <View style={{ padding: 10 }}>
                     <Text style={styles.title}>{item.title}</Text>
                     <Text style={styles.price}>$ {item.price}</Text>
+                    {/* Add and Remove from Cart */}
+                    {cartItems.some((cartItem) => cartItem.id === item.id) ? (
+                        <CartButton
+                            title="REMOVE FROM CART"
+                            bgColor={colors.medium}
+                            onPress={() => {
+                                setCartItems((preCartItems) =>
+                                    preCartItems.filter(
+                                        (preCartItem) =>
+                                            preCartItem.id !== item.id
+                                    )
+                                );
+                            }}
+                        />
+                    ) : (
+                        <CartButton
+                            title="ADD TO CART"
+                            bgColor={colors.primary}
+                            onPress={() =>
+                                setCartItems((preCartItems) => [
+                                    ...preCartItems,
+                                    { ...item, quantity: 1 },
+                                ])
+                            }
+                        />
+                    )}
+                    {/* End Add and Remove from Cart */}
+
                     <View>
-                        <Text style={{ fontSize: 18, fontWeight: "500" }}>
+                        <Text
+                            style={{
+                                marginTop: 15,
+                                fontSize: 18,
+                                fontWeight: "500",
+                            }}
+                        >
                             Description :
                         </Text>
                         <Text style={styles.description}>
@@ -134,3 +158,55 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
 });
+
+//Favorite Button component
+function FavoriteButton({ color, onPress }) {
+    return (
+        <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPress}
+            style={{
+                position: "absolute",
+                zIndex: 100,
+                right: 10,
+                top: 10,
+            }}
+        >
+            <FontAwesome name="heart" size={30} color={color} />
+        </TouchableOpacity>
+    );
+}
+
+//Cart Button component
+function CartButton({ title, onPress, bgColor }) {
+    return (
+        <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPress}
+            style={{
+                backgroundColor: bgColor,
+                alignItems: "center",
+                padding: 10,
+            }}
+        >
+            <View
+                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+            >
+                <FontAwesome
+                    name="shopping-cart"
+                    size={24}
+                    color={colors.white}
+                />
+                <Text
+                    style={{
+                        color: colors.white,
+                        fontSize: 16,
+                        fontWeight: "500",
+                    }}
+                >
+                    {title}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    );
+}

@@ -8,10 +8,13 @@ import ShopCategoryScreen from "./app/screens/ShopCategoryScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export const favoritesContext = React.createContext();
+export const cartContext = React.createContext();
 
 export default function App() {
     const [favorites, setFavorites] = React.useState([]);
-    console.log(JSON.stringify(favorites, null, 2));
+    const [cartItems, setCartItems] = React.useState([]);
+    // console.log(JSON.stringify(favorites, null, 2));
+    console.log(JSON.stringify(cartItems, null, 2));
     return (
         // <NavigationContainer>
         //     <SafeAreaView>
@@ -21,11 +24,13 @@ export default function App() {
         // </NavigationContainer>
 
         <favoritesContext.Provider value={[favorites, setFavorites]}>
-            <NavigationContainer>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <TabNavigator />
-                </SafeAreaView>
-            </NavigationContainer>
+            <cartContext.Provider value={[cartItems, setCartItems]}>
+                <NavigationContainer>
+                    <SafeAreaView style={{ flex: 1 }}>
+                        <TabNavigator />
+                    </SafeAreaView>
+                </NavigationContainer>
+            </cartContext.Provider>
         </favoritesContext.Provider>
     );
 }

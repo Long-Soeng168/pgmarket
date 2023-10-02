@@ -51,7 +51,10 @@ export default function HomeNavigator() {
             <Stack.Screen
                 name="ShopCategoryScreen"
                 component={ShopCategoryScreen}
-                options={{ title: "Shop Category" }}
+                options={({ route }) => ({
+                    title: route.params.title + " Shops",
+                    headerTitleAlign: "center",
+                })}
             />
             <Stack.Screen
                 name="ShopScreen"

@@ -1,7 +1,9 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-export default function ShopCategoryScreen({ navigation }) {
+export default function ShopCategoryScreen({ navigation, route }) {
+    // const item = route.params;
+    // console.log(item);
     const shops = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     return (
         <View style={{ padding: 10 }}>
@@ -40,14 +42,14 @@ function ShopItem({ onPress }) {
                         borderRadius: 100,
                     }}
                     source={{
-                        uri: "https://source.unsplash.com/1024x768/?mountain",
+                        uri: "https://source.unsplash.com/Y9MoiZi9Rbg",
                     }}
                 />
                 <Text
                     numberOfLines={3}
                     style={{ textAlign: "center", fontSize: 14 }}
                 >
-                    Hello Shop
+                    ABC Shop
                 </Text>
             </View>
         </TouchableOpacity>

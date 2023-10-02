@@ -10,73 +10,57 @@ import { TouchableOpacity } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 
 export default function CartItem({ item }) {
-    const [isFetching, setIsFetching] = React.useState(true);
-    const [product, setProduct] = React.useState();
-    React.useEffect(() => {
-        fetch(`https://fakestoreapi.com/products/${item.productId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                // console.log(data);
-                setProduct(data);
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setIsFetching(false));
-    }, []);
-
     return (
         <View>
-            <ActivityIndicator visibility={isFetching} />
-            {!isFetching && (
-                <View style={styles.container}>
-                    <View style={styles.deleteBtn}>
-                        <Feather
-                            style={styles.deleteIcon}
-                            name="x"
-                            size={25}
-                            color={colors.danger}
-                        />
-                    </View>
-                    <Image
-                        style={styles.image}
-                        source={{
-                            uri: product.image,
-                        }}
+            <View style={styles.container}>
+                <View style={styles.deleteBtn}>
+                    <Feather
+                        style={styles.deleteIcon}
+                        name="x"
+                        size={25}
+                        color={colors.danger}
                     />
-                    <View style={styles.rightSideContainer}>
-                        <View style={styles.textContainer}>
-                            <Text numberOfLines={1} style={styles.title}>
-                                {product.title}
-                            </Text>
-                            <Text numberOfLines={1} style={styles.description}>
-                                {product.description}
-                            </Text>
-                            <Text numberOfLines={1} style={styles.pricePerUnit}>
-                                $ {product.price}
-                            </Text>
+                </View>
+                <Image
+                    style={styles.image}
+                    source={{
+                        uri: item.image,
+                    }}
+                />
+                <View style={styles.rightSideContainer}>
+                    <View style={styles.textContainer}>
+                        <Text numberOfLines={1} style={styles.title}>
+                            {item.title}
+                        </Text>
+                        <Text numberOfLines={1} style={styles.description}>
+                            {item.description}
+                        </Text>
+                        <Text numberOfLines={1} style={styles.pricePerUnit}>
+                            $ {item.price}
+                        </Text>
+                    </View>
+                    <View style={styles.updateContainer}>
+                        <View style={styles.updateQty}>
+                            <FontAwesome
+                                style={styles.decreaseQty}
+                                name="minus"
+                                size={20}
+                                color={colors.dark}
+                            />
+                            <Text style={styles.Qty}>{item.quantity}</Text>
+                            <FontAwesome
+                                style={styles.increaseQty}
+                                name="plus"
+                                size={20}
+                                color={colors.dark}
+                            />
                         </View>
-                        <View style={styles.updateContainer}>
-                            <View style={styles.updateQty}>
-                                <FontAwesome
-                                    style={styles.decreaseQty}
-                                    name="minus"
-                                    size={20}
-                                    color={colors.dark}
-                                />
-                                <Text style={styles.Qty}>{item.quantity}</Text>
-                                <FontAwesome
-                                    style={styles.increaseQty}
-                                    name="plus"
-                                    size={20}
-                                    color={colors.dark}
-                                />
-                            </View>
-                            <Text numberOfLines={1} style={styles.totalPrice}>
-                                $ {item.quantity * product.price}
-                            </Text>
-                        </View>
+                        <Text numberOfLines={1} style={styles.totalPrice}>
+                            $ {item.quantity * item.price}
+                        </Text>
                     </View>
                 </View>
-            )}
+            </View>
         </View>
     );
 }
@@ -116,10 +100,9 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         justifyContent: "flex-start",
-        gap: 2,
     },
 
-    title: { fontSize: 20, fontWeight: "500" },
+    title: { fontSize: 16, fontWeight: "500" },
     description: { fontSize: 14, color: colors.medium },
     pricePerUnit: { fontSize: 14, color: colors.dark },
 

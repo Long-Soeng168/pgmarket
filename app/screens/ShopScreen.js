@@ -60,7 +60,7 @@ export default function ShopScreen({ navigation }) {
                                     <Image
                                         style={styles.profileImage}
                                         source={{
-                                            uri: "https://source.unsplash.com/1024x768/?mountain",
+                                            uri: "https://source.unsplash.com/Y9MoiZi9Rbg",
                                         }}
                                     />
                                     <Text style={styles.profileTitle}>
