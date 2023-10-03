@@ -9,9 +9,12 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
-import { favoritesContext } from "../../App";
-import { cartContext } from "../../App";
+import { Modal } from "react-native";
+import ImageViewer from "react-native-image-zoom-viewer";
+
+import { cartContext, favoritesContext } from "../../App";
 
 import ActivityIndicator from "../components/ActivityIndicator";
 import Card from "../components/Card";
@@ -27,6 +30,9 @@ export default function ProductDetailScreen({ route }) {
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
     const [cartItems, setCartItems] = React.useContext(cartContext);
+
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const [images, setImages] = React.useState([]);
 
     const getData = () => {
         fetch(`https://fakestoreapi.com/products/category/${category}`)
@@ -79,12 +85,20 @@ export default function ProductDetailScreen({ route }) {
             )}
             {/* End Add to favorite */}
 
-            <Image
-                style={styles.image}
-                source={{
-                    uri: item.image,
+            <TouchableOpacity
+                onPress={() => {
+                    setModalVisible(true);
+                    setImages([{ url: item.image }]);
                 }}
-            />
+            >
+                <Image
+                    style={styles.image}
+                    source={{
+                        uri: item.image,
+                    }}
+                />
+            </TouchableOpacity>
+
             <View style={{ backgroundColor: colors.white }}>
                 <View style={{ padding: 10 }}>
                     <Text style={styles.title}>{item.title}</Text>
@@ -105,10 +119,35 @@ export default function ProductDetailScreen({ route }) {
                     )}
                     {/* End Add and Remove from Cart */}
 
-                    <View>
+                    <View style={{ marginTop: 25, alignItems: "flex-start" }}>
+                        {/* Video Play */}
+                        <View
+                            style={{
+                                backgroundColor: colors.secondary,
+                                borderRadius: 5,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                padding: 10,
+                                marginBottom: 10,
+                            }}
+                        >
+                            <Feather
+                                name="play"
+                                size={24}
+                                color={colors.dark}
+                            />
+                            <Text
+                                style={{
+                                    color: colors.dark,
+                                    textAlign: "center",
+                                    fontSize: 16,
+                                }}
+                            >
+                                Video
+                            </Text>
+                        </View>
                         <Text
                             style={{
-                                marginTop: 15,
                                 fontSize: 18,
                                 fontWeight: "500",
                             }}
@@ -138,6 +177,17 @@ export default function ProductDetailScreen({ route }) {
                     )}
                 </View>
             </View>
+            <Modal
+                visible={modalVisible}
+                transparent={true}
+                animationType="slide"
+            >
+                <ImageViewer
+                    enableSwipeDown={true}
+                    onSwipeDown={() => setModalVisible(false)}
+                    imageUrls={images}
+                />
+            </Modal>
         </ScrollView>
     );
 }

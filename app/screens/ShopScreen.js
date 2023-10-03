@@ -3,6 +3,9 @@ import { Dimensions, FlatList, ScrollView, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
+import { Modal } from "react-native";
+import ImageViewer from "react-native-image-zoom-viewer";
+
 import Card from "../components/Card";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -18,6 +21,9 @@ export default function ShopScreen({ navigation }) {
 
     const [isFetching, setIsFetching] = React.useState(true);
     const [products, setProducts] = React.useState([]);
+
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const [images, setImages] = React.useState([]);
 
     const getData = () => {
         fetch(`https://fakestoreapi.com/products`)
@@ -49,20 +55,46 @@ export default function ShopScreen({ navigation }) {
                         />
                         {/* Shop Profile */}
                         <View style={{ marginBottom: 100 }}>
-                            <Image
-                                style={styles.coverImage}
-                                source={{
-                                    uri: "https://source.unsplash.com/1024x768/?mountain",
+                            {/* Cover */}
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={() => {
+                                    setModalVisible(true);
+                                    setImages([
+                                        {
+                                            url: "https://source.unsplash.com/1024x768/?mountain",
+                                        },
+                                    ]);
                                 }}
-                            />
+                            >
+                                <Image
+                                    style={styles.coverImage}
+                                    source={{
+                                        uri: "https://source.unsplash.com/1024x768/?mountain",
+                                    }}
+                                />
+                            </TouchableOpacity>
                             <View>
                                 <View style={styles.profile}>
-                                    <Image
-                                        style={styles.profileImage}
-                                        source={{
-                                            uri: "https://source.unsplash.com/Y9MoiZi9Rbg",
+                                    {/* Profile Image */}
+                                    <TouchableOpacity
+                                        activeOpacity={0.8}
+                                        onPress={() => {
+                                            setModalVisible(true);
+                                            setImages([
+                                                {
+                                                    url: "https://source.unsplash.com/Y9MoiZi9Rbg",
+                                                },
+                                            ]);
                                         }}
-                                    />
+                                    >
+                                        <Image
+                                            style={styles.profileImage}
+                                            source={{
+                                                uri: "https://source.unsplash.com/Y9MoiZi9Rbg",
+                                            }}
+                                        />
+                                    </TouchableOpacity>
                                     <Text style={styles.profileTitle}>
                                         ABC Shop
                                     </Text>
@@ -127,6 +159,17 @@ export default function ShopScreen({ navigation }) {
                     </ScrollView>
                 )}
             </View>
+            <Modal
+                visible={modalVisible}
+                transparent={true}
+                animationType="slide"
+            >
+                <ImageViewer
+                    enableSwipeDown={true}
+                    onSwipeDown={() => setModalVisible(false)}
+                    imageUrls={images}
+                />
+            </Modal>
         </View>
     );
 }
