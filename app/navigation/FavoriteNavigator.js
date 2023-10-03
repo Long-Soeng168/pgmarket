@@ -8,7 +8,11 @@ const Stack = createNativeStackNavigator();
 export default function HomeNavigator() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="FavoriteScreen" component={FavoriteScreen} />
+            <Stack.Screen
+                name="FavoriteScreen"
+                component={FavoriteScreen}
+                options={{ title: "Favorite", headerTitleAlign: "center" }}
+            />
             <Stack.Screen
                 name="ProductDetailScreen"
                 component={ProductDetailScreen}

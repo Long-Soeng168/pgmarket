@@ -2,7 +2,7 @@
 
 export default {
     primary: "dodgerblue",
-    secondary: "#D4D4F7",
+    secondary: "#e1e1ff",
     accent: "tomato",
     white: "white",
     black: "black",
@@ -10,7 +10,7 @@ export default {
     medium: "#6c757d",
     mdLight: "#f3f3f3",
     light: "#f8f9fa",
-    danger: "#dc3545",
+    danger: "#f7495b",
     warning: "#ffc107",
     success: "#28a745",
 };

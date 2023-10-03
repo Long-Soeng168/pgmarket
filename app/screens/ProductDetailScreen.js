@@ -42,27 +42,40 @@ export default function ProductDetailScreen({ route }) {
     React.useEffect(() => {
         getData();
     }, []);
+
+    const removeFromFavorite = () => {
+        setFavorites((preFavorites) =>
+            preFavorites.filter((data) => data.id !== item.id)
+        );
+    };
+
+    const addToFavorite = () => {
+        setFavorites([...favorites, item]);
+    };
+
+    const removeFromCart = () => {
+        setCartItems((preCartItems) =>
+            preCartItems.filter((preCartItem) => preCartItem.id !== item.id)
+        );
+    };
+
+    const addToCart = () => {
+        setCartItems((preCartItems) => [
+            ...preCartItems,
+            { ...item, quantity: 1 },
+        ]);
+    };
+
     return (
         <ScrollView>
             {/* Add and Remove to Favorite */}
             {favorites.some((favorite) => favorite.id === item.id) ? (
-                // Remove Item
                 <FavoriteButton
-                    onPress={() => {
-                        setFavorites((preFavorites) =>
-                            preFavorites.filter((data) => data.id !== item.id)
-                        );
-                    }}
+                    onPress={removeFromFavorite}
                     color={colors.accent}
                 />
             ) : (
-                // Add Item
-                <FavoriteButton
-                    onPress={() => {
-                        setFavorites([...favorites, item]);
-                    }}
-                    color={colors.medium}
-                />
+                <FavoriteButton onPress={addToFavorite} color={colors.medium} />
             )}
             {/* End Add to favorite */}
 
@@ -81,25 +94,13 @@ export default function ProductDetailScreen({ route }) {
                         <CartButton
                             title="REMOVE FROM CART"
                             bgColor={colors.medium}
-                            onPress={() => {
-                                setCartItems((preCartItems) =>
-                                    preCartItems.filter(
-                                        (preCartItem) =>
-                                            preCartItem.id !== item.id
-                                    )
-                                );
-                            }}
+                            onPress={removeFromCart}
                         />
                     ) : (
                         <CartButton
                             title="ADD TO CART"
                             bgColor={colors.primary}
-                            onPress={() =>
-                                setCartItems((preCartItems) => [
-                                    ...preCartItems,
-                                    { ...item, quantity: 1 },
-                                ])
-                            }
+                            onPress={addToCart}
                         />
                     )}
                     {/* End Add and Remove from Cart */}
@@ -125,6 +126,7 @@ export default function ProductDetailScreen({ route }) {
                     {!isFetching && (
                         <FlatList
                             data={products}
+                            keyExtractor={(item) => item.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => <Card item={item} />}
@@ -172,7 +174,7 @@ function FavoriteButton({ color, onPress }) {
                 top: 10,
             }}
         >
-            <FontAwesome name="heart" size={30} color={color} />
+            <FontAwesome name="heart" size={35} color={color} />
         </TouchableOpacity>
     );
 }
@@ -187,6 +189,7 @@ function CartButton({ title, onPress, bgColor }) {
                 backgroundColor: bgColor,
                 alignItems: "center",
                 padding: 10,
+                borderRadius: 100,
             }}
         >
             <View

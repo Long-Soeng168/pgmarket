@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, TextInput, View } from "react-native";
+import { Image, KeyboardAvoidingView, TextInput, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import colors from "../config/colors";
 import { StyleSheet } from "react-native";
@@ -8,7 +8,9 @@ import { Text } from "react-native";
 
 export default function LoginScreen() {
     return (
-        <View style={{ flex: 1, backgroundColor: colors.white }}>
+        <KeyboardAvoidingView
+            style={{ flex: 1, backgroundColor: colors.white }}
+        >
             <View style={{ padding: 10, alignItems: "center" }}>
                 <Image
                     style={{
@@ -64,7 +66,7 @@ export default function LoginScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
