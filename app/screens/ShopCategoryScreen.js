@@ -4,7 +4,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 export default function ShopCategoryScreen({ navigation, route }) {
     // const item = route.params;
     // console.log(item);
-    const shops = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const shops = [1, 2, 3, 4, 5, 6, 7, 8];
     return (
         <View style={{ padding: 10 }}>
             <View

@@ -1,175 +1,221 @@
 import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
-import categories from "../config/allCategories";
+import HomeHeader from "../components/HomeHeader";
+import categories from "../config/allCategory";
+import { FullWindowOverlay } from "react-native-screens";
 
 export default function AllCategoryScreen() {
-    const [categorySelected, setCategorySelected] = React.useState(0);
-    const [subCategorySelected, setSubCategorySelected] = React.useState(0);
-    const [subItemSelected, setSubItemSelected] = React.useState(0);
-
-    const handleSelectCategory = (id) => {
-        setCategorySelected(id);
-        setSubCategorySelected(0);
-    };
-    const handleSelectSubCategory = (id) => {
-        setSubCategorySelected(id);
-    };
-
-    return (
-        <View style={{ flex: 1, backgroundColor: colors.white }}>
-            <FlatList
-                data={categories}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <Category
-                        item={item}
-                        categorySelected={categorySelected}
-                        handleSelectCategory={handleSelectCategory}
-                        subCategorySelected={subCategorySelected}
-                        handleSelectSubCategory={handleSelectSubCategory}
-                    />
-                )}
-                contentContainerStyle={{ gap: 5, margin: 10 }}
-            />
-        </View>
+    const [selected, setSelected] = React.useState("Categories");
+    const [categorySelected, setCategorySelected] = React.useState(
+        categories[0]
     );
-}
+    const subCategories = categorySelected.subCategories;
 
-function Category({
-    item,
-    categorySelected,
-    handleSelectCategory,
-    subCategorySelected,
-    handleSelectSubCategory,
-}) {
-    const subCategories = item.subCategories;
+    const handleCategoryIdSelect = (item) => {
+        setCategorySelected(item);
+    };
+
     return (
         <View>
-            <TouchableOpacity onPress={() => handleSelectCategory(item.id)}>
+            {/* Header */}
+            <HomeHeader />
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    borderBottomWidth: 1,
+                    borderColor: "lightgrey",
+                }}
+            >
+                <ShopSelection
+                    title="Categories"
+                    icon="apps"
+                    selected={selected}
+                    onPress={() => setSelected("Categories")}
+                />
+                <ShopSelection
+                    title="Brands"
+                    icon="progress-star"
+                    selected={selected}
+                    onPress={() => setSelected("Brands")}
+                />
+            </View>
+            {/* End Header */}
+            <View
+                style={{
+                    flexDirection: "row",
+                    height: "100%",
+                    backgroundColor: colors.white,
+                }}
+            >
+                {/* Left Side */}
                 <View
                     style={{
-                        padding: 5,
-                        backgroundColor: colors.secondary,
-                        flexDirection: "row",
+                        width: 140,
                         alignItems: "center",
-                        justifyContent: "space-between",
+                        paddingTop: 25,
+                        borderRightColor: colors.medium,
+                        borderRightWidth: 1,
                     }}
                 >
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 5,
-                        }}
-                    >
-                        <Image
-                            style={{
-                                width: 40,
-                                height: 40,
-                                objectFit: "contain",
-                            }}
-                            source={{ uri: item.image }}
-                        />
-                        <Text
-                            style={{
-                                backgroundColor: colors.secondary,
-                                fontSize: 16,
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {item.category}
-                        </Text>
-                    </View>
-                    <Feather
-                        name={
-                            categorySelected === item.id
-                                ? "chevron-down"
-                                : "chevron-right"
-                        }
-                        size={30}
-                        color="black"
+                    <FlatList
+                        data={categories}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => (
+                            <CategoryComponent
+                                item={item}
+                                handleCategoryIdSelect={handleCategoryIdSelect}
+                                categorySelected={categorySelected}
+                            />
+                        )}
                     />
                 </View>
-            </TouchableOpacity>
-            {categorySelected === item.id && (
-                <FlatList
-                    data={subCategories}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <SubCategory
-                            item={item}
-                            subCategorySelected={subCategorySelected}
-                            handleSelectSubCategory={handleSelectSubCategory}
-                        />
-                    )}
-                />
-            )}
+                {/* Right Side */}
+                <View
+                    style={{
+                        flex: 1,
+                        paddingTop: 25,
+                        alignItems: "center",
+                    }}
+                >
+                    <FlatList
+                        numColumns={2}
+                        data={subCategories}
+                        renderItem={({ item }) => (
+                            <SubCategoryComponent item={item} />
+                        )}
+                        columnWrapperStyle={{ gap: 15 }}
+                    />
+                </View>
+            </View>
         </View>
     );
 }
 
-function SubCategory({ item, subCategorySelected, handleSelectSubCategory }) {
-    const subCategoryItem = item.subCategoryItem;
-    return (
-        <View style={{ margin: 1 }}>
-            <TouchableOpacity onPress={() => handleSelectSubCategory(item.id)}>
-                <View
-                    style={{
-                        padding: 10,
-                        backgroundColor: colors.light,
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                >
-                    <Feather
-                        name={
-                            subCategorySelected === item.id
-                                ? "chevron-down"
-                                : "chevron-right"
-                        }
-                        size={20}
-                        color="black"
-                    />
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            fontWeight: "500",
-                        }}
-                    >
-                        {item.subCategoryTitle}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            {subCategorySelected === item.id && (
-                <FlatList
-                    data={subCategoryItem}
-                    keyExtractor={(item) => item}
-                    renderItem={({ item }) => <SubCategoryItem item={item} />}
-                />
-            )}
-        </View>
-    );
-}
-
-function SubCategoryItem({ item }) {
+// Selection Component
+function ShopSelection({ title, icon, selected, onPress }) {
+    const isSelected = title === selected;
     return (
         <TouchableOpacity
-            onPress={() => console.warn(item)}
+            opacity={0.8}
+            onPress={onPress}
             style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 5,
                 padding: 10,
-                paddingLeft: 30,
-                backgroundColor: colors.white,
+                backgroundColor: isSelected ? colors.mdLight : colors.white,
+                borderBottomWidth: isSelected ? 2 : 1,
+                borderColor: isSelected ? colors.primary : colors.mdLight,
+                top: 1,
             }}
         >
+            <MaterialCommunityIcons
+                name={icon} //appstore-o, bars
+                size={19}
+                color={isSelected ? colors.dark : colors.medium}
+            />
             <Text
                 style={{
                     fontSize: 16,
+                    color: isSelected ? colors.dark : colors.medium,
                 }}
             >
-                {item}
+                {title}
             </Text>
+        </TouchableOpacity>
+    );
+}
+
+// Category Component
+function CategoryComponent({ item, categorySelected, handleCategoryIdSelect }) {
+    const isSelected = categorySelected.id === item.id;
+    return (
+        <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => handleCategoryIdSelect(item)}
+        >
+            <View
+                style={{
+                    width: 100,
+                    height: 100,
+                    alignItems: "center",
+                    alignSelf: "flex-start",
+                }}
+            >
+                <Image
+                    style={{
+                        width: "80%",
+                        height: "60%",
+                        objectFit: "contain",
+                        borderWidth: isSelected ? 1.6 : 1,
+                        borderColor: isSelected ? colors.dark : colors.medium,
+                        borderRadius: 10,
+                    }}
+                    source={{
+                        uri:
+                            item.image ||
+                            "https://cdn-icons-png.flaticon.com/512/10701/10701484.png",
+                    }}
+                />
+                <Text
+                    numberOfLines={3}
+                    style={{
+                        textAlign: "center",
+                        fontSize: 14,
+                        color: isSelected ? colors.dark : colors.medium,
+                        fontWeight: isSelected ? "500" : "400",
+                    }}
+                >
+                    {item.category}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    );
+}
+
+// Sub Category
+function SubCategoryComponent({ onPress, item }) {
+    return (
+        <TouchableOpacity onPress={onPress}>
+            <View
+                style={{
+                    width: 100,
+                    height: 100,
+                    alignItems: "center",
+                    alignSelf: "flex-start",
+                }}
+            >
+                <Image
+                    style={{
+                        width: "80%",
+                        height: "60%",
+                        objectFit: "contain",
+                        // borderWidth: 1,
+                        // borderColor: colors.medium,
+                        borderRadius: 10,
+                    }}
+                    source={{
+                        uri:
+                            item.image ||
+                            "https://cdn-icons-png.flaticon.com/512/10701/10701484.png",
+                    }}
+                />
+                <Text
+                    numberOfLines={3}
+                    style={{
+                        textAlign: "center",
+                        fontSize: 14,
+                        color: colors.medium,
+                    }}
+                >
+                    {item.subCategoryTitle}
+                </Text>
+            </View>
         </TouchableOpacity>
     );
 }

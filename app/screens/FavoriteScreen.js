@@ -5,7 +5,7 @@ import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { favoritesContext } from "../../App";
 
-const width = Dimensions.get("screen").width / 2 - 20;
+const width = Dimensions.get("screen").width / 2 - 25;
 
 export default function FavoriteScreen() {
     const [favorites, setFavorites] = React.useContext(favoritesContext);
@@ -17,7 +17,7 @@ export default function FavoriteScreen() {
             }}
         >
             <ScrollView>
-                <View style={{ paddingVertical: 25 }}>
+                <View style={{ paddingVertical: 25, alignItems: "center" }}>
                     <FlatList
                         numColumns={2}
                         data={favorites}
@@ -26,11 +26,9 @@ export default function FavoriteScreen() {
                             <Card item={item} width={width} />
                         )}
                         contentContainerStyle={{
-                            gap: 10,
+                            gap: 15,
                         }}
-                        columnWrapperStyle={{
-                            justifyContent: "space-evenly",
-                        }}
+                        columnWrapperStyle={{ gap: 15 }}
                     />
                 </View>
             </ScrollView>

@@ -4,6 +4,7 @@ export default {
     primary: "dodgerblue",
     secondary: "#e1e1ff",
     accent: "tomato",
+    lightGreen: "rgb(221, 255, 221)",
     white: "white",
     black: "black",
     dark: "#343a40",

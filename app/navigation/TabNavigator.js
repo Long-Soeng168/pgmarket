@@ -39,7 +39,6 @@ export default function TabNavigator() {
                 name="AllCategoryScreen"
                 component={AllCategoryScreen}
                 options={{
-                    headerShown: true,
                     title: "All Category",
                     headerTitleAlign: "center",
                     tabBarLabel: "All Category",
