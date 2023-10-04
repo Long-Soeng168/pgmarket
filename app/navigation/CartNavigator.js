@@ -10,7 +10,10 @@ export default function HomeNavigator() {
             <Stack.Screen
                 name="CartScreen"
                 component={CartScreen}
-                options={{ title: "Cart", headerTitleAlign: "center" }}
+                options={{
+                    title: "Cart",
+                    headerTitleAlign: "center",
+                }}
             />
         </Stack.Navigator>
     );

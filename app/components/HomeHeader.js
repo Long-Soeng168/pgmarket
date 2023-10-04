@@ -30,7 +30,7 @@ export default function HomeHeader() {
                         bottom: 3,
                         objectFit: "contain",
                     }}
-                    source={require("../assets/images/pgmarketLogo.jpg")}
+                    source={require("../assets/images/pgmarket.jpg")}
                 />
                 {/* <Text style={{ fontSize: 20, fontWeight: "500" }}>
                             PG Market

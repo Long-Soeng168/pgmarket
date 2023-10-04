@@ -1,18 +1,24 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Ionicons } from "@expo/vector-icons";
 
 import HomeNavigator from "./HomeNavigator";
 import FavoriteNavigator from "./FavoriteNavigator";
 import CartNavigator from "./CartNavigator";
 import AccountNavigator from "./AccountNavigator";
+import AllCategoryScreen from "../screens/AllCategoryScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
     return (
         <Tab.Navigator
-            screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
+            screenOptions={{
+                headerShown: false,
+                tabBarHideOnKeyboard: true,
+                tabBarActiveTintColor: "tomato",
+            }}
         >
             <Tab.Screen
                 name="Home"
@@ -23,6 +29,24 @@ export default function TabNavigator() {
                     tabBarIcon: ({ color, size, focused }) => (
                         <MaterialCommunityIcons
                             name={focused ? "home" : "home-outline"}
+                            color={color}
+                            size={size * 1.1}
+                        />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="AllCategoryScreen"
+                component={AllCategoryScreen}
+                options={{
+                    headerShown: true,
+                    title: "All Category",
+                    headerTitleAlign: "center",
+                    tabBarLabel: "All Category",
+                    tabBarStyle: { padding: 5 },
+                    tabBarIcon: ({ color, size, focused }) => (
+                        <Ionicons
+                            name={focused ? "apps-sharp" : "apps-outline"}
                             color={color}
                             size={size * 1.1}
                         />

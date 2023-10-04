@@ -7,6 +7,7 @@ import {
     StyleSheet,
     View,
     Platform,
+    Text,
 } from "react-native";
 
 import ListHeader from "../components/ListHeader";
@@ -55,6 +56,17 @@ export default function HomeScreen({ navigation }) {
                         <HomeHeader />
                         <ImagesSlider images={images} />
                         {/* Categories */}
+                        <Text
+                            style={{
+                                marginLeft: 10,
+                                marginBottom: -5,
+                                marginTop: 15,
+                                fontSize: 20,
+                                fontWeight: "500",
+                            }}
+                        >
+                            Top Recommend Shops
+                        </Text>
                         <FlatList
                             horizontal
                             showsHorizontalScrollIndicator={false}
