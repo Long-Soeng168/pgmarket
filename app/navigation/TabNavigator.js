@@ -41,7 +41,7 @@ export default function TabNavigator() {
                 options={{
                     title: "All Category",
                     headerTitleAlign: "center",
-                    tabBarLabel: "All Category",
+                    tabBarLabel: "Categories",
                     tabBarStyle: { padding: 5 },
                     tabBarIcon: ({ color, size, focused }) => (
                         <Ionicons

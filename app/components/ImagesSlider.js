@@ -7,8 +7,8 @@ export default function ImagesSlider({ images }) {
             images={images}
             sliderBoxHeight={200}
             ImageComponentStyle={{
-                width: "95%",
-                borderRadius: 20,
+                width: "100%",
+                // borderRadius: 20,
             }}
             dotColor="#FFEE58"
             inactiveDotColor="#90A4AE"

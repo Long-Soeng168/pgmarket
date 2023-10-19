@@ -5,7 +5,7 @@ import ProductDetailScreen from "./app/screens/ProductDetailScreen";
 
 import ShopScreen from "./app/screens/ShopScreen";
 import ShopCategoryScreen from "./app/screens/ShopCategoryScreen";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native";
 
 export const favoritesContext = React.createContext();
 export const cartContext = React.createContext();

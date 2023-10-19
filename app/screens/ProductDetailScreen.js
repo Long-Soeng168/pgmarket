@@ -170,7 +170,7 @@ export default function ProductDetailScreen({ route }) {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => <Card item={item} />}
                             contentContainerStyle={{
-                                gap: 20,
+                                gap: 10,
                                 paddingHorizontal: 10,
                             }}
                         />

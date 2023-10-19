@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Card({ item, width = 160 }) {
+export default function Card({ item, width = 170 }) {
     const navigation = useNavigation();
 
     return (
@@ -48,10 +48,10 @@ const styles = StyleSheet.create({
         objectFit: "contain",
     },
     textContainer: { padding: 10, gap: 3 },
-    title: { fontSize: 20, fontWeight: "500" },
-    description: { fontSize: 14, color: colors.medium },
+    title: { fontSize: 12, fontWeight: "500" },
+    description: { fontSize: 10, color: colors.medium },
     price: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: "500",
         color: colors.danger,
     },

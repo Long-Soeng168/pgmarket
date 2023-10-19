@@ -8,6 +8,7 @@ import {
     View,
     Platform,
     Text,
+    Image,
 } from "react-native";
 
 import ListHeader from "../components/ListHeader";
@@ -61,8 +62,9 @@ export default function HomeScreen({ navigation }) {
                                 marginLeft: 10,
                                 marginBottom: -5,
                                 marginTop: 15,
-                                fontSize: 20,
+                                fontSize: 14,
                                 fontWeight: "500",
+                                color: 'tomato'
                             }}
                         >
                             Top Recommend Shops
@@ -96,11 +98,13 @@ export default function HomeScreen({ navigation }) {
                                         <Card item={item} />
                                     )}
                                     contentContainerStyle={{
-                                        gap: 20,
+                                        gap: 10,
                                         paddingHorizontal: 10,
                                     }}
                                 />
                             </View>
+                            {/* Banner 1 */}
+                            <BannerComponent />
                             {/* Best Selling */}
                             <View>
                                 <ListHeader
@@ -117,11 +121,12 @@ export default function HomeScreen({ navigation }) {
                                         <Card item={item} />
                                     )}
                                     contentContainerStyle={{
-                                        gap: 20,
+                                        gap: 10,
                                         paddingHorizontal: 10,
                                     }}
                                 />
                             </View>
+                            {/* Banner 2 */}
                         </View>
                     </View>
                 </ScrollView>
@@ -143,3 +148,26 @@ const styles = StyleSheet.create({
         // paddingTop: 20,
     },
 });
+
+
+// Banner Component
+function BannerComponent() {
+    return (
+        <View
+            style={{
+                padding: 10,
+                marginBottom: 10,
+            }}
+        >
+            <Image
+                source={{ uri: "https://source.unsplash.com/2cFZ_FB08UM" }}
+                style={{
+                    width: "100%",
+                    height: 70,
+                    objectFit: "cover",
+                    borderRadius: 10,
+                }}
+            />
+        </View>
+    );
+}

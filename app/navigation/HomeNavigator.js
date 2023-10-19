@@ -23,6 +23,7 @@ export default function HomeNavigator() {
                 component={ProductDetailScreen}
                 options={{
                     title: "Product Detail",
+                    headerTitleStyle: {color: "tomato"},
                     headerTitleAlign: "center",
                 }}
             />
@@ -39,7 +40,8 @@ export default function HomeNavigator() {
                 component={SeeMoreScreen}
                 options={{
                     // headerShown: false
-                    title: "All Product",
+                    title: "All Products",
+                    headerTitleStyle: {color: "tomato"},
                     headerTitleAlign: "center",
                 }}
             />

@@ -15,6 +15,12 @@ export default function HomeNavigator() {
             />
             <Stack.Screen
                 name="ProductDetailScreen"
+                options={{ 
+                    title: "Product Detail", 
+                    headerTitleAlign: "center" ,
+                    headerTitleStyle: {color: "tomato"},
+                }}
+
                 component={ProductDetailScreen}
             />
         </Stack.Navigator>

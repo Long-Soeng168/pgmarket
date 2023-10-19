@@ -29,8 +29,15 @@
     },
     "extra": {
       "eas": {
-        "projectId": "813c2aa5-89fa-429c-8a39-456314a1f14c"
+        "projectId": "33d15018-624f-4367-9e7a-b7727aa5b6d3"
       }
+    },
+    "owner": "longsoeng",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/33d15018-624f-4367-9e7a-b7727aa5b6d3"
     }
   }
 }

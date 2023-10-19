@@ -2,7 +2,7 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Category({ item }) {
+export default function CategoryComponent({ item }) {
     const navigation = useNavigation();
     return (
         <TouchableOpacity
@@ -22,7 +22,7 @@ export default function Category({ item }) {
                 <Text
                     style={{
                         textAlign: "center",
-                        fontSize: 12,
+                        fontSize: 10,
                     }}
                 >
                     {item.title}

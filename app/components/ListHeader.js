@@ -11,7 +11,7 @@ export default function ListHeader({ title, onPress }) {
                 padding: 10,
             }}
         >
-            <Text style={{ fontSize: 18, fontWeight: "500" }}>{title}</Text>
+            <Text style={{ fontSize: 14, fontWeight: "500", color: "tomato" }}>{title}</Text>
             <TouchableOpacity
                 onPress={onPress}
                 style={{
@@ -19,11 +19,11 @@ export default function ListHeader({ title, onPress }) {
                     alignItems: "center",
                 }}
             >
-                <Text style={{ fontSize: 18 }}>See more</Text>
+                <Text style={{ fontSize: 14, borderBottomColor: 'tomato', borderBottomWidth: 1 }}>See more</Text>
                 <MaterialCommunityIcons
-                    style={{ top: 2 }}
+                    style={{ top: 1 }}
                     name="chevron-double-right"
-                    size={28}
+                    size={18}
                     color="black"
                 />
             </TouchableOpacity>

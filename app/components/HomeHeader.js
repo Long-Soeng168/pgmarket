@@ -25,10 +25,11 @@ export default function HomeHeader() {
             >
                 <Image
                     style={{
-                        width: 140,
+                        width: 170,
                         height: 40,
+                        marginLeft: -5,
                         bottom: 3,
-                        objectFit: "contain",
+                        // objectFit: "contain",
                     }}
                     source={require("../assets/images/pgmarket.jpg")}
                 />
