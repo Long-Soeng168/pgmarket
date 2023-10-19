@@ -19,6 +19,7 @@ import CategoryComponent from "../components/CategoryComponent";
 import ActivityIndicator from "../components/ActivityIndicator";
 import HomeHeader from "../components/HomeHeader";
 import colors from "../config/colors";
+import Slider from "../components/Slider";
 
 export default function HomeScreen({ navigation }) {
     const [isFetching, setIsFetching] = React.useState(true);
@@ -28,6 +29,8 @@ export default function HomeScreen({ navigation }) {
         "https://source.unsplash.com/1024x768/?nature",
         "https://source.unsplash.com/1024x768/?tree",
         "https://source.unsplash.com/1024x768/?mountain",
+        "https://source.unsplash.com/1024x768/?river",
+        "https://source.unsplash.com/1024x768/?clothes",
     ]);
 
     let newArrival = [];
@@ -55,7 +58,7 @@ export default function HomeScreen({ navigation }) {
                 <ScrollView>
                     <View style={[styles.body]}>
                         <HomeHeader />
-                        <ImagesSlider images={images} />
+                        <Slider images={images} />
                         {/* Categories */}
                         <Text
                             style={{
@@ -129,6 +132,7 @@ export default function HomeScreen({ navigation }) {
                             {/* Banner 2 */}
                         </View>
                     </View>
+                    
                 </ScrollView>
             )}
 
