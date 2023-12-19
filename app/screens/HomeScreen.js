@@ -12,7 +12,6 @@ import {
 } from "react-native";
 
 import ListHeader from "../components/ListHeader";
-import ImagesSlider from "../components/ImagesSlider";
 import categories from "../config/categories";
 import Card from "../components/Card";
 import CategoryComponent from "../components/CategoryComponent";
