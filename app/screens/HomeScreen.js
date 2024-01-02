@@ -20,35 +20,42 @@ import HomeHeader from "../components/HomeHeader";
 import colors from "../config/colors";
 import Slider from "../components/Slider";
 
+const fetchData = async (url, setter) => {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setter(data);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export default function HomeScreen({ navigation }) {
     const [isFetching, setIsFetching] = React.useState(true);
-    const [products, setProducts] = React.useState([]);
+    const [newProducts, setNewProducts] = React.useState([]);
+    const [bestSellingProducts, setBestSellingProducts] = React.useState([]);
+    const [categories, setCategories] = React.useState([]);
 
-    const [images, setImages] = React.useState([
-        "https://source.unsplash.com/1024x768/?nature",
-        "https://source.unsplash.com/1024x768/?tree",
-        "https://source.unsplash.com/1024x768/?mountain",
-        "https://source.unsplash.com/1024x768/?river",
-        "https://source.unsplash.com/1024x768/?clothes",
-    ]);
+    const [slides, setSlides] = React.useState([]);
+    const [banners, setBanners] = React.useState([]);
 
-    let newArrival = [];
-    if (!isFetching) {
-        newArrival = products.slice(2, 10);
-    }
+   React.useEffect(() => {
+        const fetchDataAsync = async () => {
+            await fetchData("https://pgmarket.online/api/toprecommendshops", setCategories);
+            await fetchData("https://pgmarket.online/api/getnewproducts", setNewProducts);
+            await fetchData("https://pgmarket.online/api/getbestselling", setBestSellingProducts);
+            await fetchData("https://pgmarket.online/api/getslides", setSlides);
+            await fetchData("https://pgmarket.online/api/getbanners", setBanners);
+            
+            setIsFetching(false);
+        };
 
-    const getData = () => {
-        fetch("https://fakestoreapi.com/products")
-            .then((rest) => rest.json())
-            .then((data) => {
-                setProducts(data);
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setIsFetching(false));
-    };
-    React.useEffect(() => {
-        getData();
+        fetchDataAsync();
     }, []);
+    // End Get New Product 
+        
+        // console.log(JSON.stringify(categories, null, 2));
+        console.log(JSON.stringify(banners, null, 2));
 
     return (
         <View style={{ flex: 1 }}>
@@ -57,7 +64,9 @@ export default function HomeScreen({ navigation }) {
                 <ScrollView>
                     <View style={[styles.body]}>
                         <HomeHeader />
-                        <Slider images={images} />
+                        <Slider 
+                            addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 16/9 }}
+                            images={slides} endPoint="https://pgmarket.online/public/images/slide/" />
                         {/* Categories */}
                         <Text
                             style={{
@@ -69,7 +78,7 @@ export default function HomeScreen({ navigation }) {
                                 color: 'tomato'
                             }}
                         >
-                            Top Recommend Shops
+                            Digital Market
                         </Text>
                         <FlatList
                             horizontal
@@ -93,11 +102,16 @@ export default function HomeScreen({ navigation }) {
                                     }}
                                 />
                                 <FlatList
-                                    data={newArrival}
+                                    data={newProducts}
                                     horizontal
                                     showsHorizontalScrollIndicator={false}
                                     renderItem={({ item }) => (
-                                        <Card item={item} />
+                                        <Card item={item} 
+                                            title = {item.pro_name}
+                                            imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                            description= {item.description}
+                                            price = {item.price}
+                                        />
                                     )}
                                     contentContainerStyle={{
                                         gap: 10,
@@ -106,7 +120,14 @@ export default function HomeScreen({ navigation }) {
                                 />
                             </View>
                             {/* Banner 1 */}
-                            <BannerComponent />
+                            {/* <BannerComponent /> */}
+                             
+                            <Slider 
+                                addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 13/3 }}  
+                                images={banners} 
+                                endPoint="https://pgmarket.online/public/images/banner/" 
+                            />
+                            
                             {/* Best Selling */}
                             <View>
                                 <ListHeader
@@ -116,11 +137,16 @@ export default function HomeScreen({ navigation }) {
                                     }}
                                 />
                                 <FlatList
-                                    data={products}
+                                    data={bestSellingProducts}
                                     horizontal
                                     showsHorizontalScrollIndicator={false}
                                     renderItem={({ item }) => (
-                                        <Card item={item} />
+                                        <Card item={item} 
+                                            title = {item.pro_name}
+                                            imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                            description= {item.description}
+                                            price = {item.price}
+                                        />
                                     )}
                                     contentContainerStyle={{
                                         gap: 10,

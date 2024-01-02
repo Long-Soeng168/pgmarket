@@ -7,19 +7,21 @@ import {
     Animated,
     Easing,
   } from 'react-native';
-  import React from 'react';
+import React from 'react';
   
-  const {width, height} = Dimensions.get('screen');
+const {width, height} = Dimensions.get('screen');
   
-  const SlideItem = ({item, height= 200}) => {
+const SlideItem = ({item, endPoint, addStyle}) => {
     // console.warn(item);
+    const imageUrl = item.image;
     return (
-      <View style={[styles.container, {height: height}]}>
+      <View style={[styles.container]}>
         <Animated.Image
-          source={{ uri:item }}
+          source={{ uri:endPoint + imageUrl }}
           resizeMode="contain"
           style={[
             styles.image,
+            addStyle
           ]}
         />
       </View>
@@ -32,11 +34,11 @@ import {
     container: {
       width,
       alignItems: 'center',
-      backgroundColor: 'grey'
+      // backgroundColor: 'grey'
     },
     image: {
       width: '100%',
-      height: '100%',
+      // height: '100%',
       objectFit: 'cover',
     },
     content: {

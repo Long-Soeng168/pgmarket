@@ -4,20 +4,25 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function CategoryComponent({ item }) {
     const navigation = useNavigation();
+    const imageUrl = 'https://pgmarket.online/public/images/shopcategory/' + item.image;
+    const title = item.name;
+    // console.log(JSON.stringify(imageUrl, null, 2));
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate("ShopCategoryScreen", item)}
         >
             <View
                 style={{
-                    width: 60,
-                    margin: 10,
+                    width: 100,
+                    // backgroundColor: "green",
+                    // margin: 5,
                 }}
                 key={item.title}
             >
                 <Image
-                    style={{ width: 60, height: 60, objectFit: "contain" }}
-                    source={item.img}
+                    style={{ width: 100, height: 100, objectFit: "contain" }}
+                    source={{ uri: imageUrl }}
                 />
                 <Text
                     style={{
@@ -25,7 +30,7 @@ export default function CategoryComponent({ item }) {
                         fontSize: 10,
                     }}
                 >
-                    {item.title}
+                    {title}
                 </Text>
             </View>
         </TouchableOpacity>

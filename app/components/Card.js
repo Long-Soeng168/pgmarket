@@ -3,9 +3,10 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Card({ item, width = 170 }) {
+export default function Card({ item, width = 170, title, description, imageUrl, price }) {
     const navigation = useNavigation();
 
+    const descriptionNoHtml = stripHtmlTags(description);
     return (
         <TouchableOpacity
             onPress={() => navigation.push("ProductDetailScreen", item)}
@@ -14,18 +15,18 @@ export default function Card({ item, width = 170 }) {
                 <Image
                     style={styles.image}
                     source={{
-                        uri: item.image,
+                        uri: imageUrl,
                     }}
                 />
                 <View style={styles.textContainer}>
-                    <Text numberOfLines={1} style={styles.title}>
-                        {item.title}
+                    <Text numberOfLines={2} style={styles.title}>
+                        {title}
                     </Text>
-                    <Text numberOfLines={1} style={styles.description}>
-                        {item.description}
+                    <Text numberOfLines={2} style={styles.description}>
+                        {descriptionNoHtml}
                     </Text>
                     <Text numberOfLines={1} style={styles.price}>
-                        $ {item.price}
+                        $ {parseFloat(price).toFixed(2)}
                     </Text>
                 </View>
             </View>
@@ -56,3 +57,26 @@ const styles = StyleSheet.create({
         color: colors.danger,
     },
 });
+
+
+
+
+const stripHtmlTags = (htmlString) => {
+    // Remove HTML tags, attributes, and entities using regular expressions
+    if(htmlString) {
+        return htmlString
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
+        .replace(/&\w+;/g, ''); // Remove HTML entities
+    }else {
+        return htmlString;
+    };
+}
+
+// const stripHtmlTags = (htmlString) => {
+//     // Remove HTML tags using a regular expression
+//     return htmlString.replace(/<[^>]*>/g, '');
+//   };
+
+
+

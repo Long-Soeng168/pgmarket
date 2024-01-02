@@ -23,6 +23,12 @@ import colors from "../config/colors";
 
 export default function ProductDetailScreen({ route }) {
     const item = route.params;
+
+    const imageUrl = "https://pgmarket.online/public/images/product/" + item.thumbnail;
+    const title = item.pro_name;
+    const descriptionNoHtml = stripHtmlTags(item.description);
+    const price = parseFloat(item.price).toFixed(2);
+
     const category = item.category;
     const [isFetching, setIsFetching] = React.useState(true);
     const [isError, setIsError] = React.useState(false);
@@ -88,21 +94,21 @@ export default function ProductDetailScreen({ route }) {
             <TouchableOpacity
                 onPress={() => {
                     setModalVisible(true);
-                    setImages([{ url: item.image }]);
+                    setImages([{ url: imageUrl }]);
                 }}
             >
                 <Image
                     style={styles.image}
                     source={{
-                        uri: item.image,
+                        uri: imageUrl,
                     }}
                 />
             </TouchableOpacity>
 
             <View style={{ backgroundColor: colors.white }}>
                 <View style={{ padding: 10 }}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.price}>$ {item.price}</Text>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.price}>$ {price}</Text>
                     {/* Add and Remove from Cart */}
                     {cartItems.some((cartItem) => cartItem.id === item.id) ? (
                         <CartButton
@@ -121,7 +127,7 @@ export default function ProductDetailScreen({ route }) {
 
                     <View style={{ marginTop: 25, alignItems: "flex-start" }}>
                         {/* Video Play */}
-                        <View
+                        {/* <View
                             style={{
                                 backgroundColor: colors.secondary,
                                 borderRadius: 5,
@@ -145,7 +151,7 @@ export default function ProductDetailScreen({ route }) {
                             >
                                 Video
                             </Text>
-                        </View>
+                        </View> */}
                         <Text
                             style={{
                                 fontSize: 18,
@@ -155,7 +161,7 @@ export default function ProductDetailScreen({ route }) {
                             Description :
                         </Text>
                         <Text style={styles.description}>
-                            {item.description}
+                            {descriptionNoHtml}
                         </Text>
                     </View>
                 </View>
@@ -199,14 +205,14 @@ const styles = StyleSheet.create({
         objectFit: "contain",
         backgroundColor: colors.white,
     },
-    title: { fontSize: 20, fontWeight: "500" },
+    title: { fontSize: 18, fontWeight: "500" },
     price: {
         fontSize: 24,
         color: colors.danger,
         marginVertical: 15,
     },
     description: {
-        fontSize: 18,
+        fontSize: 16,
         marginBottom: 15,
     },
 });
@@ -262,4 +268,18 @@ function CartButton({ title, onPress, bgColor }) {
             </View>
         </TouchableOpacity>
     );
+}
+
+
+
+const stripHtmlTags = (htmlString) => {
+    // Remove HTML tags, attributes, and entities using regular expressions
+    if(htmlString) {
+        return htmlString
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
+        .replace(/&\w+;/g, ''); // Remove HTML entities
+    }else {
+        return htmlString;
+    };
 }

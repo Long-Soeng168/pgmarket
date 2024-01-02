@@ -54,7 +54,7 @@ export default function HomeNavigator() {
                 name="ShopCategoryScreen"
                 component={ShopCategoryScreen}
                 options={({ route }) => ({
-                    title: route.params.title + " Shops",
+                    title: route.params.name + " Shops",
                     headerTitleAlign: "center",
                 })}
             />
