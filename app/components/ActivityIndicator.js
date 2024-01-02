@@ -1,6 +1,5 @@
 import React from "react";
-import { View } from "react-native";
-import LottieView from "lottie-react-native";
+import { ActivityIndicator as ActivityInd, View } from "react-native"; 
 
 export default function ActivityIndicator({ visibility }) {
     return (
@@ -12,15 +11,8 @@ export default function ActivityIndicator({ visibility }) {
                         justifyContent: "center",
                         alignItems: "center",
                     }}
-                >
-                    <LottieView
-                        autoPlay
-                        style={{
-                            width: 88,
-                            height: 88,
-                        }}
-                        source={require("../assets/animation/loading_animation.json")}
-                    />
+                > 
+                    <ActivityInd size="large" color="#0000ff" />
                 </View>
             )}
         </>
