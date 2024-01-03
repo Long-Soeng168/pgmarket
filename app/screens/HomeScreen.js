@@ -55,7 +55,7 @@ export default function HomeScreen({ navigation }) {
     // End Get New Product 
         
         // console.log(JSON.stringify(categories, null, 2));
-        console.log(JSON.stringify(banners, null, 2));
+        // console.log(JSON.stringify(banners, null, 2));
 
     return (
         <View style={{ flex: 1 }}>

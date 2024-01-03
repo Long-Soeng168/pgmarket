@@ -26,6 +26,7 @@ export default function ShopCategoryScreen({ navigation, route }) {
     }, []);
 
     // console.log(JSON.stringify(shopsByCate, null, 2));
+    console.log(JSON.stringify(item.id, null, 2));
 
     const shops = shopsByCate;
     // console.log(JSON.stringify(shops, null, 2));
