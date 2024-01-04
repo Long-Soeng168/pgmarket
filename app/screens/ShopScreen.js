@@ -16,7 +16,18 @@ import BackButton from "../components/BackButton";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
-export default function ShopScreen({ navigation }) {
+export default function ShopScreen({ navigation, route }) {
+    const shop = route.params;
+    // console.log(JSON.stringify(shop, null, 2));
+
+    const bannerUrl = "https://pgmarket.online/public/images/shop_banner/" + shop.image_banner;
+    const imageUrl = "https://pgmarket.online/public/images/shop/" + shop.image;
+    const shopName = shop.shop_name;
+    const shopAddress = shop.shop_address;
+    const shopNumber = shop.shop_phone;
+    const shopEmail = shop.shop_email;
+    const shopDescription = stripHtmlTags(shop.description);
+
     const [selected, setSelected] = React.useState("Products");
 
     const [isFetching, setIsFetching] = React.useState(true);
@@ -26,7 +37,7 @@ export default function ShopScreen({ navigation }) {
     const [images, setImages] = React.useState([]);
 
     const getData = () => {
-        fetch(`https://fakestoreapi.com/products`)
+        fetch(`https://pgmarket.online/api/getproducts_byshop/` + shop.id_link_from_users)
             .then((rest) => rest.json())
             .then((data) => {
                 setProducts(data);
@@ -37,6 +48,7 @@ export default function ShopScreen({ navigation }) {
     React.useEffect(() => {
         getData();
     }, []);
+    // console.log(JSON.stringify(products, null, 2));
     return (
         <View
             style={{
@@ -62,7 +74,7 @@ export default function ShopScreen({ navigation }) {
                                     setModalVisible(true);
                                     setImages([
                                         {
-                                            url: "https://source.unsplash.com/1024x768/?mountain",
+                                            url: bannerUrl,
                                         },
                                     ]);
                                 }}
@@ -70,7 +82,7 @@ export default function ShopScreen({ navigation }) {
                                 <Image
                                     style={styles.coverImage}
                                     source={{
-                                        uri: "https://source.unsplash.com/1024x768/?mountain",
+                                        uri: bannerUrl,
                                     }}
                                 />
                             </TouchableOpacity>
@@ -83,7 +95,7 @@ export default function ShopScreen({ navigation }) {
                                             setModalVisible(true);
                                             setImages([
                                                 {
-                                                    url: "https://source.unsplash.com/Y9MoiZi9Rbg",
+                                                    url: imageUrl,
                                                 },
                                             ]);
                                         }}
@@ -91,12 +103,12 @@ export default function ShopScreen({ navigation }) {
                                         <Image
                                             style={styles.profileImage}
                                             source={{
-                                                uri: "https://source.unsplash.com/Y9MoiZi9Rbg",
+                                                uri: imageUrl,
                                             }}
                                         />
                                     </TouchableOpacity>
                                     <Text style={styles.profileTitle}>
-                                        ABC Shop
+                                        {shopName}
                                     </Text>
                                 </View>
                             </View>
@@ -121,38 +133,52 @@ export default function ShopScreen({ navigation }) {
                         {/* List Item */}
                         {selected === "Products" ? (
                             <View style={{ paddingVertical: 15 }}>
-                                <FlatList
-                                    numColumns={2}
-                                    data={products}
-                                    scrollEnabled={false}
-                                    showsHorizontalScrollIndicator={false}
-                                    renderItem={({ item }) => (
-                                        <Card item={item} width={width} />
-                                    )}
-                                    contentContainerStyle={{
-                                        gap: 10,
-                                    }}
-                                    columnWrapperStyle={{
-                                        justifyContent: "space-evenly",
-                                    }}
-                                />
+                                {
+                                    products.length > 0 ?
+                                        <FlatList
+                                            numColumns={2}
+                                            data={products}
+                                            scrollEnabled={false}
+                                            showsHorizontalScrollIndicator={false}
+                                            renderItem={({ item }) => (
+                                                <Card item={item} width={width} 
+                                                    title = {item.pro_name}
+                                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                                    description= {item.description}
+                                                    price = {item.price}
+                                                />
+                                            )}
+                                            contentContainerStyle={{
+                                                gap: 10,
+                                            }}
+                                            columnWrapperStyle={{
+                                                justifyContent: "space-evenly",
+                                        }}
+                                    /> : 
+                                    <Text>No Product</Text>
+                                }
                             </View>
                         ) : (
                             <View style={{ padding: 10, gap: 15 }}>
                                 <AboutItem
                                     title="Address"
-                                    detail="st148, PhsarKandal, DounPenh, Phnom Penh, Cambodia "
+                                    detail={shopAddress}
                                     icon="map-marker"
                                 />
                                 <AboutItem
                                     title="Phone Number"
-                                    detail="096 233 46 84"
+                                    detail={shopNumber}
                                     icon="mobile-phone"
                                 />
                                 <AboutItem
                                     title="email"
-                                    detail="longsoeng168@gmail.com"
+                                    detail={shopEmail}
                                     icon="envelope-o"
+                                />
+                                <AboutItem
+                                    title="Description"
+                                    detail={shopDescription}
+                                    icon="navicon"
                                 />
                             </View>
                         )}
@@ -269,3 +295,18 @@ const styles = StyleSheet.create({
         margin: 10,
     },
 });
+
+
+
+
+const stripHtmlTags = (htmlString) => {
+    // Remove HTML tags, attributes, and entities using regular expressions
+    if(htmlString) {
+        return htmlString
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
+        .replace(/&\w+;/g, ''); // Remove HTML entities
+    }else {
+        return htmlString;
+    };
+}

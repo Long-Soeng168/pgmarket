@@ -33,6 +33,7 @@ export default function ProductDetailScreen({ route }) {
     const [isFetching, setIsFetching] = React.useState(true);
     const [isError, setIsError] = React.useState(false);
     const [products, setProducts] = React.useState([]);
+    // const [relatedProducts, setRelatedProducts] = React.useState([]);
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
     const [cartItems, setCartItems] = React.useContext(cartContext);
@@ -40,19 +41,17 @@ export default function ProductDetailScreen({ route }) {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
 
-    const getData = () => {
-        fetch(`https://fakestoreapi.com/products/category/${category}`)
+    const getrelatedproducts = () => {
+        fetch("https://pgmarket.online/api/getrelatedproducts/" + item.main_cate_id)
             .then((rest) => rest.json())
             .then((data) => {
-                const relateProduct = data.filter((data) => data.id != item.id);
-                setProducts(relateProduct);
-                setIsError(false);
+                setProducts(data);
             })
-            .catch((err) => setIsError(true))
+            .catch((err) => console.log(err))
             .finally(() => setIsFetching(false));
     };
     React.useEffect(() => {
-        getData();
+        getrelatedproducts();
     }, []);
 
     const removeFromFavorite = () => {
@@ -77,6 +76,8 @@ export default function ProductDetailScreen({ route }) {
             { ...item, quantity: 1 },
         ]);
     };
+
+    // console.log(JSON.stringify(item, null, 2));
 
     return (
         <ScrollView>
@@ -174,7 +175,13 @@ export default function ProductDetailScreen({ route }) {
                             keyExtractor={(item) => item.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => <Card item={item} />}
+                            renderItem={({ item }) => <Card 
+                                item={item} 
+                                title = {item.pro_name}
+                                imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                description= {item.description}
+                                price = {item.price}
+                            />}
                             contentContainerStyle={{
                                 gap: 10,
                                 paddingHorizontal: 10,
