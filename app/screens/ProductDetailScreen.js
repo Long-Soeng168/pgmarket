@@ -21,7 +21,7 @@ import Card from "../components/Card";
 import ListHeader from "../components/ListHeader";
 import colors from "../config/colors";
 
-export default function ProductDetailScreen({ route }) {
+export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
 
     const imageUrl = "https://pgmarket.online/public/images/product/" + item.thumbnail;
@@ -167,7 +167,11 @@ export default function ProductDetailScreen({ route }) {
                     </View>
                 </View>
                 <View style={{ marginBottom: 30 }}>
-                    <ListHeader title="Relate Product" onPress={() => {}} />
+                    <ListHeader title="Relate Product" 
+                        onPress={() => {
+                            navigation.navigate("SeeMoreScreen", `getrelatedproducts/${item.main_cate_id}`);
+                        }} 
+                    />
                     <ActivityIndicator visibility={isFetching} />
                     {!isFetching && (
                         <FlatList

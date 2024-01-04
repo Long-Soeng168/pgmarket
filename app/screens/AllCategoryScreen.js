@@ -48,7 +48,7 @@ export default function AllCategoryScreen() {
     }
   }, [categorySelected, shopsCate]);
 
-  console.log(JSON.stringify(shops, null, 2));
+  console.log(JSON.stringify(categorySelected, null, 2));
 
   return (
     <View style={{ flex: 1 }}>

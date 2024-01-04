@@ -98,7 +98,7 @@ export default function HomeScreen({ navigation }) {
                                 <ListHeader
                                     title="New Products"
                                     onPress={() => {
-                                        navigation.navigate("SeeMoreScreen");
+                                        navigation.navigate("SeeMoreScreen", "getnewproducts");
                                     }}
                                 />
                                 <FlatList
@@ -133,7 +133,7 @@ export default function HomeScreen({ navigation }) {
                                 <ListHeader
                                     title="Best Selling"
                                     onPress={() => {
-                                        navigation.navigate("SeeMoreScreen");
+                                        navigation.navigate("SeeMoreScreen", "getbestselling");
                                     }}
                                 />
                                 <FlatList

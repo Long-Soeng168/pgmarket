@@ -6,24 +6,30 @@ import ActivityIndicator from "../components/ActivityIndicator";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
+const fetchData = async (url, setter) => {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setter(data);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export default function SeeMoreScreen({ route }) {
-    // const item = route.params;
+    const item = route.params;
     // const category = item.title;
-    // console.log(category);
+    console.log(item);
     const [isFetching, setIsFetching] = React.useState(true);
     const [products, setProducts] = React.useState([]);
 
-    const getData = () => {
-        fetch(`https://fakestoreapi.com/products`)
-            .then((rest) => rest.json())
-            .then((data) => {
-                setProducts(data);
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setIsFetching(false));
-    };
     React.useEffect(() => {
-        getData();
+        const fetchDataAsync = async () => {
+            await fetchData("https://pgmarket.online/api/" + item, setProducts); 
+            setIsFetching(false);
+        };
+
+        fetchDataAsync();
     }, []);
     return (
         <View
@@ -42,7 +48,12 @@ export default function SeeMoreScreen({ route }) {
                             scrollEnabled={false}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => (
-                                <Card item={item} width={width} />
+                                <Card item={item} width={width} 
+                                    title = {item.pro_name}
+                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                    description= {item.description}
+                                    price = {item.price}
+                                />
                             )}
                             contentContainerStyle={{
                                 gap: 10,

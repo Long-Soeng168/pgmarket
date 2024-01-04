@@ -40,7 +40,7 @@ export default function HomeNavigator() {
                 component={SeeMoreScreen}
                 options={{
                     // headerShown: false
-                    title: "All Products",
+                    title: "Products",
                     headerTitleStyle: {color: "tomato"},
                     headerTitleAlign: "center",
                 }}
