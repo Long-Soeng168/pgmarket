@@ -23,7 +23,12 @@ export default function FavoriteScreen() {
                         data={favorites}
                         scrollEnabled={false}
                         renderItem={({ item }) => (
-                            <Card item={item} width={width} />
+                            <Card item={item} width={width} 
+                                title = {item.pro_name}
+                                imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                description= {item.description}
+                                price = {item.price}
+                            />
                         )}
                         contentContainerStyle={{
                             gap: 15,

@@ -12,7 +12,10 @@ import { TouchableOpacity } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { TouchableWithoutFeedback } from "react-native";
 
-export default function CartItem({ item }) {
+export default function CartItem({ item, title, description, imageUrl, price }) {
+
+    const descriptionNoHtml = stripHtmlTags(description);
+
     const [cartItems, setCartItems] = React.useContext(cartContext);
 
     const removeFromCart = () => {
@@ -61,19 +64,19 @@ export default function CartItem({ item }) {
                 <Image
                     style={styles.image}
                     source={{
-                        uri: item.image,
+                        uri: imageUrl,
                     }}
                 />
                 <View style={styles.rightSideContainer}>
                     <View style={styles.textContainer}>
                         <Text numberOfLines={1} style={styles.title}>
-                            {item.title}
+                            {title}
                         </Text>
                         <Text numberOfLines={1} style={styles.description}>
-                            {item.description}
+                            {descriptionNoHtml}
                         </Text>
                         <Text numberOfLines={1} style={styles.pricePerUnit}>
-                            $ {item.price}
+                            $ {price}
                         </Text>
                     </View>
                     <View style={styles.updateContainer}>
@@ -200,3 +203,16 @@ const styles = StyleSheet.create({
         fontWeight: "500",
     },
 });
+
+
+const stripHtmlTags = (htmlString) => {
+    // Remove HTML tags, attributes, and entities using regular expressions
+    if(htmlString) {
+        return htmlString
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
+        .replace(/&\w+;/g, ''); // Remove HTML entities
+    }else {
+        return htmlString;
+    };
+}

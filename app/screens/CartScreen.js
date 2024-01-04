@@ -24,7 +24,14 @@ export default function CartScreen() {
             <FlatList
                 data={cartItems}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <CartItem item={item} />}
+                renderItem={({ item }) => (
+                    <CartItem item={item} 
+                        title = {item.pro_name}
+                        imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                        description= {item.description}
+                        price = {item.price}
+                    />
+                )}
             />
             <View
                 style={{
