@@ -5,7 +5,7 @@ import ProductDetailScreen from "../screens/ProductDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function HomeNavigator() {
+export default function FavoriteNavigator() {
     return (
         <Stack.Navigator>
             <Stack.Screen

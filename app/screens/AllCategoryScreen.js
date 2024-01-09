@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View, ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import HomeHeader from "../components/HomeHeader";
@@ -16,9 +16,11 @@ const fetchData = async (url, setter) => {
   }
 };
 
-export default function AllCategoryScreen() {
+export default function AllCategoryScreen({navigation}) {
   const [shopsCate, setShopsCate] = useState([]);
+  const [allShops, setAllShops] = useState([]);
   const [shops, setShops] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
 
   const [selected, setSelected] = useState("Shops");
@@ -31,16 +33,21 @@ export default function AllCategoryScreen() {
   useEffect(() => {
     const fetchDataAsync = async () => {
       await fetchData("https://pgmarket.online/api/toprecommendshops", setShopsCate);
+      await fetchData(`https://pgmarket.online/api/getbrands`, setBrands);
+      await fetchData(`https://pgmarket.online/api/getallshops`, setAllShops);
     };
     fetchDataAsync();
   }, []);
 
   useEffect(() => {
     if (categorySelected) {
-      const fetchDataAsync = async () => {
-        await fetchData(`https://pgmarket.online/api/getshops_bycategoryshop/${categorySelected.id}`, setShops);
-      };
-      fetchDataAsync();
+      // const fetchDataAsync = async () => {
+      //   await fetchData(`https://pgmarket.online/api/getshops_bycategoryshop/${categorySelected.id}`, setShops); 
+      // };
+      let data = allShops.filter((shop) => shop.shopcategory_id == categorySelected.id);
+      setShops(data);
+      // console.log(JSON.stringify(data, null, 2));
+      // fetchDataAsync();
       setIsFetching(false);
     } else if (shopsCate.length > 0) {
       setCategorySelected(shopsCate[0]);
@@ -48,13 +55,14 @@ export default function AllCategoryScreen() {
     }
   }, [categorySelected, shopsCate]);
 
-  console.log(JSON.stringify(categorySelected, null, 2));
+  // console.log(JSON.stringify(allShops, null, 2));
+  // console.log(JSON.stringify(categorySelected, null, 2));
 
   return (
     <View style={{ flex: 1 }}>
       <ActivityIndicator visibility={isFetching} />
       {!isFetching && (
-        <View>
+        <View style={{ flex: 1 }}>
           {/* Header */}
           <HomeHeader />
           <View
@@ -63,6 +71,7 @@ export default function AllCategoryScreen() {
               justifyContent: "space-around",
               borderBottomWidth: 1,
               borderColor: "lightgrey",
+              zIndex: 100,
             }}
           >
             <ShopSelection
@@ -79,49 +88,77 @@ export default function AllCategoryScreen() {
             />
           </View>
           {/* End Header */}
-          <View
-            style={{
-              flexDirection: "row",
-              height: "100%",
-              backgroundColor: colors.white,
-            }}
-          >
-            {/* Left Side */}
-            <View
-              style={{
-                alignItems: "center",
-                borderRightColor: colors.medium,
-                borderRightWidth: 1,
-              }}
-            >
-              <FlatList
-                style={{ marginBottom: 210, marginTop: 10 }}
-                data={shopsCate}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                  <CategoryComponent
-                    item={item}
-                    handleCategoryIdSelect={handleCategoryIdSelect}
-                    categorySelected={categorySelected}
-                  />
-                )}
-              />
-            </View>
-            {/* Right Side */}
-            <View style={{ flex: 1, paddingTop: 25, alignItems: "center" }}>
-              {shops.length > 0 ? (
-                <FlatList
-                  numColumns={2}
-                  data={shops}
-                  renderItem={({ item }) => <SubCategoryComponent item={item} />}
-                  columnWrapperStyle={{ gap: 15 }}
-                />
+            {
+              selected === "Shops" ? 
+              (
+                <View style={{
+                  flexDirection: "row",
+                  height: "100%",
+                  backgroundColor: colors.white,
+                }}>
+                  {/* Left Side */}
+                  <View
+                    style={{
+                      alignItems: "center",
+                      borderRightColor: colors.medium,
+                      borderRightWidth: 1,
+                      marginBottom: 108,
+                      marginTop: 3,
+                    }}
+                  >
+                    <FlatList
+                      data={shopsCate}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={({ item }) => (
+                        <CategoryComponent
+                          item={item}
+                          handleCategoryIdSelect={handleCategoryIdSelect}
+                          categorySelected={categorySelected}
+                        />
+                      )}
+                    />
+                  </View>
+                  {/* Right Side */}
+                  <View style={{ flex: 1, paddingTop: 13, alignItems: "center" }}>
+                    {shops.length > 0 ? (
+                      <FlatList
+                        numColumns={2}
+                        data={shops}
+                        renderItem={({ item }) => <SubCategoryComponent item={item} onPress={() => navigation.navigate("ShopScreen", item)} />}
+                        columnWrapperStyle={{ gap: 15 }}
+                      />
+                    ) : (
+                      <Text>No Shop</Text>
+                    )}
+                  </View>
+                </View>
               ) : (
-                <Text>No Shop</Text>
-              )}
-            </View>
-          </View>
-        </View>
+                <ScrollView>
+                      <View style={{
+                        // flex: 1,
+                        justifyContent: 'center',
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        paddingVertical: 13,
+                        gap: 2,
+                        // height: "1000%",
+                        // backgroundColor: colors.primary,
+
+                        // overflow: 'scroll',
+                        // marginBottom: 50,
+                      }}>
+                        {brands.map((item) => (
+                              <BrandComponent
+                                  item={item}
+                                  onPress={() => navigation.navigate("ProductsByBrandScreen", item.id)}
+                                  key={item.id}
+                              />
+                          ))} 
+                      </View>
+                </ScrollView>
+              )
+            }
+          </View> 
       )}
     </View>
   );
@@ -213,26 +250,72 @@ function CategoryComponent({ item, categorySelected, handleCategoryIdSelect }) {
 }
 
 // Sub Category
-function SubCategoryComponent({ item }) {
+function SubCategoryComponent({ item, onPress }) {
   const imageUrl = `https://pgmarket.online/public/images/shop/${item.image}`;
   const title = item.shop_name;
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View
         style={{
-          width: 100,
-          height: 100,
+          margin: 3,
+          width: 70,
           alignItems: "center",
           alignSelf: "flex-start",
         }}
       >
         <Image
           style={{
-            width: "80%",
-            height: "60%",
+            width: '100%',
+            aspectRatio: 1,
             objectFit: "contain",
-            borderRadius: 10,
+            borderRadius: 100,
+            borderWidth: 1,
+            borderColor:  colors.medium,
+          }}
+          source={{
+            uri: imageUrl || "https://cdn-icons-png.flaticon.com/512/10701/10701484.png",
+          }}
+        />
+        <Text
+          numberOfLines={3}
+          style={{
+            textAlign: "center",
+            fontSize: 10,
+            color: colors.medium,
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+
+// Brand Component
+function BrandComponent({ item, onPress }) {
+  const imageUrl = `https://pgmarket.online/public/images/brand/${item.image}`;
+  const title = item.name;
+
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={{
+          width: 95,
+          alignItems: "center",
+          alignSelf: "flex-start",
+          // backgroundColor: colors.white,
+          padding: 5,
+        }}
+      >
+        <Image
+          style={{
+            width: "100%",
+            aspectRatio: 3/2,
+            objectFit: "contain",
+            backgroundColor: colors.white,
+            borderRadius: 5,
           }}
           source={{
             uri: imageUrl || "https://cdn-icons-png.flaticon.com/512/10701/10701484.png",

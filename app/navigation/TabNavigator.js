@@ -7,7 +7,8 @@ import HomeNavigator from "./HomeNavigator";
 import FavoriteNavigator from "./FavoriteNavigator";
 import CartNavigator from "./CartNavigator";
 import AccountNavigator from "./AccountNavigator";
-import AllCategoryScreen from "../screens/AllCategoryScreen";
+// import AllCategoryScreen from "../screens/AllCategoryScreen";
+import ShopsNavigator from "./ShopsNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,8 +37,8 @@ export default function TabNavigator() {
                 }}
             />
             <Tab.Screen
-                name="AllCategoryScreen"
-                component={AllCategoryScreen}
+                name="ShopsNavigator"
+                component={ShopsNavigator}
                 options={{
                     title: "All Category",
                     headerTitleAlign: "center",
