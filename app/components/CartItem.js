@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         height: "100%",
         borderRadius: 5,
-        objectFit: "contain",
+        objectFit: "cover",
     },
     rightSideContainer: {
         flexDirection: "column",

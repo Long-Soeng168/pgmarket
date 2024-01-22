@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         aspectRatio: 1,
         borderRadius: 10,
-        objectFit: "contain",
+        objectFit: "cover",
     },
     textContainer: { padding: 10, gap: 3 },
     title: { fontSize: 12, fontWeight: "500" },

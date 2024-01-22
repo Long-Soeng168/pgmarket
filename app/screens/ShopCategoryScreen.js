@@ -47,7 +47,7 @@ export default function ShopCategoryScreen({ navigation, route }) {
                             <ShopItem
                                 item={shop}
                                 onPress={() => navigation.navigate("ShopScreen", shop)}
-                                key={shop}
+                                key={shop.id}
                             />
                         ))}
                     </View>
