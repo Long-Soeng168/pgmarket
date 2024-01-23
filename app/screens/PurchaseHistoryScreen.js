@@ -73,8 +73,8 @@ const PurchaseHistoryScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-        <HeaderText title='Purchase Orders'/>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <HeaderText title='Purchase History'/>
         <View style={styles.container}>
 
       <FlatList

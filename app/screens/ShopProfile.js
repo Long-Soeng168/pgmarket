@@ -16,7 +16,7 @@ import BackButton from "../components/BackButton";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
-export default function ShopProfile({ navigation, route=12 }) {
+export default function ShopProfile({ navigation, route }) {
     // const shop = route.params;
     const shop = {
         "id": 12,

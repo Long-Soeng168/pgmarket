@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+
 import colors from '../config/colors';
 
 const LoginScreen = () => {
@@ -8,6 +10,7 @@ const LoginScreen = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
     // Implement your login logic here
@@ -19,6 +22,10 @@ const LoginScreen = () => {
   const handleRegister = () => {
     // Navigate to the registration screen
     navigation.navigate('RegisterScreen');
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -46,14 +53,18 @@ const LoginScreen = () => {
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Password"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
@@ -72,6 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: 'white',
   },
   innerContainer: {
     justifyContent: 'center',
@@ -84,16 +96,19 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 40,
+    height: 45,
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
   },
   button: {
     backgroundColor: colors.primary,
-    padding: 10,
+    paddingHorizontal: 17,
+    paddingVertical: 12,
     borderRadius: 5,
+    marginTop: 20,
   },
   buttonText: {
     color: 'white',
@@ -101,8 +116,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   registerText: {
-    marginTop: 20,
+    marginTop: 10,
     color: colors.primary,
+  },
+  passwordContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    // marginBottom: 20,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    // marginTop: 20,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 45,
+    paddingHorizontal: 10,
+  },
+  eyeIcon: {
+    paddingHorizontal: 10,
   },
 });
 

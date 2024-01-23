@@ -3,7 +3,11 @@
 import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 
+
 const HomeScreen = ({ navigation }) => {
+
+  
+
   return (
     <View style={styles.container}>
       <Button
@@ -17,6 +21,10 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="Profile Screen"
         onPress={() => navigation.navigate('ProfileScreen')}
+      />
+      <Button
+        title="AddProduct Screen"
+        onPress={() => navigation.navigate('AddProductScreen')}
       />
       {/* <Button
         title="Purchase History Screen"
@@ -41,6 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
+
 });
 
 export default HomeScreen;

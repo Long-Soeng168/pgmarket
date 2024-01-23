@@ -157,7 +157,7 @@ const AccountDetailScreen = () => {
                             style={styles.uploadButton}
                             onPress={pickImage}
                         >
-                            <Ionicons name="camera" size={24} color="white" />
+                            <Ionicons name="camera" size={28} color="white" />
                         </TouchableOpacity>
                     )}
                     <TextInput
@@ -260,20 +260,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         paddingHorizontal: 20,
+        backgroundColor: 'white',
     },
     innerContainer: {
         justifyContent: "center",
         alignItems: "center",
     },
     profilePicture: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 120,
+        height: 120,
+        borderRadius: 100,
     },
     uploadButton: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 120,
+        height: 120,
+        borderRadius: 100,
         backgroundColor: colors.primary,
         justifyContent: "center",
         alignItems: "center",
@@ -281,13 +282,14 @@ const styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        height: 40,
+        height: 45,
         borderColor: "gray",
         borderWidth: 1,
         // marginBottom: 20,
         marginTop: 20,
         paddingHorizontal: 10,
         fontSize: 16, // Adjust the font size as needed
+        borderRadius: 5,
     },
     passwordContainer: {
         width: "100%",
@@ -301,15 +303,16 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
         flex: 1,
-        height: 40,
+        height: 45,
         paddingHorizontal: 10,
     },
     eyeIcon: {
-        padding: 10,
+        paddingHorizontal: 10,
     },
     button: {
         backgroundColor: colors.accent,
-        padding: 10,
+        paddingHorizontal: 17,
+        paddingVertical: 15,
         borderRadius: 5,
         marginTop: 20,
     },

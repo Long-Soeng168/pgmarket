@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: 'white',
   },
   innerContainer: {
     justifyContent: 'center',
@@ -212,12 +213,13 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 40,
+    height: 45,
     borderColor: 'gray',
     borderWidth: 1,
     // marginBottom: 20,
     paddingHorizontal: 10,
     marginTop: 20,
+    borderRadius: 5,
   },
   passwordContainer: {
     width: '100%',
@@ -231,17 +233,18 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    height: 40,
+    height: 45,
     paddingHorizontal: 10,
   },
   eyeIcon: {
-    padding: 10,
+    paddingHorizontal: 10,
   },
   button: {
     backgroundColor: colors.primary,
-    padding: 10,
+    paddingHorizontal: 17,
+    paddingVertical: 12,
     borderRadius: 5,
-    marginTop: 10,
+    marginTop: 20,
   },
   buttonText: {
     color: 'white',
@@ -249,7 +252,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   loginText: {
-    // marginTop: 20,
+    marginTop: 10,
     color: colors.primary,
   },
   errorText: {
