@@ -9,9 +9,11 @@ import {
     Image,
     ScrollView,
     TextInput,
+    Modal,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -90,6 +92,21 @@ const AddProductScreen = () => {
     const [discountError, setDiscountError] = useState(null);
     const [videoUrlError, setVideoUrlError] = useState(null);
     const [shippingError, setShippingError] = useState(null);
+
+    const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
+    const today = new Date();
+    const startDate = getFormatedDate(
+      today.setDate(today.getDate() + 1),
+      "YYYY/MM/DD"
+    );
+    const [selectedStartDate, setSelectedStartDate] = useState("");
+    const [startedDate, setStartedDate] = useState("12/12/2023");
+    function handleChangeStartDate(propDate) {
+        setStartedDate(propDate);
+    }
+    const handleOnPressStartDate = () => {
+        setOpenStartDatePicker(!openStartDatePicker);
+    };
 
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
@@ -345,6 +362,27 @@ const AddProductScreen = () => {
                         />
                     </View>
 
+                    <View style={{ flexDirection: 'row', gap: 10 }}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10 }}>Discount Start</Text>
+                            <TouchableOpacity
+                                style={styles.inputBtn}
+                                onPress={handleOnPressStartDate}
+                            >
+                                <Text>{selectedStartDate}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10 }}>Discount End</Text>
+                            <TouchableOpacity
+                                style={styles.inputBtn}
+                                onPress={handleOnPressStartDate}
+                            >
+                                <Text>{selectedStartDate}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
                     <InputField
                         placeholder="Video URL"
                         headTitle="Viedeo URL"
@@ -371,6 +409,34 @@ const AddProductScreen = () => {
                     >
                         <Text style={styles.buttonText}>Add Product</Text>
                     </TouchableOpacity>
+
+
+                    {/* Create modal for date picker */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={openStartDatePicker}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <DatePicker
+                  mode="calendar"
+                  minimumDate={startDate}
+                  selected={startedDate}
+                  onDateChanged={handleChangeStartDate}
+                  onSelectedChange={(date) => {
+                    setSelectedStartDate(date);
+                    setDiscountFromDate(date);
+                  }}
+                  style={{ borderRadius: 15,}}
+                />
+
+                <TouchableOpacity onPress={handleOnPressStartDate}>
+                  <Text style={styles.closeModal}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -479,6 +545,37 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 16,
     },
+    
+      inputBtn: {
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: "lightgray",
+        height: 50,
+        paddingLeft: 8,
+        fontSize: 18,
+        justifyContent: "center",
+        marginTop: 3,
+      },
+      centeredView: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderWidth: 2,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingTop: 10,
+        paddingBottom: 35,
+        width: "90%", 
+      },
+      closeModal: {
+        color: "white", padding: 10, backgroundColor: colors.accent, borderRadius: 10,
+      }
 });
 
 export default AddProductScreen;
