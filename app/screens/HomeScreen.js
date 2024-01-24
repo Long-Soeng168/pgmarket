@@ -161,7 +161,11 @@ export default function HomeScreen({ navigation }) {
                 </ScrollView>
             )}
 
-            <StatusBar />
+            {/* <StatusBar /> */}
+            <StatusBar
+                backgroundColor="tomato"
+                barStyle="light-content"
+            />
         </View>
     );
 }
