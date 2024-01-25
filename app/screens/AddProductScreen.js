@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
+import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 
 import { Dropdown, MultiSelect } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -41,7 +41,7 @@ const InputField = ({
     error,
     style,
 }) => (
-    <View style={[style, {flex: 1}]}>
+    <View style={[style, { flex: 1 }]}>
         <Text style={{ marginTop: 10, fontWeight: "500", marginBottom: 3 }}>
             {headTitle}
         </Text>
@@ -96,8 +96,8 @@ const AddProductScreen = () => {
     const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
     const today = new Date();
     const startDate = getFormatedDate(
-      today.setDate(today.getDate() + 1),
-      "YYYY/MM/DD"
+        today.setDate(today.getDate() + 1),
+        "YYYY/MM/DD"
     );
     const [selectedStartDate, setSelectedStartDate] = useState("");
     const [startedDate, setStartedDate] = useState("12/12/2023");
@@ -242,7 +242,7 @@ const AddProductScreen = () => {
             <ScrollView style={styles.container}>
                 <View style={styles.innerContainer}>
                     {/* Image Upload Button */}
-                    <View style={{ alignItems: 'center',}}>
+                    <View style={{ alignItems: "center" }}>
                         <ImageUploadButton onPress={pickImage} image={image} />
                     </View>
 
@@ -326,7 +326,7 @@ const AddProductScreen = () => {
                         error={productNameError}
                     />
 
-                    <View style={{flexDirection: 'row', gap: 10}}>
+                    <View style={{ flexDirection: "row", gap: 10 }}>
                         <InputField
                             placeholder="Unit Price"
                             headTitle="Price($)"
@@ -362,9 +362,17 @@ const AddProductScreen = () => {
                         />
                     </View>
 
-                    <View style={{ flexDirection: 'row', gap: 10 }}>
+                    <View style={{ flexDirection: "row", gap: 10 }}>
                         <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10 }}>Discount Start</Text>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: "500",
+                                    marginTop: 10,
+                                }}
+                            >
+                                Discount Start
+                            </Text>
                             <TouchableOpacity
                                 style={styles.inputBtn}
                                 onPress={handleOnPressStartDate}
@@ -373,7 +381,15 @@ const AddProductScreen = () => {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10 }}>Discount End</Text>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: "500",
+                                    marginTop: 10,
+                                }}
+                            >
+                                Discount End
+                            </Text>
                             <TouchableOpacity
                                 style={styles.inputBtn}
                                 onPress={handleOnPressStartDate}
@@ -410,33 +426,34 @@ const AddProductScreen = () => {
                         <Text style={styles.buttonText}>Add Product</Text>
                     </TouchableOpacity>
 
-
                     {/* Create modal for date picker */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={openStartDatePicker}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  minimumDate={startDate}
-                  selected={startedDate}
-                  onDateChanged={handleChangeStartDate}
-                  onSelectedChange={(date) => {
-                    setSelectedStartDate(date);
-                    setDiscountFromDate(date);
-                  }}
-                  style={{ borderRadius: 15,}}
-                />
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={openStartDatePicker}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <DatePicker
+                                    mode="calendar"
+                                    minimumDate={startDate}
+                                    selected={startedDate}
+                                    onDateChanged={handleChangeStartDate}
+                                    onSelectedChange={(date) => {
+                                        setSelectedStartDate(date);
+                                        setDiscountFromDate(date);
+                                    }}
+                                    style={{ borderRadius: 15 }}
+                                />
 
-                <TouchableOpacity onPress={handleOnPressStartDate}>
-                  <Text style={styles.closeModal}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
+                                <TouchableOpacity
+                                    onPress={handleOnPressStartDate}
+                                >
+                                    <Text style={styles.closeModal}>Close</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -489,7 +506,7 @@ const styles = StyleSheet.create({
         // height: 200,
         aspectRatio: 1 / 1,
         borderRadius: 5,
-        backgroundColor: 'lightgray',
+        backgroundColor: "lightgray",
         justifyContent: "center",
         alignItems: "center",
         marginVertical: 20,
@@ -545,8 +562,8 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 16,
     },
-    
-      inputBtn: {
+
+    inputBtn: {
         borderWidth: 1,
         borderRadius: 4,
         borderColor: "lightgray",
@@ -555,13 +572,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         justifyContent: "center",
         marginTop: 3,
-      },
-      centeredView: {
+    },
+    centeredView: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         backgroundColor: "white",
         borderWidth: 2,
@@ -571,11 +588,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingTop: 10,
         paddingBottom: 35,
-        width: "90%", 
-      },
-      closeModal: {
-        color: "white", padding: 10, backgroundColor: colors.accent, borderRadius: 10,
-      }
+        width: "90%",
+    },
+    closeModal: {
+        color: "white",
+        padding: 10,
+        backgroundColor: colors.accent,
+        borderRadius: 10,
+    },
 });
 
 export default AddProductScreen;

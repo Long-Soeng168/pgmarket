@@ -74,7 +74,7 @@ const PurchaseHistoryScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <HeaderText title='Purchase History'/>
+        <HeaderText title='Orders'/>
         <View style={styles.container}>
 
       <FlatList

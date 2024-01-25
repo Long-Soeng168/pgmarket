@@ -58,7 +58,7 @@ const ProfileScreen = ({navigation}) => {
 
             <TouchableOpacity style={styles.menuItem} onPress={onEditInformation}>
             <Icon name="list" size={20} color="#555" />
-            <Text style={styles.menuItemText}>Purchase History</Text>
+            <Text style={styles.menuItemText}>Orders</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={onGoToSettings}>

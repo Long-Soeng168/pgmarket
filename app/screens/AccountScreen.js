@@ -26,6 +26,10 @@ const HomeScreen = ({ navigation }) => {
         title="AddProduct Screen"
         onPress={() => navigation.navigate('AddProductScreen')}
       />
+      <Button
+        title="OrderDetailScreen"
+        onPress={() => navigation.navigate('OrderDetailScreen')}
+      />
       {/* <Button
         title="Purchase History Screen"
         onPress={() => navigation.navigate('PurchaseHistoryScreen')}

@@ -3,6 +3,7 @@ import React from "react";
 import {
     FlatList,
     Image,
+    KeyboardAvoidingView,
     ScrollView,
     StyleSheet,
     Text,
@@ -40,6 +41,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
+
 
     const getrelatedproducts = () => {
         fetch("https://pgmarket.online/api/getrelatedproducts/" + item.main_cate_id)
@@ -165,6 +167,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                             {descriptionNoHtml}
                         </Text>
                     </View>
+                    
                 </View>
                 <View style={{ marginBottom: 30 }}>
                     <ListHeader title="Relate Product" 
