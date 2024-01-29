@@ -5,6 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import { Modal } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
+import { useNavigation } from "@react-navigation/native";
 
 import Card from "../components/Card";
 import colors from "../config/colors";
@@ -16,61 +17,70 @@ import BackButton from "../components/BackButton";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
+const fetchData = async (url, setter) => {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setter(data);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export default function ShopProfile({ navigation, route }) {
     // const shop = route.params;
-    const shop = {
-        "id": 12,
-        "id_link_from_users": 20,
-        "shopcategory_id": 26,
-        "shop_name": "IDO Technology",
-        "shop_email": "ido@gmail.com",
-        "shop_address": "Phnom Penh",
-        "shop_phone": "010775589",
-        "image": "1688884776-IDO Technology.jpg",
-        "image_banner": "1694533821.jpg",
-        "bank_name": "ABA Bank",
-        "bank_id": "Mao Bora",
-        "bank_swift_code": "000210919",
-        "payment_link_for_url": "https://pay.ababank.com/Xvy23onjzjtB2dkm8",
-        "qr_code": "1702955813-IDO Technology.jpg",
-        "bank_image": "1703473786-IDO Technology.jpeg",
-        "description": "<p>We are selling all type of electronic device.</p>",
-        "cash_ondelivery": 1,
-        "status_delete": 1,
-        "created_at": "2023-06-16T10:00:32.000000Z",
-        "updated_at": "2024-01-17T04:25:02.000000Z"
-    };
+    // const shop = {
+    //     "id": 12,
+    //     "id_link_from_users": 20,
+    //     "shopcategory_id": 26,
+    //     "shop_name": "IDO Technology",
+    //     "shop_email": "ido@gmail.com",
+    //     "shop_address": "Phnom Penh",
+    //     "shop_phone": "010775589",
+    //     "image": "1688884776-IDO Technology.jpg",
+    //     "image_banner": "1694533821.jpg",
+    //     "bank_name": "ABA Bank",
+    //     "bank_id": "Mao Bora",
+    //     "bank_swift_code": "000210919",
+    //     "payment_link_for_url": "https://pay.ababank.com/Xvy23onjzjtB2dkm8",
+    //     "qr_code": "1702955813-IDO Technology.jpg",
+    //     "bank_image": "1703473786-IDO Technology.jpeg",
+    //     "description": "<p>We are selling all type of electronic device.</p>",
+    //     "cash_ondelivery": 1,
+    //     "status_delete": 1,
+    //     "created_at": "2023-06-16T10:00:32.000000Z",
+    //     "updated_at": "2024-01-17T04:25:02.000000Z"
+    // };
     // console.log(JSON.stringify(shop, null, 2));
-
-    const bannerUrl = "https://pgmarket.online/public/images/shop_banner/" + shop.image_banner;
-    const imageUrl = "https://pgmarket.online/public/images/shop/" + shop.image;
-    const shopName = shop.shop_name;
-    const shopAddress = shop.shop_address;
-    const shopNumber = shop.shop_phone;
-    const shopEmail = shop.shop_email;
-    const shopDescription = stripHtmlTags(shop.description);
-
     const [selected, setSelected] = React.useState("Products");
 
-    const [isFetching, setIsFetching] = React.useState(true);
     const [products, setProducts] = React.useState([]);
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
 
-    const getData = () => {
-        fetch(`https://pgmarket.online/api/getproducts_byshop/` + shop.id_link_from_users)
-            .then((rest) => rest.json())
-            .then((data) => {
-                setProducts(data);
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setIsFetching(false));
-    };
+    const [isFetching, setIsFetching] = React.useState(true);
+    const [shop, setShop] = React.useState([]);
+
     React.useEffect(() => {
-        getData();
+        const fetchDataAsync = async () => {
+            await fetchData("https://pgmarket.online/api/shopview/12", setShop);
+            await fetchData("https://pgmarket.online/api/shopproducts/20", setProducts);
+            setIsFetching(false);
+        };
+
+        fetchDataAsync();
     }, []);
-    // console.log(JSON.stringify(products, null, 2));
+    console.log(JSON.stringify(shop, null, 2));
+
+    const bannerUrl = shop && "https://pgmarket.online/public/images/shop_banner/" + shop.image_banner;
+    const imageUrl = shop && "https://pgmarket.online/public/images/shop/" + shop.image;
+    const shopName = shop && shop.shop_name;
+    const shopAddress = shop && shop.shop_address;
+    const shopNumber = shop && shop.shop_phone;
+    const shopEmail = shop && shop.shop_email;
+    const shopDescription = shop && stripHtmlTags(shop.description);
+
     return (
         <View
             style={{
@@ -156,7 +166,7 @@ export default function ShopProfile({ navigation, route }) {
                         {/* List Item */}
                         {selected === "Products" ? (
                             <View style={{ paddingVertical: 15 }}>
-                                <TouchableOpacity style={ styles.AddButton }>
+                                <TouchableOpacity style={ styles.AddButton } onPress={() => navigation.navigate('AddProductScreen')}>
                                     <Text style={ styles.AddButtonText }>
                                         Add Product
                                     </Text>
@@ -169,12 +179,17 @@ export default function ShopProfile({ navigation, route }) {
                                             scrollEnabled={false}
                                             showsHorizontalScrollIndicator={false}
                                             renderItem={({ item }) => (
-                                                <Card item={item} width={width} 
-                                                    title = {item.pro_name}
-                                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
-                                                    description= {item.description}
-                                                    price = {item.price}
-                                                />
+                                                <TouchableOpacity
+                                                key={item.pro_id}
+                                                onPress={() => navigation.push("ShopProductDetail", item)}
+                                                >
+                                                    <CardProduct item={item} width={width} 
+                                                        title = {item.pro_name}
+                                                        imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                                        description= {item.description}
+                                                        price = {item.price}
+                                                        />
+                                                </TouchableOpacity>
                                             )}
                                             contentContainerStyle={{
                                                 gap: 10,
@@ -208,11 +223,23 @@ export default function ShopProfile({ navigation, route }) {
                                     detail={shopDescription}
                                     icon="navicon"
                                 />
-                                <TouchableOpacity style={ [styles.AddButton, {backgroundColor: "tomato"}] }>
-                                    <Text style={ styles.AddButtonText }>
-                                        Edit Shop Details
-                                    </Text>
-                                </TouchableOpacity>
+                                <View style={{ flexDirection: 'row', gap: 10 }}>
+                                <TouchableOpacity style={ [styles.AddButton, {backgroundColor: colors.medium}] }
+                                        onPress={() => navigation.navigate('UpdateBankAccount')}
+                                    >
+                                        <Text style={ styles.AddButtonText }>
+                                            Update Bank
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={ [styles.AddButton, {backgroundColor: "tomato"}] }
+                                        onPress={() => navigation.navigate('UpdateShopDetail')}
+                                    >
+                                        <Text style={ styles.AddButtonText }>
+                                            Update Details
+                                        </Text>
+                                    </TouchableOpacity>
+                                    
+                                </View>
                             </View>
                         )}
                     </ScrollView>
@@ -298,6 +325,33 @@ function AboutItem({ title, detail, icon }) {
     );
 }
 
+const CardProduct = ({ item, width = 170, title, description, imageUrl, price }) => {
+    const navigation = useNavigation();
+
+    const descriptionNoHtml = stripHtmlTags(description);
+    return (
+        <View style={[styles.container, { width: width }]}>
+            <Image
+                style={styles.image}
+                source={{
+                    uri: imageUrl,
+                }}
+            />
+            <View style={styles.textContainer}>
+                <Text numberOfLines={2} style={styles.title}>
+                    {title}
+                </Text>
+                <Text numberOfLines={2} style={styles.description}>
+                    {descriptionNoHtml}
+                </Text>
+                <Text numberOfLines={1} style={styles.price}>
+                    $ {parseFloat(price).toFixed(2)}
+                </Text>
+            </View>
+        </View>
+    )
+}
+
 // Style Sheet
 const styles = StyleSheet.create({
     coverImage: { width: "100%", height: 200 },
@@ -328,6 +382,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     AddButton: {
+        flex: 1,
         backgroundColor: colors.primary,
         padding: 12,
         borderRadius: 8,
@@ -341,6 +396,27 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
       },
+      image: {
+        backgroundColor: colors.white,
+        aspectRatio: 1,
+        borderRadius: 10,
+        objectFit: "cover",
+    },
+    container: {
+        // width: 160,
+        borderRadius: 15,
+        overflow: "hidden",
+        backgroundColor: colors.light,
+        padding: 5,
+    },
+    textContainer: { padding: 10, gap: 3 },
+    title: { fontSize: 12, fontWeight: "500" },
+    description: { fontSize: 10, color: colors.medium },
+    price: {
+        fontSize: 14,
+        fontWeight: "500",
+        color: colors.danger,
+    },
 });
 
 

@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
     const [slides, setSlides] = React.useState([]);
     const [banners, setBanners] = React.useState([]);
 
-   React.useEffect(() => {
+    React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData("https://pgmarket.online/api/toprecommendshops", setCategories);
             await fetchData("https://pgmarket.online/api/getnewproducts", setNewProducts);

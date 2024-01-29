@@ -6,8 +6,6 @@ import { View, Button, StyleSheet } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
 
-  
-
   return (
     <View style={styles.container}>
       <Button
@@ -21,15 +19,7 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="Profile Screen"
         onPress={() => navigation.navigate('ProfileScreen')}
-      />
-      <Button
-        title="AddProduct Screen"
-        onPress={() => navigation.navigate('AddProductScreen')}
-      />
-      <Button
-        title="OrderDetailScreen"
-        onPress={() => navigation.navigate('OrderDetailScreen')}
-      />
+      />  
       {/* <Button
         title="Purchase History Screen"
         onPress={() => navigation.navigate('PurchaseHistoryScreen')}

@@ -9,6 +9,11 @@ import AccountDetailScreen from "../screens/AccountDetailScreen";
 import ShopProfile from "../screens/ShopProfile";
 import AddProductScreen from "../screens/AddProductScreen";
 import OrderDetailScreen from "../screens/OrderDetailScreen";
+import UpdateShopDetail from "../screens/UpdateShopDetail";
+import UpdateBankAccount from "../screens/UpdateBankAccount";
+import ShopProductDetail from "../screens/ShopProductDetail";
+import ProductImagesScreen from "../screens/ProductImagesScreen";
+import UpdateProductScreen from "../screens/UpdateProductScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +29,11 @@ export default function HomeNavigator() {
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
             <Stack.Screen name="AddProductScreen" component={AddProductScreen} />
             <Stack.Screen name="OrderDetailScreen" component={OrderDetailScreen} />
+            <Stack.Screen name="UpdateShopDetail" component={UpdateShopDetail} />
+            <Stack.Screen name="UpdateBankAccount" component={UpdateBankAccount} />
+            <Stack.Screen name="ShopProductDetail" component={ShopProductDetail} />
+            <Stack.Screen name="ProductImagesScreen" component={ProductImagesScreen} />
+            <Stack.Screen name="UpdateProductScreen" component={UpdateProductScreen} />
         </Stack.Navigator>
     );
 }
