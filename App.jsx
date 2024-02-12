@@ -11,10 +11,13 @@ import HomeScreen from "./app/screens/HomeScreen";
 
 export const favoritesContext = React.createContext();
 export const cartContext = React.createContext();
+export const userContext = React.createContext();
 
 export default function App() {
     const [favorites, setFavorites] = React.useState([]);
     const [cartItems, setCartItems] = React.useState([]);
+    const [user, setUser] = React.useState(null);
+    // console.log(JSON.stringify(user, null, 2));
     // console.log(JSON.stringify(favorites, null, 2));
     console.log(JSON.stringify(cartItems, null, 2));
     return (
@@ -29,11 +32,13 @@ export default function App() {
 
         <favoritesContext.Provider value={[favorites, setFavorites]}>
             <cartContext.Provider value={[cartItems, setCartItems]}>
-                <NavigationContainer>
-                    <SafeAreaView style={{ flex: 1 }}>
-                        <TabNavigator />
-                    </SafeAreaView>
-                </NavigationContainer>
+                <userContext.Provider value={[user, setUser]} >
+                    <NavigationContainer>
+                        <SafeAreaView style={{ flex: 1 }}>
+                            <TabNavigator />
+                        </SafeAreaView>
+                    </NavigationContainer>
+                </userContext.Provider>
             </cartContext.Provider>
         </favoritesContext.Provider>
     );

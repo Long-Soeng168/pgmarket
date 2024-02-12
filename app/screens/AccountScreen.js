@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
+import { userContext } from '../../App';
 
 
 const HomeScreen = ({ navigation }) => {
@@ -20,18 +21,6 @@ const HomeScreen = ({ navigation }) => {
         title="Profile Screen"
         onPress={() => navigation.navigate('ProfileScreen')}
       />  
-      {/* <Button
-        title="Purchase History Screen"
-        onPress={() => navigation.navigate('PurchaseHistoryScreen')}
-      />
-      <Button
-        title="Account Detail Screen"
-        onPress={() => navigation.navigate('AccountDetailScreen')}
-      />
-      <Button
-        title="Shop Profile Screen"
-        onPress={() => navigation.navigate('ShopProfile')}
-      /> */}
     </View>
   );
 };

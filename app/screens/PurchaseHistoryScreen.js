@@ -13,6 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import ActivityIndicator from "../components/ActivityIndicator";
+import { userContext } from "../../App";
 
 // const orders = [
 //   {
@@ -46,22 +47,39 @@ const fetchData = async (url, setter) => {
 
 const PurchaseHistoryScreen = ({ navigation }) => {
     const [isFetching, setIsFetching] = React.useState(true);
+    const [message, setMessage] = React.useState("");
     const [orders, setOrders] = React.useState([]);
+    const [reload, setReload] = React.useState(false);
+    console.log(JSON.stringify(orders, null, 2));
+
+    const [user, setUser] = React.useContext(userContext);
+    const userToken = user.token;
 
     const handleViewOrder = (orderId) => {
         // Implement logic to view order details
         console.log(`View Order: ${orderId}`);
-        navigation.navigate("OrderDetailScreen");
+        navigation.navigate("OrderDetailScreen", orderId);
     };
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.online/api/orders/20", setOrders);
+            await fetchData(
+                "https://pgmarket.longsoeng.website/api/orders/" + user.user.id,
+                setOrders
+            );
             setIsFetching(false);
         };
 
         fetchDataAsync();
-    }, []);
+    }, [reload]);
+
+    React.useEffect(() => {
+        if (message) {
+            setTimeout(() => {
+                setMessage(null); // Reset message state to false after 3 seconds
+            }, 3000);
+        }
+    }, [reload]);
 
     const handleDeleteOrder = (orderId) => {
         // Implement logic to delete order
@@ -72,7 +90,32 @@ const PurchaseHistoryScreen = ({ navigation }) => {
                 { text: "Cancel", style: "cancel" },
                 {
                     text: "Delete",
-                    onPress: () => console.log(`Delete Order: ${orderId}`),
+                    onPress: () => {
+                        console.log(`Delete Order: ${orderId}`);
+                        const myHeaders = {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + userToken,
+                        };
+
+                        const requestOptions = {
+                            method: "GET",
+                            headers: myHeaders,
+                            redirect: "follow",
+                        };
+
+                        fetch(
+                            "https://pgmarket.longsoeng.website/api/cancelOrder/" +
+                                orderId,
+                            requestOptions
+                        )
+                            .then((response) => response.json())
+                            .then((result) => {
+                                console.log(JSON.stringify(result, null, 2));
+                                setMessage(result.message);
+                                setReload((prevReload) => !prevReload);
+                            })
+                            .catch((error) => console.log("error", error));
+                    },
                 },
             ],
             { cancelable: true }
@@ -119,6 +162,19 @@ const PurchaseHistoryScreen = ({ navigation }) => {
     return (
         <View style={{ flex: 1, backgroundColor: "white" }}>
             <HeaderText title="Orders" />
+            {message && (
+                <Text
+                    style={{
+                        color: "red",
+                        textAlign: "center",
+                        fontSize: 16,
+                        backgroundColor: colors.lightGreen,
+                        padding: 10,
+                    }}
+                >
+                    {message}
+                </Text>
+            )}
             <ActivityIndicator visibility={isFetching} />
             {!isFetching && (
                 <View style={styles.container}>

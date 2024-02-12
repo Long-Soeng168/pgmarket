@@ -14,14 +14,21 @@ import UpdateBankAccount from "../screens/UpdateBankAccount";
 import ShopProductDetail from "../screens/ShopProductDetail";
 import ProductImagesScreen from "../screens/ProductImagesScreen";
 import UpdateProductScreen from "../screens/UpdateProductScreen";
+import { userContext } from "../../App";
 
 const Stack = createNativeStackNavigator();
 
-export default function HomeNavigator() {
+export default function AccountNavigator() {
+    const [user, setUser] = React.useContext(userContext);
+
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="AccountScreen" component={AccountScreen} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+        <Stack.Navigator screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'white' }, }}>
+                {
+                    user ? 
+                    <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+                    :
+                    <Stack.Screen name="AccountScreen" component={AccountScreen} />
+                }
             <Stack.Screen name="PurchaseHistoryScreen" component={PurchaseHistoryScreen} />
             <Stack.Screen name="AccountDetailScreen" component={AccountDetailScreen} />
             <Stack.Screen name="ShopProfile" component={ShopProfile} />
