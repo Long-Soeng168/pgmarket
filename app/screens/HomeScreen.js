@@ -41,11 +41,11 @@ export default function HomeScreen({ navigation }) {
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.online/api/toprecommendshops", setCategories);
-            await fetchData("https://pgmarket.online/api/getnewproducts", setNewProducts);
-            await fetchData("https://pgmarket.online/api/getbestselling", setBestSellingProducts);
-            await fetchData("https://pgmarket.online/api/getslides", setSlides);
-            await fetchData("https://pgmarket.online/api/getbanners", setBanners);
+            await fetchData("https://pgmarket.longsoeng.website/api/toprecommendshops", setCategories);
+            await fetchData("https://pgmarket.longsoeng.website/api/getnewproducts", setNewProducts);
+            await fetchData("https://pgmarket.longsoeng.website/api/getbestselling", setBestSellingProducts);
+            await fetchData("https://pgmarket.longsoeng.website/api/getslides", setSlides);
+            await fetchData("https://pgmarket.longsoeng.website/api/getbanners", setBanners);
             
             setIsFetching(false);
         };
@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }) {
                         <HomeHeader />
                         <Slider 
                             addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 16/9 }}
-                            images={slides} endPoint="https://pgmarket.online/public/images/slide/" />
+                            images={slides} endPoint="https://pgmarket.longsoeng.website/public/images/slide/" />
                         {/* Categories */}
                         <Text
                             style={{
@@ -108,7 +108,7 @@ export default function HomeScreen({ navigation }) {
                                     renderItem={({ item }) => (
                                         <Card item={item} 
                                             title = {item.pro_name}
-                                            imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                            imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
                                             description= {item.description}
                                             price = {item.price}
                                         />
@@ -125,7 +125,7 @@ export default function HomeScreen({ navigation }) {
                             <Slider 
                                 addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 13/3 }}  
                                 images={banners} 
-                                endPoint="https://pgmarket.online/public/images/banner/" 
+                                endPoint="https://pgmarket.longsoeng.website/public/images/banner/" 
                             />
                             
                             {/* Best Selling */}
@@ -143,7 +143,7 @@ export default function HomeScreen({ navigation }) {
                                     renderItem={({ item }) => (
                                         <Card item={item} 
                                             title = {item.pro_name}
-                                            imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                            imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
                                             description= {item.description}
                                             price = {item.price}
                                         />

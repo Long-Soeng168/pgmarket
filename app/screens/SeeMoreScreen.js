@@ -50,7 +50,7 @@ export default function SeeMoreScreen({ route }) {
                             renderItem={({ item }) => (
                                 <Card item={item} width={width} 
                                     title = {item.pro_name}
-                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                    imageUrl = {"https://pgmarket.online/public/images/product/thumb/" + item.thumbnail}
                                     description= {item.description}
                                     price = {item.price}
                                 />

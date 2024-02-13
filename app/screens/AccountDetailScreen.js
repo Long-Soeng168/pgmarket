@@ -13,12 +13,19 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
+import { userContext } from "../../App";
 
-const AccountDetailScreen = () => {
-    const [name, setName] = useState("John Doe");
-    const [phoneNumber, setPhoneNumber] = useState("123-456-7890");
-    const [email, setEmail] = useState("john.doe@example.com");
-    const [address, setAddress] = useState("123 Main St, Cityville");
+const AccountDetailScreen = ({navigation}) => {
+    const [user, setUser] = React.useContext(userContext);
+    const [message, setMessage] = React.useState("");
+    const [reload, setReload] = React.useState(false);
+    const userInfo = user.user;
+    console.log(userInfo);
+
+    const [name, setName] = useState(userInfo.name);
+    const [phoneNumber, setPhoneNumber] = useState(userInfo.phone);
+    const [email, setEmail] = useState(userInfo.email);
+    const [address, setAddress] = useState(userInfo.address);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [profilePicture, setProfilePicture] = useState(null);
@@ -30,6 +37,15 @@ const AccountDetailScreen = () => {
     const [addressError, setAddressError] = useState(null);
     const [confirmPasswordError, setConfirmPasswordError] = useState(null);
     const [passwordMatchError, setPasswordMatchError] = useState(null);
+
+    React.useEffect(() => {
+        if (message) {
+            setTimeout(() => {
+                setMessage(null); // Reset message state to false after 3 seconds
+                // navigation.goBack();
+            }, 2000);
+        }
+    }, [reload]);
 
     const validateField = (field, value) => {
         switch (field) {
@@ -107,7 +123,6 @@ const AccountDetailScreen = () => {
         validateField("name", name);
         validateField("phoneNumber", phoneNumber);
         validateField("email", email);
-        validateField("address", address);
         validateField("passwordMatch", confirmPassword);
 
         if (
@@ -121,14 +136,57 @@ const AccountDetailScreen = () => {
         }
 
         // Implement logic to update user details (e.g., make API call)
-        console.log("Updating user details...");
-        console.log("Name:", name);
-        console.log("Phone Number:", phoneNumber);
-        console.log("Email:", email);
-        console.log("Address:", address);
-        console.log("New Password:", newPassword);
-        console.log("Confirm Password:", confirmPassword);
-        console.log("Profile Picture:", profilePicture);
+        // console.log("Updating user details...");
+        // console.log("Name:", name);
+        // console.log("Phone Number:", phoneNumber);
+        // console.log("Email:", email);
+        // console.log("Address:", address);
+        // console.log("New Password:", newPassword);
+        // console.log("Confirm Password:", confirmPassword);
+        // console.log("Profile Picture:", profilePicture);
+        var myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Authorization", "Bearer " + user.token);
+
+        var formdata = new FormData();
+        formdata.append("name", name);
+        formdata.append("phone", phoneNumber);
+        formdata.append("email", email);
+        if(newPassword) {
+            formdata.append("password", newPassword);
+        }
+        formdata.append("address", address);
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow'
+        };
+
+        fetch("https://pgmarket.longsoeng.website/api/updateUserDetail/" + userInfo.id, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if(result.errors) {
+                console.log('Update Unsuccess!');
+                setMessage('Update Unsuccess');
+                setReload(!reload)
+            }
+            else {
+                console.log('Update Successfully!');
+                setMessage('Update Successfully');
+                setReload(!reload);
+                // console.log(result.user);
+                setUser(user => {
+                    return {
+                        "token": user.token,
+                        "user": result.user,
+                    }
+                })
+
+            }
+        })
+        .catch(error => console.log('error', error));
 
         // Optionally, reset password-related states after updating details
         // setNewPassword("");
@@ -142,6 +200,19 @@ const AccountDetailScreen = () => {
         >
             <View style={{ zIndex: 100 }}>
                 <HeaderText title="Account Detail" />
+                {message && (
+                    <Text
+                        style={{
+                            color: "red",
+                            textAlign: "center",
+                            fontSize: 16,
+                            backgroundColor: colors.lightGreen,
+                            padding: 10,
+                        }}
+                    >
+                        {message}
+                    </Text>
+                )}
             </View>
             <View style={styles.container}>
                 <View style={styles.innerContainer}>
