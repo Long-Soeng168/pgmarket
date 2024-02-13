@@ -8,6 +8,7 @@ import ShopCategoryScreen from "./app/screens/ShopCategoryScreen";
 import { SafeAreaView } from "react-native";
 import Slider from "./app/components/Slider";
 import HomeScreen from "./app/screens/HomeScreen";
+import storage from "./app/localStorage/storage";
 
 export const favoritesContext = React.createContext();
 export const cartContext = React.createContext();
@@ -19,7 +20,19 @@ export default function App() {
     const [user, setUser] = React.useState(null);
     // console.log(JSON.stringify(user, null, 2));
     // console.log(JSON.stringify(favorites, null, 2));
-    console.log(JSON.stringify(cartItems, null, 2));
+    // console.log(JSON.stringify(cartItems, null, 2));
+
+    const restoreToken = async () => {
+        const tokenString = await storage.getToken("authToken");
+        const token = JSON.parse(tokenString);
+        if(!token) return;
+        // console.log(JSON.stringify(token, null, 2));
+        setUser(token);
+    }
+    React.useEffect(() => {
+        restoreToken();
+    }, [])
+   
     return (
         
         // <NavigationContainer>

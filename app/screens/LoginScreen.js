@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import colors from "../config/colors";
 import { userContext } from "../../App";
+import storage from "../localStorage/storage";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -63,6 +64,8 @@ const LoginScreen = () => {
                         // console.log(result.token);
                         // console.log(JSON.stringify(result, null, 2));
                         setUser(result);
+                        storage.storeToken(JSON.stringify(result));
+
                         navigation.replace('ProfileScreen');
                         setIsError(false);
                     } else {

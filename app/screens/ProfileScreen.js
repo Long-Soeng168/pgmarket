@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import colors from "../config/colors";
 import { userContext } from "../../App";
+import storage from "../localStorage/storage";
 
 const ProfileScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
-    console.log(JSON.stringify(user, null, 2));
+    // console.log(JSON.stringify(user, null, 2));
     const userInfo = user.user;
 
     const onViewDetail = () => {
@@ -30,9 +31,26 @@ const ProfileScreen = ({ navigation }) => {
     const onSignOut = () => {
         // Logic for signing out
         console.log("Sign Out");
-        setUser(null);
+
+        var myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Authorization", "Bearer " + user.token);
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            redirect: "follow",
+        };
+
+        fetch("https://pgmarket.longsoeng.website/api/logout", requestOptions)
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.log("error", error));
         // navigation.navigate('LoginScreen');
         // You can add your sign-out logic here, e.g., navigating to the authentication screen
+
+        setUser(null);
+        storage.removeAuthToken();
     };
 
     return (
@@ -85,31 +103,36 @@ const ProfileScreen = ({ navigation }) => {
                     </TouchableOpacity>
 
                     {/* Show orders in shop */}
-                    {userInfo.type_roles === 'dealer' &&
-                    <TouchableOpacity
-                        style={styles.menuItem}
-                        onPress={onViewOrders}
-                    >
-                        <Icon name="list" size={20} color="#555" />
-                        <Text style={styles.menuItemText}>Orders</Text>
-                    </TouchableOpacity>}
+                    {userInfo.type_roles === "dealer" && (
+                        <>
+                            <TouchableOpacity
+                                style={styles.menuItem}
+                                onPress={onViewOrders}
+                            >
+                                <Icon name="list" size={20} color="#555" />
+                                <Text style={styles.menuItemText}>Orders</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.menuItem}
+                                onPress={onGoToSettings}
+                            >
+                                <Icon name="th-large" size={20} color="#555" />
+                                <Text style={styles.menuItemText}>
+                                    Your Shop
+                                </Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
 
                     {/* Show orders of user */}
-                    {userInfo.type_roles === 'customer' &&
-                    <TouchableOpacity
-                        style={styles.menuItem}
-                    >
-                        <Icon name="list" size={20} color="#555" />
-                        <Text style={styles.menuItemText}>Orders History</Text>
-                    </TouchableOpacity>}
-
-                    <TouchableOpacity
-                        style={styles.menuItem}
-                        onPress={onGoToSettings}
-                    >
-                        <Icon name="th-large" size={20} color="#555" />
-                        <Text style={styles.menuItemText}>Your Shop</Text>
-                    </TouchableOpacity>
+                    {userInfo.type_roles === "customer" && (
+                        <TouchableOpacity style={styles.menuItem}>
+                            <Icon name="list" size={20} color="#555" />
+                            <Text style={styles.menuItemText}>
+                                Orders History
+                            </Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
 
                 <TouchableOpacity

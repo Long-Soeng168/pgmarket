@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import colors from '../config/colors';
+import colors from '../config/colors'; 
+import storage from '../localStorage/storage';
+import { userContext } from '../../App';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
+
+  const [user, setUser] = React.useContext(userContext);
 
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -22,6 +26,8 @@ const RegisterScreen = () => {
   const [passwordError, setPasswordError] = useState(null);
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
   const [passwordMatchError, setPasswordMatchError] = useState(null);
+  
+  const [errors, setErrors] = useState(false);
 
   const validateField = (field, value) => {
     switch (field) {
@@ -52,6 +58,7 @@ const RegisterScreen = () => {
   };
 
   const handleRegister = () => {
+    setErrors(false);
     // Validate individual fields
     validateField('name', name);
     validateField('phoneNumber', phoneNumber);
@@ -67,12 +74,66 @@ const RegisterScreen = () => {
     }
 
     // Implement your registration logic here
-    console.log('Name:', name);
-    console.log('Phone Number:', phoneNumber);
-    console.log('Email:', email);
-    console.log('Address:', address);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
+    // console.log('Name:', name);
+    // console.log('Phone Number:', phoneNumber);
+    // console.log('Email:', email);
+    // console.log('Address:', address);
+    // console.log('Password:', password);
+    // console.log('Confirm Password:', confirmPassword);
+
+    const fetchData = () => {
+      const myHeaders = new Headers();
+      myHeaders.append("Accept", "application/json");
+
+      const formdata = new FormData();
+      formdata.append("name", name);
+      formdata.append("phone", phoneNumber);
+      formdata.append("email", email);
+      formdata.append("password", password);
+      formdata.append("address", address);
+
+      const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: formdata,
+          redirect: "follow",
+      };
+
+      fetch(
+          "https://pgmarket.longsoeng.website/api/register",
+          requestOptions
+      )
+          .then((response) => {
+              if (!response.ok) {
+                  throw new Error("Network response was not ok");
+              }
+              return response.json(); // Convert response to JSON
+          })
+          .then((result) => {
+              if (result.token) {
+                  // console.log(result.token);
+                  // console.log(JSON.stringify(result, null, 2)); 
+                  setUser(result);
+                  storage.storeToken(JSON.stringify(result));
+                  navigation.replace('ProfileScreen');
+              } 
+              if(result.errors) {
+                // console.log(JSON.stringify(result, null, 2)); 
+                setErrors(true);
+              }
+              // Process the JSON result here
+              // setIsError(false);
+          })
+          .catch((error) => {
+              console.error(
+                  "There was a problem with the fetch operation:",
+                  error
+              );
+              // setIsError(true);
+          });
+  };
+
+  fetchData();
 
     // You can add validation, authentication logic, API calls, etc. here
 
@@ -182,6 +243,8 @@ const RegisterScreen = () => {
         </View>
         {confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
         {passwordMatchError && <Text style={styles.errorText}>{passwordMatchError}</Text>}
+        
+        {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>Phone or Email was Taken</Text>}
 
         <TouchableOpacity style={styles.button} onPress={handleRegister}>
           <Text style={styles.buttonText}>Register</Text>
