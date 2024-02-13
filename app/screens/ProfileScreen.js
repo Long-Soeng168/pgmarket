@@ -22,7 +22,7 @@ const ProfileScreen = ({ navigation }) => {
         console.log("Edit Information");
     };
 
-    const onGoToSettings = () => {
+    const onGoToShop = () => {
         // Logic for navigating to the settings screen
         navigation.navigate("ShopProfile");
         console.log("Go to Shop Profile");
@@ -102,7 +102,7 @@ const ProfileScreen = ({ navigation }) => {
                         <Text style={styles.menuItemText}>Account Detail</Text>
                     </TouchableOpacity>
 
-                    {/* Show orders in shop */}
+                    {/* Show for dealer */}
                     {userInfo.type_roles === "dealer" && (
                         <>
                             <TouchableOpacity
@@ -114,7 +114,7 @@ const ProfileScreen = ({ navigation }) => {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.menuItem}
-                                onPress={onGoToSettings}
+                                onPress={onGoToShop}
                             >
                                 <Icon name="th-large" size={20} color="#555" />
                                 <Text style={styles.menuItemText}>
@@ -124,7 +124,7 @@ const ProfileScreen = ({ navigation }) => {
                         </>
                     )}
 
-                    {/* Show orders of user */}
+                    {/* Show for normal user */}
                     {userInfo.type_roles === "customer" && (
                         <TouchableOpacity style={styles.menuItem}>
                             <Icon name="list" size={20} color="#555" />

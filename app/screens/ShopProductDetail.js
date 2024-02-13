@@ -9,13 +9,14 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Alert,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import { Modal } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 
-import { cartContext, favoritesContext } from "../../App";
+import { cartContext, favoritesContext, userContext } from "../../App";
 
 import ActivityIndicator from "../components/ActivityIndicator";
 import Card from "../components/Card";
@@ -26,6 +27,9 @@ import HeaderText from "../components/HeaderText";
 export default function ShopProductDetail({ route, navigation }) {
     const item = route.params;
     console.log(JSON.stringify(item, null, 2));
+
+    const [user, setUser] = React.useContext(userContext);
+    const userToken = user.token;
 
     const imageUrl =
         "https://pgmarket.online/public/images/product/" + item.thumbnail;
@@ -74,6 +78,43 @@ export default function ShopProductDetail({ route, navigation }) {
 
     const DeleteProduct = () => {
         console.log('Delete Product');
+        Alert.alert(
+            "Delete Order",
+            "Are you sure you want to delete Product?",
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        console.log(`Delete Order: ${item.id}`);
+                        const myHeaders = {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + userToken,
+                        };
+
+                        const requestOptions = {
+                            method: "DELETE",
+                            headers: myHeaders,
+                            redirect: "follow",
+                        };
+
+                        fetch(
+                            "https://pgmarket.longsoeng.website/api/destroyProduct/" +
+                            item.id,
+                            requestOptions
+                        )
+                            .then((response) => response.json())
+                            .then((result) => {
+                                console.log(JSON.stringify(result, null, 2)); 
+                                navigation.pop();
+                                navigation.replace('ShopProfile');
+                            })
+                            .catch((error) => console.log("error", error));
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
     };
 
     const UpdateDetails = () => {

@@ -14,6 +14,7 @@ import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import BackButton from "../components/BackButton";
+import { userContext } from "../../App";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
@@ -29,6 +30,9 @@ const fetchData = async (url, setter) => {
 
 export default function ShopProfile({ navigation, route }) {
     // const shop = route.params;
+
+    const [user, setUser] = React.useContext(userContext); 
+
     // const shop = {
     //     "id": 12,
     //     "id_link_from_users": 20,
@@ -64,8 +68,8 @@ export default function ShopProfile({ navigation, route }) {
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.online/api/shopview/12", setShop);
-            await fetchData("https://pgmarket.online/api/shopproducts/20", setProducts);
+            await fetchData("https://pgmarket.longsoeng.website/api/shopview/" + user.user.id, setShop);
+            await fetchData("https://pgmarket.longsoeng.website/api/shopproducts/" + user.user.id, setProducts);
             setIsFetching(false);
         };
 
