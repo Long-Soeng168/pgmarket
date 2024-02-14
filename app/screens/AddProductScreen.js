@@ -10,6 +10,7 @@ import {
     ScrollView,
     TextInput,
     Modal,
+    Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -20,6 +21,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
+import { userContext } from "../../App";
 
 const data = [
     { label: "Item 1", value: "1" },
@@ -68,7 +70,11 @@ const ImageUploadButton = ({ onPress, image }) => (
     </TouchableOpacity>
 );
 
-const AddProductScreen = () => {
+const AddProductScreen = ({navigation}) => {
+
+    const [user, setUser] = React.useContext(userContext);
+
+    const [mainCategory, setMainCategory] = useState("");
     const [category, setCategory] = useState("");
     const [subCategory, setSubCategory] = useState("");
     const [brand, setBrand] = useState("");
@@ -92,11 +98,52 @@ const AddProductScreen = () => {
     const [discountError, setDiscountError] = useState(null);
     const [videoUrlError, setVideoUrlError] = useState(null);
     const [shippingError, setShippingError] = useState(null);
+    
+    const [mainCate, setMainCate] = useState([]);
+    const [cate, setCate] = useState([]);
+    const [filterCate, setFilterCate] = useState([]);
+    const [subCate, setSubCate] = useState([]);
+    const [filterSubCate, setFilterSubCate] = useState([]);
+
+    // React.useEffect(() => {
+    //     if(mainCategory){
+    //         let filter = cate.filter(item => item.id === mainCategory.id);
+    //         console.log('filter');
+    //         setFilterCate(filter);
+    //     }
+    // });
+
+    React.useEffect(() => {
+        fetch("https://pgmarket.longsoeng.website/api/getmaincategories")
+            .then((response) => response.json())
+            .then((result) => {
+                setMainCate(result);
+                // console.log(result)
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getcategories")
+            .then((response) => response.json())
+            .then((result) => {
+                setCate(result);
+                // console.log(result)
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getsubcategories")
+            .then((response) => response.json())
+            .then((result) => {
+                setSubCate(result);
+                // console.log(result)
+            })
+            .catch((error) => console.error(error));
+    },[]);
+
 
     const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
     const today = new Date();
     const startDate = getFormatedDate(
-        today.setDate(today.getDate() + 1),
+        today.setDate(today.getDate()),
         "YYYY/MM/DD"
     );
     const [selectedStartDate, setSelectedStartDate] = useState("");
@@ -108,15 +155,47 @@ const AddProductScreen = () => {
         setOpenStartDatePicker(!openStartDatePicker);
     };
 
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-    const [selected, setSelected] = useState([]);
+    const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
+ 
+    const [selectedEndDate, setSelectedEndDate] = useState("");
+    const [endDate, setEndDate] = useState("12/12/2023");
+    function handleChangeEndDate(propDate) {
+        setEndDate(propDate);
+    }
+    const handleOnPressEndDate = () => {
+        setOpenEndDatePicker(!openEndDatePicker);
+    };
+ 
+    const [isFocusMain, setIsFocusMain] = useState(false);
+    // const [selectedMain, setSelectedMain] = useState([]); 
+    const [isFocusCate, setIsFocusCate] = useState(false);
+    const [isFocusSubCate, setIsFocusSubCate] = useState(false);
 
-    const renderLabel = () => {
-        if (value || isFocus) {
+    const renderLabelMain = () => {
+        if (mainCategory || isFocusMain) {
             return (
-                <Text style={[styles.label, isFocus && { color: "blue" }]}>
+                <Text style={[styles.label, isFocusMain && { color: "blue" }]}>
+                    Main Category
+                </Text>
+            );
+        }
+        return null;
+    };
+    const renderLabelCate = () => {
+        if (category || isFocusCate) {
+            return (
+                <Text style={[styles.label, isFocusCate && { color: "blue" }]}>
                     Category
+                </Text>
+            );
+        }
+        return null;
+    };
+    const renderLabelSubCate = () => {
+        if (subCategory || isFocusSubCate) {
+            return (
+                <Text style={[styles.label, isFocusSubCate && { color: "blue" }]}>
+                    Sub Category
                 </Text>
             );
         }
@@ -127,39 +206,39 @@ const AddProductScreen = () => {
         switch (field) {
             // Add validation logic for each field
             case "category":
-                setCategoryError(value ? null : "Category cannot be empty");
+                setCategoryError(value ? null : "Category required");
                 break;
             case "subCategory":
                 setSubCategoryError(
-                    value ? null : "Sub-category cannot be empty"
+                    value ? null : "Sub-category required"
                 );
                 break;
             case "brand":
-                setBrandError(value ? null : "Brand cannot be empty");
+                setBrandError(value ? null : "Brand required");
                 break;
             case "productName":
                 setProductNameError(
-                    value.trim() !== "" ? null : "Product Name cannot be empty"
+                    value.trim() !== "" ? null : "Product Name required"
                 );
                 break;
             case "unitPrice":
                 setUnitPriceError(
-                    value.trim() !== "" ? null : "Unit Price cannot be empty"
+                    value.trim() !== "" ? null : "Price required"
                 );
                 break;
             case "discount":
                 setDiscountError(
-                    value.trim() !== "" ? null : "Discount cannot be empty"
+                    value.trim() !== "" ? null : "Discount required"
                 );
                 break;
             case "videoUrl":
                 setVideoUrlError(
-                    value.trim() !== "" ? null : "Video URL cannot be empty"
+                    value.trim() !== "" ? null : "Video URL required"
                 );
                 break;
             case "shipping":
                 setShippingError(
-                    value.trim() !== "" ? null : "Shipping cannot be empty"
+                    value.trim() !== "" ? null : "Shipping required"
                 );
                 break;
             default:
@@ -187,33 +266,26 @@ const AddProductScreen = () => {
         }
     };
 
-    const updateProduct = () => {
+    const addProduct = () => {
         // Validate fields
-        // validateField("category", category);
-        // validateField("subCategory", subCategory);
-        // validateField("brand", brand);
-        // validateField("productName", productName);
-        // validateField("unitPrice", unitPrice);
-        // validateField("discount", discount);
-        // validateField("videoUrl", videoUrl);
-        // validateField("shipping", shipping);
+        validateField("category", category);
+        validateField("subCategory", subCategory);
+        validateField("productName", productName);
+        validateField("unitPrice", unitPrice);
 
-        // // Check for errors
-        // if (
-        //   categoryError ||
-        //   subCategoryError ||
-        //   brandError ||
-        //   productNameError ||
-        //   unitPriceError ||
-        //   discountError ||
-        //   videoUrlError ||
-        //   shippingError
-        // ) {
-        //   return;
-        // }
+        // Check for errors
+        if (
+          categoryError ||
+          subCategoryError ||
+          productNameError ||
+          unitPriceError
+        ) {
+          return;
+        }
 
         // Implement logic to add new product (e.g., make API call)
         console.log("Adding new product...");
+        console.log("Main Category:", mainCategory);
         console.log("Category:", category);
         console.log("Sub-category:", subCategory);
         console.log("Brand:", brand);
@@ -229,6 +301,55 @@ const AddProductScreen = () => {
         console.log("Selected Sizes:", selectedSizes);
         console.log("Description:", description);
         console.log("============================");
+
+        var myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Authorization", "Bearer " + user.token);
+
+        var formdata = new FormData();
+        formdata.append("main_cate_id", mainCategory);
+        formdata.append("cate_id", category);
+        formdata.append("sub_cate_id", subCategory);
+        formdata.append("pro_name", productName);
+        formdata.append("price", unitPrice);
+        formdata.append("start", discountFromDate);
+        formdata.append("end", discountToDate);
+        formdata.append("discount", discount);
+        formdata.append("video_url", videoUrl);
+        formdata.append("description", description);
+        formdata.append("shipping", shipping);
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow'
+        };
+
+        fetch("https://pgmarket.longsoeng.website/api/storeProduct", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if (result.createdProductId) {
+                Alert.alert(
+                    "Add Product",
+                    "Product has been added successfully",
+                    [
+                        { text: "", style: "" },
+                        {
+                            text: "OK",
+                            onPress: () => {
+                                navigation.pop();
+                                navigation.replace('ShopProfile');
+                            },
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            }
+        })
+        .catch(error => console.log('error', error));
+
+        
     };
 
     return (
@@ -247,41 +368,125 @@ const AddProductScreen = () => {
                     </View>
 
                     <View style={styles.dropdownContainer}>
-                        {renderLabel()}
+                        {renderLabelMain()}
                         <Dropdown
                             style={[
                                 styles.dropdown,
-                                isFocus && { borderColor: "blue" },
+                                isFocusMain && { borderColor: "blue" },
                             ]}
                             placeholderStyle={styles.placeholderStyle}
                             selectedTextStyle={styles.selectedTextStyle}
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
-                            data={data}
+                            data={mainCate}
                             search
                             maxHeight={300}
-                            labelField="label"
-                            valueField="value"
-                            placeholder={!isFocus ? "Select Category" : "..."}
+                            labelField="name_en"
+                            valueField="id"
+                            placeholder={!isFocusMain ? "Select Main Category" : "..."}
                             searchPlaceholder="Search..."
-                            value={category}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
+                            value={mainCategory}
+                            onFocus={() => setIsFocusMain(true)}
+                            onBlur={() => setIsFocusMain(false)}
                             onChange={(item) => {
                                 // setValue(item.value);
-                                setCategory(item.value);
-                                setIsFocus(false);
+                                setMainCategory(item.id);
+                                // console.log(item.id);
+                                let filter = cate.filter(i => i.main_category_id === item.id);
+                                // console.log(filter);
+                                setFilterCate(filter);
+                                setIsFocusMain(false);
                             }}
                             renderLeftIcon={() => (
                                 <AntDesign
                                     style={styles.icon}
-                                    color={isFocus ? "blue" : "black"}
-                                    name="Safety"
+                                    color={isFocusMain ? "blue" : "black"}
+                                    name="profile"
                                     size={20}
                                 />
                             )}
                         />
                     </View>
+
+                    <View style={styles.dropdownContainer}>
+                        {renderLabelCate()}
+                        <Dropdown
+                            style={[
+                                styles.dropdown,
+                                isFocusCate && { borderColor: "blue" },
+                            ]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={filterCate}
+                            search
+                            maxHeight={300}
+                            labelField="name_en"
+                            valueField="id"
+                            placeholder={!isFocusCate ? "Select Category" : "..."}
+                            searchPlaceholder="Search..."
+                            value={category}
+                            onFocus={() => setIsFocusCate(true)}
+                            onBlur={() => setIsFocusCate(false)}
+                            onChange={(item) => {
+                                // setValue(item.id);
+                                setCategory(item.id);
+                                console.log(item.id);
+                                let filter = subCate.filter(i => i.sub_category_id === item.id);
+                                // console.log(filter);
+                                setFilterSubCate(filter);
+                                setIsFocusCate(false);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color={isFocusCate ? "blue" : "black"}
+                                    name="profile"
+                                    size={20}
+                                />
+                            )}
+                        />
+                    </View>
+
+                    <View style={styles.dropdownContainer}>
+                        {renderLabelSubCate()}
+                        <Dropdown
+                            style={[
+                                styles.dropdown,
+                                isFocusSubCate && { borderColor: "blue" },
+                            ]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={filterSubCate}
+                            search
+                            maxHeight={300}
+                            labelField="name_en"
+                            valueField="id"
+                            placeholder={!isFocusSubCate ? "Select Sub-Category" : "..."}
+                            searchPlaceholder="Search..."
+                            value={subCategory}
+                            onFocus={() => setIsFocusSubCate(true)}
+                            onBlur={() => setIsFocusSubCate(false)}
+                            onChange={(item) => {
+                                // setValue(item.id);
+                                setSubCategory(item.id);
+                                console.log(item.id);
+                                setIsFocusSubCate(false);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color={isFocusSubCate ? "blue" : "black"}
+                                    name="profile"
+                                    size={20}
+                                />
+                            )}
+                        />
+                    </View>
+                    {subCategoryError && <Text style={{ marginTop: -10, color: 'red' }}>Category required</Text>}
 
                     <View style={styles.dropdownContainer}>
                         <MultiSelect
@@ -306,7 +511,7 @@ const AddProductScreen = () => {
                                 <AntDesign
                                     style={styles.icon}
                                     color="black"
-                                    name="Safety"
+                                    name="profile"
                                     size={20}
                                 />
                             )}
@@ -392,9 +597,9 @@ const AddProductScreen = () => {
                             </Text>
                             <TouchableOpacity
                                 style={styles.inputBtn}
-                                onPress={handleOnPressStartDate}
+                                onPress={handleOnPressEndDate}
                             >
-                                <Text>{selectedStartDate}</Text>
+                                <Text>{selectedEndDate}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -421,7 +626,7 @@ const AddProductScreen = () => {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={updateProduct}
+                        onPress={addProduct}
                     >
                         <Text style={styles.buttonText}>Add Product</Text>
                     </TouchableOpacity>
@@ -448,6 +653,34 @@ const AddProductScreen = () => {
 
                                 <TouchableOpacity
                                     onPress={handleOnPressStartDate}
+                                >
+                                    <Text style={styles.closeModal}>Close</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={openEndDatePicker}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <DatePicker
+                                    mode="calendar"
+                                    minimumDate={startDate}
+                                    selected={endDate}
+                                    onDateChanged={handleChangeEndDate}
+                                    onSelectedChange={(date) => {
+                                        setSelectedEndDate(date);
+                                        setDiscountToDate(date);
+                                    }}
+                                    style={{ borderRadius: 15 }}
+                                />
+
+                                <TouchableOpacity
+                                    onPress={handleOnPressEndDate}
                                 >
                                     <Text style={styles.closeModal}>Close</Text>
                                 </TouchableOpacity>
