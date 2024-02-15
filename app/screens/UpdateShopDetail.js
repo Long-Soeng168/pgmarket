@@ -8,20 +8,27 @@ import {
     KeyboardAvoidingView,
     Platform,
     Image,
+    Alert,
+    ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
+import { userContext } from "../../App";
+import LoadingOverlay from "../components/LoadingOverlay";
 
-const UpdateShopDetail = () => {
-    const [name, setName] = useState("IDO Technology");
-    const [phoneNumber, setPhoneNumber] = useState("010775589");
-    const [email, setEmail] = useState("ido@gmail.com");
-    const [address, setAddress] = useState(" Phnom Penh");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+const UpdateShopDetail = ({navigation}) => {
+    const [user, setUser] = React.useContext(userContext); 
+    const [loading, setLoading] = useState(true);
+
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [address, setAddress] = useState('');
+    const [description, setDescription] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
+    const [coverPicture, setCoverPicture] = useState(null);
     const [passwordVisible, setPasswordVisible] = useState(false);
 
     const [nameError, setNameError] = useState(null);
@@ -30,6 +37,24 @@ const UpdateShopDetail = () => {
     const [addressError, setAddressError] = useState(null);
     const [confirmPasswordError, setConfirmPasswordError] = useState(null);
     const [passwordMatchError, setPasswordMatchError] = useState(null);
+
+    React.useEffect(() => {
+        fetch("https://pgmarket.longsoeng.website/api/shopview/" + user.user.id)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(JSON.stringify(result, null, 2));
+
+                setName(result.shop_name);
+                setPhoneNumber(result.shop_phone);
+                setEmail(result.shop_email);
+                setAddress(result.shop_address); 
+                setDescription(result.description);
+                setLoading(false);
+            })
+            .catch((error) => {console.error(error)
+                setLoading(false);
+            }); 
+    }, []);
 
     const validateField = (field, value) => {
         switch (field) {
@@ -53,11 +78,7 @@ const UpdateShopDetail = () => {
                     value.trim() !== "" ? null : "Address cannot be empty"
                 );
                 break;
-            case "passwordMatch":
-                setPasswordMatchError(
-                    value === newPassword ? null : "Passwords do not match"
-                );
-                break;
+             
             default:
                 break;
         }
@@ -84,7 +105,7 @@ const UpdateShopDetail = () => {
         })();
     }, []);
 
-    const pickImage = async () => {
+    const pickImageProfile = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -102,20 +123,36 @@ const UpdateShopDetail = () => {
             console.error("Error picking image:", error);
         }
     };
+    const pickImageCover = async () => {
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [21, 9],
+                quality: 1,
+            });
+
+            if (!result.canceled) {
+                // Use the first asset in the "assets" array
+                const selectedAsset = result.assets[0];
+                setCoverPicture(selectedAsset.uri);
+            }
+        } catch (error) {
+            console.error("Error picking image:", error);
+        }
+    };
 
     const updateDetails = () => {
         validateField("name", name);
         validateField("phoneNumber", phoneNumber);
         validateField("email", email);
         validateField("address", address);
-        validateField("passwordMatch", confirmPassword);
 
         if (
             nameError ||
             phoneNumberError ||
             emailError ||
-            addressError ||
-            passwordMatchError
+            addressError
         ) {
             return;
         }
@@ -126,9 +163,80 @@ const UpdateShopDetail = () => {
         console.log("Phone Number:", phoneNumber);
         console.log("Email:", email);
         console.log("Address:", address);
-        console.log("New Password:", newPassword);
-        console.log("Confirm Password:", confirmPassword);
         console.log("Profile Picture:", profilePicture);
+
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        myHeaders.append("Authorization", "Bearer " + user.token);
+
+        const formdata = new FormData();
+        formdata.append("shop_name", name);
+        formdata.append("shop_email", email);
+        formdata.append("shop_phone", phoneNumber);
+        formdata.append("shop_address", address);
+        formdata.append("description", description);
+        if(profilePicture) {
+            formdata.append("image", {
+                uri: profilePicture,
+                name: "image.jpg",
+                type: "image/jpeg",
+            });
+        }
+        if(coverPicture) {
+            formdata.append("image_banner", {
+                uri: coverPicture,
+                name: "image.jpg",
+                type: "image/jpeg",
+            });
+        }
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow"
+        };
+        setLoading(true);
+        fetch("https://pgmarket.longsoeng.website/api/updateShopProfile/" + user.user.id , requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            setLoading(false);
+                if (!result.errors) {
+                    Alert.alert(
+                        "Add Product",
+                        "Product has been added successfully",
+                        [
+                            { text: "", style: "" },
+                            {
+                                text: "OK",
+                                onPress: () => {
+                                    navigation.pop();
+                                    navigation.replace("ShopProfile");
+                                },
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    Alert.alert(
+                        "Add Product",
+                        "Product added unsuccessfully",
+                        [
+                            { text: "", style: "" },
+                            {
+                                text: "OK",
+                                onPress: () => {
+                                    navigation.pop();
+                                    navigation.replace("ShopProfile");
+                                },
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                }
+        })
+        .catch((error) => console.error(error));
 
         // Optionally, reset password-related states after updating details
         // setNewPassword("");
@@ -140,16 +248,17 @@ const UpdateShopDetail = () => {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}
         >
-            <View style={{ zIndex: 100 }}>
+            <View style={{ zIndex: 100}}>
                 <HeaderText title="Update Shop Details" />
             </View>
-            <View style={styles.container}>
+                <LoadingOverlay visible={loading}/>
+            <ScrollView style={styles.container}>
                 <View style={styles.innerContainer}>
-                    {profilePicture ? (
-                        <TouchableOpacity onPress={pickImage}>
+                    {coverPicture ? (
+                        <TouchableOpacity onPress={pickImageCover}>
                             <Image
-                                style={styles.profilePicture}
-                                source={{ uri: profilePicture }}
+                                style={styles.coverPicture}
+                                source={{ uri: coverPicture }}
                             />
                         </TouchableOpacity>
                     ) : (
@@ -161,13 +270,14 @@ const UpdateShopDetail = () => {
                                 justifyContent: "center",
                                 alignItems: "center",
                              }}
-                            onPress={pickImage}
+                            onPress={pickImageCover}
                         >
                             <Ionicons name="camera" size={28} color="white" />
                         </TouchableOpacity>
                     )}
+
                     {profilePicture ? (
-                        <TouchableOpacity onPress={pickImage}>
+                        <TouchableOpacity onPress={pickImageProfile}>
                             <Image
                                 style={styles.profilePicture}
                                 source={{ uri: profilePicture }}
@@ -176,7 +286,7 @@ const UpdateShopDetail = () => {
                     ) : (
                         <TouchableOpacity
                             style={styles.uploadButton}
-                            onPress={pickImage}
+                            onPress={pickImageProfile}
                         >
                             <Ionicons name="camera" size={28} color="white" />
                         </TouchableOpacity>
@@ -221,83 +331,54 @@ const UpdateShopDetail = () => {
                         <Text style={styles.errorText}>{addressError}</Text>
                         )}
                     <TextInput
-                        style={styles.input}
+                        multiline
+                        numberOfLines={10} 
+                        style={[styles.input, {minHeight: 70, textAlignVertical: 'top'}]}
                         placeholder="Description"
-                        // value={address}
-                        // onChangeText={(text) => setAddress(text)}
+                        value={description}
+                        onChangeText={(text) => setDescription(text)}
                     />
-                    <View style={styles.passwordContainer}>
-                        <TextInput
-                            style={styles.passwordInput}
-                            placeholder="New Password"
-                            secureTextEntry={!passwordVisible}
-                            value={newPassword}
-                            onChangeText={(text) => setNewPassword(text)}
-                        />
-                        <TouchableOpacity
-                            style={styles.eyeIcon}
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        >
-                            <Ionicons
-                                name={passwordVisible ? "eye" : "eye-off"}
-                                size={24}
-                                color="gray"
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.passwordContainer}>
-                        <TextInput
-                            style={styles.passwordInput}
-                            placeholder="Confirm Password"
-                            secureTextEntry={!passwordVisible}
-                            value={confirmPassword}
-                            onChangeText={(text) => setConfirmPassword(text)}
-                        />
-                        <TouchableOpacity
-                            style={styles.eyeIcon}
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        >
-                            <Ionicons
-                                name={passwordVisible ? "eye" : "eye-off"}
-                                size={24}
-                                color="gray"
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    {passwordMatchError && (
-                        <Text style={styles.errorText}>
-                            {passwordMatchError}
-                        </Text>
-                    )}
 
+                </View>
                     <TouchableOpacity
                         style={styles.button}
                         onPress={updateDetails}
                     >
                         <Text style={styles.buttonText}>Update Details</Text>
                     </TouchableOpacity>
-                </View>
-            </View>
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         // justifyContent: "center",
-        paddingTop: 20,
+        // paddingTop: 20,
         paddingHorizontal: 20,
         backgroundColor: 'white',
     },
     innerContainer: {
-        justifyContent: "center",
+        // justifyContent: "center",
         alignItems: "center",
+        marginTop: 20,
+        marginBottom: 30,
     },
     profilePicture: {
         width: 120,
         height: 120,
+        marginTop: -60,
         borderRadius: 100,
+        borderWidth: 1,
+        borderColor: 'white',
+    },
+    coverPicture: {
+            width: '100%',
+            aspectRatio: 21/9,
+            backgroundColor: 'lightgray',
+            justifyContent: "center",
+            alignItems: "center",
     },
     uploadButton: {
         width: 120,

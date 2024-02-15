@@ -35,7 +35,7 @@ export default function ShopProfile({ navigation, route }) {
 
     // const shop = {
     //     "id": 12,
-    //     "id_link_from_users": 20,
+    //     "id_link_from_users": 20, 
     //     "shopcategory_id": 26,
     //     "shop_name": "IDO Technology",
     //     "shop_email": "ido@gmail.com",
