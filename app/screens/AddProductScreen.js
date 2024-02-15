@@ -22,6 +22,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import { userContext } from "../../App";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const data = [
     { label: "Item 1", value: "1" },
@@ -70,9 +71,9 @@ const ImageUploadButton = ({ onPress, image }) => (
     </TouchableOpacity>
 );
 
-const AddProductScreen = ({navigation}) => {
-
+const AddProductScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
+    const [loading, setLoading] = useState(false);
 
     const [mainCategory, setMainCategory] = useState("");
     const [category, setCategory] = useState("");
@@ -98,7 +99,7 @@ const AddProductScreen = ({navigation}) => {
     const [discountError, setDiscountError] = useState(null);
     const [videoUrlError, setVideoUrlError] = useState(null);
     const [shippingError, setShippingError] = useState(null);
-    
+
     const [mainCate, setMainCate] = useState([]);
     const [cate, setCate] = useState([]);
     const [filterCate, setFilterCate] = useState([]);
@@ -137,8 +138,7 @@ const AddProductScreen = ({navigation}) => {
                 // console.log(result)
             })
             .catch((error) => console.error(error));
-    },[]);
-
+    }, []);
 
     const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
     const today = new Date();
@@ -156,7 +156,7 @@ const AddProductScreen = ({navigation}) => {
     };
 
     const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
- 
+
     const [selectedEndDate, setSelectedEndDate] = useState("");
     const [endDate, setEndDate] = useState("12/12/2023");
     function handleChangeEndDate(propDate) {
@@ -165,9 +165,9 @@ const AddProductScreen = ({navigation}) => {
     const handleOnPressEndDate = () => {
         setOpenEndDatePicker(!openEndDatePicker);
     };
- 
+
     const [isFocusMain, setIsFocusMain] = useState(false);
-    // const [selectedMain, setSelectedMain] = useState([]); 
+    // const [selectedMain, setSelectedMain] = useState([]);
     const [isFocusCate, setIsFocusCate] = useState(false);
     const [isFocusSubCate, setIsFocusSubCate] = useState(false);
 
@@ -194,7 +194,9 @@ const AddProductScreen = ({navigation}) => {
     const renderLabelSubCate = () => {
         if (subCategory || isFocusSubCate) {
             return (
-                <Text style={[styles.label, isFocusSubCate && { color: "blue" }]}>
+                <Text
+                    style={[styles.label, isFocusSubCate && { color: "blue" }]}
+                >
                     Sub Category
                 </Text>
             );
@@ -209,9 +211,7 @@ const AddProductScreen = ({navigation}) => {
                 setCategoryError(value ? null : "Category required");
                 break;
             case "subCategory":
-                setSubCategoryError(
-                    value ? null : "Sub-category required"
-                );
+                setSubCategoryError(value ? null : "Sub-category required");
                 break;
             case "brand":
                 setBrandError(value ? null : "Brand required");
@@ -254,12 +254,14 @@ const AddProductScreen = ({navigation}) => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
                 quality: 1,
             });
 
             if (!result.canceled) {
                 const selectedAsset = result.assets[0];
-                setImage(selectedAsset.uri);
+                setImage(selectedAsset);
             }
         } catch (error) {
             console.error("Error picking image:", error);
@@ -275,12 +277,13 @@ const AddProductScreen = ({navigation}) => {
 
         // Check for errors
         if (
-          categoryError ||
-          subCategoryError ||
-          productNameError ||
-          unitPriceError
+            categoryError ||
+            subCategoryError ||
+            productNameError ||
+            unitPriceError ||
+            !image
         ) {
-          return;
+            return;
         }
 
         // Implement logic to add new product (e.g., make API call)
@@ -304,6 +307,7 @@ const AddProductScreen = ({navigation}) => {
 
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
+        myHeaders.append("Content-Type", "multipart/form-data");
         myHeaders.append("Authorization", "Bearer " + user.token);
 
         var formdata = new FormData();
@@ -318,38 +322,65 @@ const AddProductScreen = ({navigation}) => {
         formdata.append("video_url", videoUrl);
         formdata.append("description", description);
         formdata.append("shipping", shipping);
+        formdata.append("thumbnail", {
+            uri: image.uri,
+            name: "image.jpg",
+            type: "image/jpeg",
+        });
 
         var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: formdata,
-        redirect: 'follow'
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow",
         };
-
-        fetch("https://pgmarket.longsoeng.website/api/storeProduct", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            if (result.createdProductId) {
-                Alert.alert(
-                    "Add Product",
-                    "Product has been added successfully",
-                    [
-                        { text: "", style: "" },
-                        {
-                            text: "OK",
-                            onPress: () => {
-                                navigation.pop();
-                                navigation.replace('ShopProfile');
+        setLoading(true);
+        fetch(
+            "https://pgmarket.longsoeng.website/api/storeProduct",
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(JSON.stringify(result, null, 2));
+                setLoading(false);
+                if (result.createdProductId) {
+                    Alert.alert(
+                        "Add Product",
+                        "Product has been added successfully",
+                        [
+                            { text: "", style: "" },
+                            {
+                                text: "OK",
+                                onPress: () => {
+                                    navigation.pop();
+                                    navigation.replace("ShopProfile");
+                                },
                             },
-                        },
-                    ],
-                    { cancelable: false }
-                );
-            }
-        })
-        .catch(error => console.log('error', error));
-
-        
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    Alert.alert(
+                        "Add Product",
+                        "Product added unsuccessfully",
+                        [
+                            { text: "", style: "" },
+                            {
+                                text: "OK",
+                                onPress: () => {
+                                    navigation.pop();
+                                    navigation.replace("ShopProfile");
+                                },
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                }
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log("error", error);
+            });
     };
 
     return (
@@ -360,11 +391,20 @@ const AddProductScreen = ({navigation}) => {
             <View style={{ zIndex: 100 }}>
                 <HeaderText title="Add Product" />
             </View>
+            <LoadingOverlay visible={loading} />
             <ScrollView style={styles.container}>
                 <View style={styles.innerContainer}>
                     {/* Image Upload Button */}
                     <View style={{ alignItems: "center" }}>
-                        <ImageUploadButton onPress={pickImage} image={image} />
+                        <ImageUploadButton
+                            onPress={pickImage}
+                            image={image ? image.uri : ""}
+                        />
+                        {!image && (
+                            <Text style={{ marginTop: -10, color: "red" }}>
+                                Image required
+                            </Text>
+                        )}
                     </View>
 
                     <View style={styles.dropdownContainer}>
@@ -383,7 +423,9 @@ const AddProductScreen = ({navigation}) => {
                             maxHeight={300}
                             labelField="name_en"
                             valueField="id"
-                            placeholder={!isFocusMain ? "Select Main Category" : "..."}
+                            placeholder={
+                                !isFocusMain ? "Select Main Category" : "..."
+                            }
                             searchPlaceholder="Search..."
                             value={mainCategory}
                             onFocus={() => setIsFocusMain(true)}
@@ -392,7 +434,9 @@ const AddProductScreen = ({navigation}) => {
                                 // setValue(item.value);
                                 setMainCategory(item.id);
                                 // console.log(item.id);
-                                let filter = cate.filter(i => i.main_category_id === item.id);
+                                let filter = cate.filter(
+                                    (i) => i.main_category_id === item.id
+                                );
                                 // console.log(filter);
                                 setFilterCate(filter);
                                 setIsFocusMain(false);
@@ -424,7 +468,9 @@ const AddProductScreen = ({navigation}) => {
                             maxHeight={300}
                             labelField="name_en"
                             valueField="id"
-                            placeholder={!isFocusCate ? "Select Category" : "..."}
+                            placeholder={
+                                !isFocusCate ? "Select Category" : "..."
+                            }
                             searchPlaceholder="Search..."
                             value={category}
                             onFocus={() => setIsFocusCate(true)}
@@ -433,7 +479,9 @@ const AddProductScreen = ({navigation}) => {
                                 // setValue(item.id);
                                 setCategory(item.id);
                                 console.log(item.id);
-                                let filter = subCate.filter(i => i.sub_category_id === item.id);
+                                let filter = subCate.filter(
+                                    (i) => i.sub_category_id === item.id
+                                );
                                 // console.log(filter);
                                 setFilterSubCate(filter);
                                 setIsFocusCate(false);
@@ -465,7 +513,9 @@ const AddProductScreen = ({navigation}) => {
                             maxHeight={300}
                             labelField="name_en"
                             valueField="id"
-                            placeholder={!isFocusSubCate ? "Select Sub-Category" : "..."}
+                            placeholder={
+                                !isFocusSubCate ? "Select Sub-Category" : "..."
+                            }
                             searchPlaceholder="Search..."
                             value={subCategory}
                             onFocus={() => setIsFocusSubCate(true)}
@@ -486,7 +536,11 @@ const AddProductScreen = ({navigation}) => {
                             )}
                         />
                     </View>
-                    {subCategoryError && <Text style={{ marginTop: -10, color: 'red' }}>Category required</Text>}
+                    {subCategoryError && (
+                        <Text style={{ marginTop: -10, color: "red" }}>
+                            Category required
+                        </Text>
+                    )}
 
                     <View style={styles.dropdownContainer}>
                         <MultiSelect

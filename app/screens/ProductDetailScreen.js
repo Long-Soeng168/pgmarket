@@ -25,7 +25,7 @@ import colors from "../config/colors";
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
 
-    const imageUrl = "https://pgmarket.online/public/images/product/" + item.thumbnail;
+    const imageUrl = "https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail;
     const title = item.pro_name;
     const descriptionNoHtml = stripHtmlTags(item.description);
     const price = parseFloat(item.price).toFixed(2);
@@ -44,7 +44,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
 
     const getrelatedproducts = () => {
-        fetch("https://pgmarket.online/api/getrelatedproducts/" + item.main_cate_id)
+        fetch("https://pgmarket.longsoeng.website/api/getrelatedproducts/" + item.main_cate_id)
             .then((rest) => rest.json())
             .then((data) => {
                 setProducts(data);
@@ -185,7 +185,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                             renderItem={({ item }) => <Card 
                                 item={item} 
                                 title = {item.pro_name}
-                                imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
                                 description= {item.description}
                                 price = {item.price}
                             />}

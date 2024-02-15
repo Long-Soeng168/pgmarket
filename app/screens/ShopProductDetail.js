@@ -32,7 +32,7 @@ export default function ShopProductDetail({ route, navigation }) {
     const userToken = user.token;
 
     const imageUrl =
-        "https://pgmarket.online/public/images/product/" + item.thumbnail;
+        "https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail;
     const title = item.pro_name;
     const descriptionNoHtml = stripHtmlTags(item.proDesc);
     const price = parseFloat(item.price).toFixed(2);
@@ -51,7 +51,7 @@ export default function ShopProductDetail({ route, navigation }) {
 
     const getrelatedproducts = () => {
         fetch(
-            "https://pgmarket.online/api/getrelatedproducts/" +
+            "https://pgmarket.longsoeng.website/api/getrelatedproducts/" +
                 item.main_cate_id
         )
             .then((rest) => rest.json())

@@ -77,8 +77,8 @@ export default function ShopProfile({ navigation, route }) {
     }, []);
     console.log(JSON.stringify(shop, null, 2));
 
-    const bannerUrl = shop && "https://pgmarket.online/public/images/shop_banner/" + shop.image_banner;
-    const imageUrl = shop && "https://pgmarket.online/public/images/shop/" + shop.image;
+    const bannerUrl = shop && "https://pgmarket.longsoeng.website/public/images/shop_banner/" + shop.image_banner;
+    const imageUrl = shop && "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;
     const shopName = shop && shop.shop_name;
     const shopAddress = shop && shop.shop_address;
     const shopNumber = shop && shop.shop_phone;
@@ -189,7 +189,7 @@ export default function ShopProfile({ navigation, route }) {
                                                 >
                                                     <CardProduct item={item} width={width} 
                                                         title = {item.pro_name}
-                                                        imageUrl = {"https://pgmarket.online/public/images/product/thumb/" + item.thumbnail}
+                                                        imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
                                                         description= {item.description}
                                                         price = {item.price}
                                                         />
