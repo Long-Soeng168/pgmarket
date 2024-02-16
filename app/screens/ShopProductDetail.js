@@ -23,53 +23,56 @@ import Card from "../components/Card";
 import ListHeader from "../components/ListHeader";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function ShopProductDetail({ route, navigation }) {
     const item = route.params;
-    console.log(JSON.stringify(item, null, 2));
+    console.log(JSON.stringify(item, null, 2));  
 
     const [user, setUser] = React.useContext(userContext);
     const userToken = user.token;
 
-    const imageUrl =
-        "https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail;
-    const title = item.pro_name;
-    const descriptionNoHtml = stripHtmlTags(item.proDesc);
-    const price = parseFloat(item.price).toFixed(2);
-
-    const category = item.category;
-    const [isFetching, setIsFetching] = React.useState(true);
-    const [isError, setIsError] = React.useState(false);
-    const [products, setProducts] = React.useState([]);
-    // const [relatedProducts, setRelatedProducts] = React.useState([]);
-
-    const [favorites, setFavorites] = React.useContext(favoritesContext);
-    const [cartItems, setCartItems] = React.useContext(cartContext);
-
+    
+    const [loading, setLoading] = React.useState(true);
+    const [product, setProduct] = React.useState([]);
+    const productInfo = product ? product.product : null;
+    const productMainCategory = product ? product.mainCategory : null;
+    const productCategory = product ? product.category : null;
+    const productSubCategory = product ? product.subCategory : null;
+    
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
 
-    const getrelatedproducts = () => {
-        fetch(
-            "https://pgmarket.longsoeng.website/api/getrelatedproducts/" +
-                item.main_cate_id
-        )
-            .then((rest) => rest.json())
-            .then((data) => {
-                setProducts(data);
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setIsFetching(false));
-    };
-    React.useEffect(() => {
-        getrelatedproducts();
-    }, []);
+    if(productInfo) {
+        var imageUrl =
+            "https://pgmarket.longsoeng.website/public/images/product/" + productInfo.thumbnail;
+        var title = productInfo.pro_name;
+        var descriptionNoHtml = stripHtmlTags(productInfo.description);
+        var price = parseFloat(productInfo.price).toFixed(2);
+        var shipping = productInfo.shipping && parseFloat(productInfo.shipping).toFixed(2);
+        var discount = productInfo.discount || '';
+        var discount_date_start = productInfo.discount_date_start || '';
+        var discount_date_end = productInfo.discount_date_end || '';
+        var mainCategory = productInfo.main_cate_id;
+        var category = productInfo.cate_id;
+        var subCategory = productInfo.sub_cate_id;
+        var videoUrl = productInfo.video_url;
 
-    const removeFromFavorite = () => {
-        setFavorites((preFavorites) =>
-            preFavorites.filter((data) => data.id !== item.id)
-        );
-    };
+    }
+
+    React.useEffect(() => {
+        fetch("https://pgmarket.longsoeng.website/api/getproduct/" + item.id)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(JSON.stringify(result, null, 2));
+                setProduct(result);
+
+                setLoading(false);
+            })
+            .catch((error) => console.error(error));
+    },[]);
+
+
 
     const addImages = () => {
         console.log('Adding images');
@@ -119,7 +122,7 @@ export default function ShopProductDetail({ route, navigation }) {
 
     const UpdateDetails = () => {
         console.log('Update Details');
-        navigation.navigate('UpdateProductScreen');
+        navigation.navigate('UpdateProductScreen' , product);
     };
 
     // console.log(JSON.stringify(item, null, 2));
@@ -127,6 +130,7 @@ export default function ShopProductDetail({ route, navigation }) {
     return (
         <ScrollView>
             <HeaderText title="Product Detail" />
+            <LoadingOverlay visible={loading} />
             <TouchableOpacity>
                 <Image
                     style={styles.image}
@@ -168,15 +172,15 @@ export default function ShopProductDetail({ route, navigation }) {
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.price}>$ {price}</Text>
 
-                    <LabelValue label="Discount" value={item.discount + '%'} />
+                    <LabelValue label="Discount" value={discount + '%'} />
                     <LabelValue
                         label="Discount Date"
-                        value={item.discount_date_start + ' - ' + item.discount_date_end}
+                        value={discount_date_start + ' - ' + discount_date_end}
                     />
-                    <LabelValue label="Shipping" value={item.shipping ? item.shipping : 'Free Delivery'} />
-                    <LabelValue label="Category" value={item.main_cate_name} />
-                    <LabelValue label="Sub-Category" value={item.cate_name} />
-                    <LabelValue label="Brand" value={item.brand_name} />
+                    <LabelValue label="Shipping" value={shipping ? shipping : 'Free Delivery'} />
+                    <LabelValue label="Main Category" value={productMainCategory && productMainCategory.name_en} />
+                    <LabelValue label="Category" value={productCategory && productCategory.name_en} /> 
+                    <LabelValue label="Sub-Category" value={productSubCategory && productSubCategory.name_en} /> 
                     {/* <LabelValue
                         label="Colors Available"
                         value="White, Black, Red"
@@ -184,7 +188,7 @@ export default function ShopProductDetail({ route, navigation }) {
                     <LabelValue label="Sizes Available" value="M, L, XL" /> */}
                     <LabelValue
                         label="Video URL"
-                        value={item.video_url}
+                        value={videoUrl}
                     />
 
                     <View style={{ alignItems: "flex-start" }}>

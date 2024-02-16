@@ -10,6 +10,7 @@ import {
     ScrollView,
     TextInput,
     Modal,
+    Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -20,17 +21,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
-
-const data = [
-    { label: "Item 1", value: "1" },
-    { label: "Item 2", value: "2" },
-    { label: "Item 3", value: "3" },
-    { label: "Item 4", value: "4" },
-    { label: "Item 5", value: "5" },
-    { label: "Item 6", value: "6" },
-    { label: "Item 7", value: "7" },
-    { label: "Item 8", value: "8" },
-];
+import { userContext } from "../../App";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const InputField = ({
     placeholder,
@@ -68,21 +60,33 @@ const ImageUploadButton = ({ onPress, image }) => (
     </TouchableOpacity>
 );
 
-const UpdateProductScreen = () => {
-    const [category, setCategory] = useState("");
-    const [subCategory, setSubCategory] = useState("");
+const AddProductScreen = ({ navigation, route }) => {
+    const product = route.params;
+    const productInfo = product.product;
+    console.log(productInfo);
+    const productColors = product.colors;
+    const productSizes = product.sizes;
+    console.log(JSON.stringify(product, null, 2));
+
+
+    const [user, setUser] = React.useContext(userContext);
+    const [loading, setLoading] = useState(true);
+
+    const [mainCategory, setMainCategory] = useState(productInfo.main_cate_id);
+    const [category, setCategory] = useState(productInfo.cate_id);
+    const [subCategory, setSubCategory] = useState(productInfo.sub_cate_id);
     const [brand, setBrand] = useState("");
-    const [productName, setProductName] = useState("");
-    const [unitPrice, setUnitPrice] = useState("");
-    const [discount, setDiscount] = useState("");
-    const [discountFromDate, setDiscountFromDate] = useState(new Date());
-    const [discountToDate, setDiscountToDate] = useState(new Date());
+    const [productName, setProductName] = useState(productInfo.pro_name);
+    const [unitPrice, setUnitPrice] = useState(productInfo.price);
+    const [discount, setDiscount] = useState(productInfo.discount);
+    const [discountFromDate, setDiscountFromDate] = useState(productInfo.discount_date_start);
+    const [discountToDate, setDiscountToDate] = useState(productInfo.discount_date_end);
     const [image, setImage] = useState(null);
-    const [videoUrl, setVideoUrl] = useState("");
-    const [shipping, setShipping] = useState("");
-    const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedSizes, setSelectedSizes] = useState([]);
-    const [description, setDescription] = useState("");
+    const [videoUrl, setVideoUrl] = useState(productInfo.video_url);
+    const [shipping, setShipping] = useState(productInfo.shipping);
+    const [selectedColors, setSelectedColors] = useState(productColors);
+    const [selectedSizes, setSelectedSizes] = useState(productSizes);
+    const [description, setDescription] = useState(productInfo.description); 
 
     const [categoryError, setCategoryError] = useState(null);
     const [subCategoryError, setSubCategoryError] = useState(null);
@@ -93,30 +97,134 @@ const UpdateProductScreen = () => {
     const [videoUrlError, setVideoUrlError] = useState(null);
     const [shippingError, setShippingError] = useState(null);
 
+    const [mainCate, setMainCate] = useState([]);
+    const [cate, setCate] = useState([]);
+    const [filterCate, setFilterCate] = useState([]);
+    const [subCate, setSubCate] = useState([]);
+    const [filterSubCate, setFilterSubCate] = useState([]);
+    const [allColors, setAllColors] = useState([]);
+    const [allSizes, setAllSizes] = useState([]);
+
+    // React.useEffect(() => {
+    //     if(mainCategory){
+    //         let filter = cate.filter(item => item.id === mainCategory.id);
+    //         console.log('filter');
+    //         setFilterCate(filter);
+    //     }
+    // });
+
+
+    React.useEffect(() => { 
+
+        fetch("https://pgmarket.longsoeng.website/api/getmaincategories")
+            .then((response) => response.json())
+            .then((result) => {
+                setMainCate(result); 
+                // console.log(result)
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getcategories")
+            .then((response) => response.json())
+            .then((result) => {
+                setCate(result);
+                let filter = result.filter(
+                    (i) => i.main_category_id === productInfo.main_cate_id
+                );
+                // console.log(filter);
+                setFilterCate(filter);
+                // console.log(result)
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getsubcategories")
+            .then((response) => response.json())
+            .then((result) => {
+                setSubCate(result);
+                // console.log(result)
+                let filter = result.filter(
+                    (i) => i.sub_category_id === productInfo.cate_id
+                );
+                // console.log(filter);
+                setFilterSubCate(filter);
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getcolors")
+            .then((response) => response.json())
+            .then((result) => {
+                setAllColors(result);
+                // console.log(JSON.stringify(result, null, 2));
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getsizes")
+            .then((response) => response.json())
+            .then((result) => {
+                setAllSizes(result);
+                // console.log(JSON.stringify(result, null, 2));
+                setLoading(false);
+            })
+            .catch((error) => console.error(error));
+        
+    }, []);
+
     const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
     const today = new Date();
     const startDate = getFormatedDate(
-        today.setDate(today.getDate() + 1),
+        today.setDate(today.getDate()),
         "YYYY/MM/DD"
     );
-    const [selectedStartDate, setSelectedStartDate] = useState("");
-    const [startedDate, setStartedDate] = useState("12/12/2023");
+    const [startedDate, setStartedDate] = useState(discountFromDate || startDate);
     function handleChangeStartDate(propDate) {
-        setStartedDate(propDate);
+        setDiscountFromDate(propDate);
     }
     const handleOnPressStartDate = () => {
         setOpenStartDatePicker(!openStartDatePicker);
     };
 
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-    const [selected, setSelected] = useState([]);
+    const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
 
-    const renderLabel = () => {
-        if (value || isFocus) {
+    const [endDate, setEndDate] = useState(discountToDate || startDate);
+    function handleChangeEndDate(propDate) {
+        setDiscountToDate(propDate);
+    }
+    const handleOnPressEndDate = () => {
+        setOpenEndDatePicker(!openEndDatePicker);
+    };
+
+    const [isFocusMain, setIsFocusMain] = useState(false);
+    // const [selectedMain, setSelectedMain] = useState([]);
+    const [isFocusCate, setIsFocusCate] = useState(false);
+    const [isFocusSubCate, setIsFocusSubCate] = useState(false);
+
+    const renderLabelMain = () => {
+        if (mainCategory || isFocusMain) {
             return (
-                <Text style={[styles.label, isFocus && { color: "blue" }]}>
+                <Text style={[styles.label, isFocusMain && { color: "blue" }]}>
+                    Main Category
+                </Text>
+            );
+        }
+        return null;
+    };
+    const renderLabelCate = () => {
+        if (category || isFocusCate) {
+            return (
+                <Text style={[styles.label, isFocusCate && { color: "blue" }]}>
                     Category
+                </Text>
+            );
+        }
+        return null;
+    };
+    const renderLabelSubCate = () => {
+        if (subCategory || isFocusSubCate) {
+            return (
+                <Text
+                    style={[styles.label, isFocusSubCate && { color: "blue" }]}
+                >
+                    Sub Category
                 </Text>
             );
         }
@@ -127,39 +235,37 @@ const UpdateProductScreen = () => {
         switch (field) {
             // Add validation logic for each field
             case "category":
-                setCategoryError(value ? null : "Category cannot be empty");
+                setCategoryError(value ? null : "Category required");
                 break;
             case "subCategory":
-                setSubCategoryError(
-                    value ? null : "Sub-category cannot be empty"
-                );
+                setSubCategoryError(value ? null : "Sub-category required");
                 break;
             case "brand":
-                setBrandError(value ? null : "Brand cannot be empty");
+                setBrandError(value ? null : "Brand required");
                 break;
             case "productName":
                 setProductNameError(
-                    value.trim() !== "" ? null : "Product Name cannot be empty"
+                    value.trim() !== "" ? null : "Product Name required"
                 );
                 break;
             case "unitPrice":
                 setUnitPriceError(
-                    value.trim() !== "" ? null : "Unit Price cannot be empty"
+                    value.trim() !== "" ? null : "Price required"
                 );
                 break;
             case "discount":
                 setDiscountError(
-                    value.trim() !== "" ? null : "Discount cannot be empty"
+                    value.trim() !== "" ? null : "Discount required"
                 );
                 break;
             case "videoUrl":
                 setVideoUrlError(
-                    value.trim() !== "" ? null : "Video URL cannot be empty"
+                    value.trim() !== "" ? null : "Video URL required"
                 );
                 break;
             case "shipping":
                 setShippingError(
-                    value.trim() !== "" ? null : "Shipping cannot be empty"
+                    value.trim() !== "" ? null : "Shipping required"
                 );
                 break;
             default:
@@ -175,60 +281,142 @@ const UpdateProductScreen = () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
                 quality: 1,
             });
 
             if (!result.canceled) {
                 const selectedAsset = result.assets[0];
-                setImage(selectedAsset.uri);
+                setImage(selectedAsset);
             }
         } catch (error) {
             console.error("Error picking image:", error);
         }
     };
 
-    const updateProduct = () => {
+    const addProduct = () => {
+        // console.log(selectedColors);
         // Validate fields
-        // validateField("category", category);
-        // validateField("subCategory", subCategory);
-        // validateField("brand", brand);
-        // validateField("productName", productName);
-        // validateField("unitPrice", unitPrice);
-        // validateField("discount", discount);
-        // validateField("videoUrl", videoUrl);
-        // validateField("shipping", shipping);
+        validateField("category", category);
+        validateField("subCategory", subCategory);
+        validateField("productName", productName);
+        validateField("unitPrice", unitPrice);
 
-        // // Check for errors
-        // if (
-        //   categoryError ||
-        //   subCategoryError ||
-        //   brandError ||
-        //   productNameError ||
-        //   unitPriceError ||
-        //   discountError ||
-        //   videoUrlError ||
-        //   shippingError
-        // ) {
-        //   return;
-        // }
+        // Check for errors
+        if (
+            categoryError ||
+            subCategoryError ||
+            productNameError ||
+            unitPriceError ||
+            !mainCategory ||
+            !category ||
+            !subCategory
+        ) {
+            return;
+        } 
 
-        // Implement logic to add new product (e.g., make API call)
-        console.log("Adding new product...");
-        console.log("Category:", category);
-        console.log("Sub-category:", subCategory);
-        console.log("Brand:", brand);
-        console.log("Product Name:", productName);
-        console.log("Unit Price:", unitPrice);
-        console.log("Discount:", discount);
-        console.log("Discount From Date:", discountFromDate);
-        console.log("Discount To Date:", discountToDate);
-        console.log("Image:", image);
-        console.log("Video URL:", videoUrl);
-        console.log("Shipping:", shipping);
-        console.log("Selected Colors:", selectedColors);
-        console.log("Selected Sizes:", selectedSizes);
-        console.log("Description:", description);
-        console.log("============================");
+        var myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+        image && myHeaders.append("Content-Type", "multipart/form-data");
+        myHeaders.append("Authorization", "Bearer " + user.token);
+
+        var formdata = new FormData();
+        formdata.append("main_cate_id", mainCategory);
+        formdata.append("cate_id", category);
+        formdata.append("sub_cate_id", subCategory);
+        formdata.append("pro_name", productName);
+        formdata.append("price", unitPrice);
+
+        discountFromDate && formdata.append("start", discountFromDate);
+
+        if(discountFromDate){
+            formdata.append("end", discountToDate);
+        }else {
+            if(discountToDate){
+                formdata.append("end", discountFromDate);
+            }
+        }
+        discount ? formdata.append("discount", discount) : formdata.append("discount", 0);
+        videoUrl && formdata.append("video_url", videoUrl);
+        description && formdata.append("description", description);
+        shipping && formdata.append("shipping", shipping);
+        selectedColors && formdata.append("colors", JSON.stringify(selectedColors));
+        selectedSizes && formdata.append("sizes", JSON.stringify(selectedSizes));
+        image && formdata.append("thumbnail", {
+            uri: image.uri,
+            name: "image.jpg",
+            type: "image/jpeg",
+        });
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow",
+        };
+        setLoading(true);
+        fetch(
+            "https://pgmarket.longsoeng.website/api/updateProduct/" + productInfo.id,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(JSON.stringify(result, null, 2));
+                setLoading(false);
+                if (result.success) {
+                    Alert.alert(
+                        "update Product",
+                        "Product updated successfully",
+                        [
+                            { text: "", style: "" },
+                            {
+                                text: "OK",
+                                onPress: () => {
+                                    navigation.pop();
+                                    navigation.replace("ShopProductDetail", productInfo);
+                                },
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    Alert.alert(
+                        "update Product",
+                        "Product updated unsuccessfully",
+                        [
+                            { text: "", style: "" },
+                            {
+                                text: "OK",
+                                onPress: () => {
+                                    navigation.pop();
+                                    navigation.replace("ShopProductDetail", productInfo);
+                                },
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                }
+            })
+            .catch((error) => {
+                setLoading(false);
+                Alert.alert(
+                    "Update Product",
+                    "Product update successfully",
+                    [
+                        { text: "", style: "" },
+                        {
+                            text: "OK",
+                            onPress: () => {
+                                navigation.pop();
+                                navigation.replace("ShopProductDetail", productInfo);
+                            },
+                        },
+                    ],
+                    { cancelable: false }
+                );
+                console.log("error", error);
+            });
     };
 
     return (
@@ -237,51 +425,161 @@ const UpdateProductScreen = () => {
             style={{ flex: 1, backgroundColor: "white" }}
         >
             <View style={{ zIndex: 100 }}>
-                <HeaderText title="Update Product" />
+                <HeaderText title="Add Product" />
             </View>
+            <LoadingOverlay visible={loading} />
             <ScrollView style={styles.container}>
                 <View style={styles.innerContainer}>
                     {/* Image Upload Button */}
                     <View style={{ alignItems: "center" }}>
-                        <ImageUploadButton onPress={pickImage} image={image} />
+                        <ImageUploadButton
+                            onPress={pickImage}
+                            image={image ? image.uri : ""}
+                        />
+                        {/* {!image && (
+                            <Text style={{ marginTop: -10, color: "red" }}>
+                                Image required
+                            </Text>
+                        )} */}
                     </View>
 
                     <View style={styles.dropdownContainer}>
-                        {renderLabel()}
+                        {renderLabelMain()}
                         <Dropdown
                             style={[
                                 styles.dropdown,
-                                isFocus && { borderColor: "blue" },
+                                isFocusMain && { borderColor: "blue" },
                             ]}
                             placeholderStyle={styles.placeholderStyle}
                             selectedTextStyle={styles.selectedTextStyle}
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
-                            data={data}
+                            data={mainCate}
                             search
                             maxHeight={300}
-                            labelField="label"
-                            valueField="value"
-                            placeholder={!isFocus ? "Select Category" : "..."}
+                            labelField="name_en"
+                            valueField="id"
+                            placeholder={
+                                !isFocusMain ? "Select Main Category" : "..."
+                            }
                             searchPlaceholder="Search..."
-                            value={category}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
+                            value={mainCategory}
+                            onFocus={() => setIsFocusMain(true)}
+                            onBlur={() => setIsFocusMain(false)}
                             onChange={(item) => {
                                 // setValue(item.value);
-                                setCategory(item.value);
-                                setIsFocus(false);
+                                setMainCategory(item.id);
+                                // console.log(item.id);
+                                let filter = cate.filter(
+                                    (i) => i.main_category_id === item.id
+                                );
+                                // console.log(filter);
+                                setFilterCate(filter);
+                                setCategory(null);
+                                setSubCategory(null);
+                                setIsFocusMain(false);
                             }}
                             renderLeftIcon={() => (
                                 <AntDesign
                                     style={styles.icon}
-                                    color={isFocus ? "blue" : "black"}
-                                    name="Safety"
+                                    color={isFocusMain ? "blue" : "black"}
+                                    name="profile"
                                     size={20}
                                 />
                             )}
                         />
                     </View>
+
+                    <View style={styles.dropdownContainer}>
+                        {renderLabelCate()}
+                        <Dropdown
+                            style={[
+                                styles.dropdown,
+                                isFocusCate && { borderColor: "blue" },
+                            ]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={filterCate}
+                            search
+                            maxHeight={300}
+                            labelField="name_en"
+                            valueField="id"
+                            placeholder={
+                                !isFocusCate ? "Select Category" : "..."
+                            }
+                            searchPlaceholder="Search..."
+                            value={category}
+                            onFocus={() => setIsFocusCate(true)}
+                            onBlur={() => setIsFocusCate(false)}
+                            onChange={(item) => {
+                                // setValue(item.id);
+                                setCategory(item.id);
+                                // console.log(item.id);
+                                let filter = subCate.filter(
+                                    (i) => i.sub_category_id === item.id
+                                );
+                                // console.log(filter);
+                                setFilterSubCate(filter);
+                                setSubCategory(null);
+                                setIsFocusCate(false);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color={isFocusCate ? "blue" : "black"}
+                                    name="profile"
+                                    size={20}
+                                />
+                            )}
+                        />
+                    </View>
+
+                    <View style={styles.dropdownContainer}>
+                        {renderLabelSubCate()}
+                        <Dropdown
+                            style={[
+                                styles.dropdown,
+                                isFocusSubCate && { borderColor: "blue" },
+                            ]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={filterSubCate}
+                            search
+                            maxHeight={300}
+                            labelField="name_en"
+                            valueField="id"
+                            placeholder={
+                                !isFocusSubCate ? "Select Sub-Category" : "..."
+                            }
+                            searchPlaceholder="Search..."
+                            value={subCategory}
+                            onFocus={() => setIsFocusSubCate(true)}
+                            onBlur={() => setIsFocusSubCate(false)}
+                            onChange={(item) => {
+                                // setValue(item.id);
+                                setSubCategory(item.id);
+                                console.log(item.id);
+                                setIsFocusSubCate(false);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color={isFocusSubCate ? "blue" : "black"}
+                                    name="profile"
+                                    size={20}
+                                />
+                            )}
+                        />
+                    </View>
+                    {subCategoryError && (
+                        <Text style={{ marginTop: -10, color: "red" }}>
+                            Category required
+                        </Text>
+                    )}
 
                     <View style={styles.dropdownContainer}>
                         <MultiSelect
@@ -291,9 +589,9 @@ const UpdateProductScreen = () => {
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
                             search
-                            data={data}
-                            labelField="label"
-                            valueField="value"
+                            data={allColors}
+                            labelField="name"
+                            valueField="id"
                             placeholder="Select colors"
                             searchPlaceholder="Search..."
                             //   value={selected}
@@ -306,7 +604,38 @@ const UpdateProductScreen = () => {
                                 <AntDesign
                                     style={styles.icon}
                                     color="black"
-                                    name="Safety"
+                                    name="tagso"
+                                    size={20}
+                                />
+                            )}
+                            selectedStyle={styles.selectedStyle}
+                        />
+                    </View>
+
+                    <View style={styles.dropdownContainer}>
+                        <MultiSelect
+                            style={styles.dropdown}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            search
+                            data={allSizes}
+                            labelField="name"
+                            valueField="id"
+                            placeholder="Select sizes"
+                            searchPlaceholder="Search..."
+                            //   value={selected}
+                            value={selectedSizes}
+                            onChange={(item) => {
+                                // setSelected(item);
+                                setSelectedSizes(item);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color="black"
+                                    name="tagso"
                                     size={20}
                                 />
                             )}
@@ -341,13 +670,13 @@ const UpdateProductScreen = () => {
                         <InputField
                             placeholder="Discount"
                             headTitle="Discount(%)"
-                            value={discount}
+                            value={discount+''}
                             onChangeText={(text) => {
                                 setDiscount(text);
                                 validateField("discount", text);
                             }}
                             keyboardType="numeric"
-                            error={discountError}
+                            // error={discountError}
                         />
                         <InputField
                             placeholder="Shipping"
@@ -377,7 +706,7 @@ const UpdateProductScreen = () => {
                                 style={styles.inputBtn}
                                 onPress={handleOnPressStartDate}
                             >
-                                <Text>{selectedStartDate}</Text>
+                                <Text>{discountFromDate}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1 }}>
@@ -392,9 +721,9 @@ const UpdateProductScreen = () => {
                             </Text>
                             <TouchableOpacity
                                 style={styles.inputBtn}
-                                onPress={handleOnPressStartDate}
+                                onPress={handleOnPressEndDate}
                             >
-                                <Text>{selectedStartDate}</Text>
+                                <Text>{discountToDate}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -421,9 +750,9 @@ const UpdateProductScreen = () => {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={updateProduct}
+                        onPress={addProduct}
                     >
-                        <Text style={styles.buttonText}>Update Product</Text>
+                        <Text style={styles.buttonText}>Add Product</Text>
                     </TouchableOpacity>
 
                     {/* Create modal for date picker */}
@@ -440,7 +769,6 @@ const UpdateProductScreen = () => {
                                     selected={startedDate}
                                     onDateChanged={handleChangeStartDate}
                                     onSelectedChange={(date) => {
-                                        setSelectedStartDate(date);
                                         setDiscountFromDate(date);
                                     }}
                                     style={{ borderRadius: 15 }}
@@ -448,6 +776,33 @@ const UpdateProductScreen = () => {
 
                                 <TouchableOpacity
                                     onPress={handleOnPressStartDate}
+                                >
+                                    <Text style={styles.closeModal}>Close</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={openEndDatePicker}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <DatePicker
+                                    mode="calendar"
+                                    minimumDate={startDate}
+                                    selected={endDate}
+                                    onDateChanged={handleChangeEndDate}
+                                    onSelectedChange={(date) => {
+                                        setDiscountToDate(date);
+                                    }}
+                                    style={{ borderRadius: 15 }}
+                                />
+
+                                <TouchableOpacity
+                                    onPress={handleOnPressEndDate}
                                 >
                                     <Text style={styles.closeModal}>Close</Text>
                                 </TouchableOpacity>
@@ -469,7 +824,7 @@ const styles = StyleSheet.create({
         // marginTop: 20,
     },
     button: {
-        backgroundColor: colors.accent,
+        backgroundColor: colors.primary,
         paddingHorizontal: 17,
         paddingVertical: 12,
         borderRadius: 5,
@@ -598,4 +953,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UpdateProductScreen;
+export default AddProductScreen;

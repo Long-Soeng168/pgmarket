@@ -24,17 +24,6 @@ import HeaderText from "../components/HeaderText";
 import { userContext } from "../../App";
 import LoadingOverlay from "../components/LoadingOverlay";
 
-const data = [
-    { label: "Item 1", value: "1" },
-    { label: "Item 2", value: "2" },
-    { label: "Item 3", value: "3" },
-    { label: "Item 4", value: "4" },
-    { label: "Item 5", value: "5" },
-    { label: "Item 6", value: "6" },
-    { label: "Item 7", value: "7" },
-    { label: "Item 8", value: "8" },
-];
-
 const InputField = ({
     placeholder,
     headTitle,
@@ -89,7 +78,7 @@ const AddProductScreen = ({ navigation }) => {
     const [shipping, setShipping] = useState("");
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState([]);
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState(""); 
 
     const [categoryError, setCategoryError] = useState(null);
     const [subCategoryError, setSubCategoryError] = useState(null);
@@ -105,6 +94,8 @@ const AddProductScreen = ({ navigation }) => {
     const [filterCate, setFilterCate] = useState([]);
     const [subCate, setSubCate] = useState([]);
     const [filterSubCate, setFilterSubCate] = useState([]);
+    const [allColors, setAllColors] = useState([]);
+    const [allSizes, setAllSizes] = useState([]);
 
     // React.useEffect(() => {
     //     if(mainCategory){
@@ -138,6 +129,22 @@ const AddProductScreen = ({ navigation }) => {
                 // console.log(result)
             })
             .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getcolors")
+            .then((response) => response.json())
+            .then((result) => {
+                setAllColors(result);
+                console.log(JSON.stringify(result, null, 2));
+            })
+            .catch((error) => console.error(error));
+
+        fetch("https://pgmarket.longsoeng.website/api/getsizes")
+            .then((response) => response.json())
+            .then((result) => {
+                setAllSizes(result);
+                console.log(JSON.stringify(result, null, 2));
+            })
+            .catch((error) => console.error(error));
     }, []);
 
     const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
@@ -147,7 +154,7 @@ const AddProductScreen = ({ navigation }) => {
         "YYYY/MM/DD"
     );
     const [selectedStartDate, setSelectedStartDate] = useState("");
-    const [startedDate, setStartedDate] = useState("12/12/2023");
+    const [startedDate, setStartedDate] = useState(startDate);
     function handleChangeStartDate(propDate) {
         setStartedDate(propDate);
     }
@@ -158,7 +165,7 @@ const AddProductScreen = ({ navigation }) => {
     const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
 
     const [selectedEndDate, setSelectedEndDate] = useState("");
-    const [endDate, setEndDate] = useState("12/12/2023");
+    const [endDate, setEndDate] = useState(startDate);
     function handleChangeEndDate(propDate) {
         setEndDate(propDate);
     }
@@ -269,6 +276,7 @@ const AddProductScreen = ({ navigation }) => {
     };
 
     const addProduct = () => {
+        // console.log(selectedColors);
         // Validate fields
         validateField("category", category);
         validateField("subCategory", subCategory);
@@ -284,26 +292,7 @@ const AddProductScreen = ({ navigation }) => {
             !image
         ) {
             return;
-        }
-
-        // Implement logic to add new product (e.g., make API call)
-        console.log("Adding new product...");
-        console.log("Main Category:", mainCategory);
-        console.log("Category:", category);
-        console.log("Sub-category:", subCategory);
-        console.log("Brand:", brand);
-        console.log("Product Name:", productName);
-        console.log("Unit Price:", unitPrice);
-        console.log("Discount:", discount);
-        console.log("Discount From Date:", discountFromDate);
-        console.log("Discount To Date:", discountToDate);
-        console.log("Image:", image);
-        console.log("Video URL:", videoUrl);
-        console.log("Shipping:", shipping);
-        console.log("Selected Colors:", selectedColors);
-        console.log("Selected Sizes:", selectedSizes);
-        console.log("Description:", description);
-        console.log("============================");
+        } 
 
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
@@ -316,12 +305,22 @@ const AddProductScreen = ({ navigation }) => {
         formdata.append("sub_cate_id", subCategory);
         formdata.append("pro_name", productName);
         formdata.append("price", unitPrice);
-        formdata.append("start", discountFromDate);
-        formdata.append("end", discountToDate);
-        formdata.append("discount", discount);
-        formdata.append("video_url", videoUrl);
-        formdata.append("description", description);
-        formdata.append("shipping", shipping);
+
+        discountFromDate && formdata.append("start", discountFromDate);
+
+        if(discountFromDate){
+            formdata.append("end", discountToDate);
+        }else {
+            if(discountToDate){
+                formdata.append("end", discountFromDate);
+            }
+        }
+        discount ? formdata.append("discount", discount) : formdata.append("discount", 0);
+        videoUrl && formdata.append("video_url", videoUrl);
+        description && formdata.append("description", description);
+        shipping && formdata.append("shipping", shipping);
+        selectedColors && formdata.append("colors", JSON.stringify(selectedColors));
+        selectedSizes && formdata.append("sizes", JSON.stringify(selectedSizes));
         formdata.append("thumbnail", {
             uri: image.uri,
             name: "image.jpg",
@@ -379,6 +378,21 @@ const AddProductScreen = ({ navigation }) => {
             })
             .catch((error) => {
                 setLoading(false);
+                Alert.alert(
+                    "Add Product",
+                    "Product added successfully",
+                    [
+                        { text: "", style: "" },
+                        {
+                            text: "OK",
+                            onPress: () => {
+                                navigation.pop();
+                                navigation.replace("ShopProfile");
+                            },
+                        },
+                    ],
+                    { cancelable: false }
+                );
                 console.log("error", error);
             });
     };
@@ -439,6 +453,8 @@ const AddProductScreen = ({ navigation }) => {
                                 );
                                 // console.log(filter);
                                 setFilterCate(filter);
+                                setCategory(null);
+                                setSubCategory(null);
                                 setIsFocusMain(false);
                             }}
                             renderLeftIcon={() => (
@@ -484,6 +500,7 @@ const AddProductScreen = ({ navigation }) => {
                                 );
                                 // console.log(filter);
                                 setFilterSubCate(filter);
+                                setSubCategory(null);
                                 setIsFocusCate(false);
                             }}
                             renderLeftIcon={() => (
@@ -550,9 +567,9 @@ const AddProductScreen = ({ navigation }) => {
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
                             search
-                            data={data}
-                            labelField="label"
-                            valueField="value"
+                            data={allColors}
+                            labelField="name"
+                            valueField="id"
                             placeholder="Select colors"
                             searchPlaceholder="Search..."
                             //   value={selected}
@@ -565,7 +582,38 @@ const AddProductScreen = ({ navigation }) => {
                                 <AntDesign
                                     style={styles.icon}
                                     color="black"
-                                    name="profile"
+                                    name="tagso"
+                                    size={20}
+                                />
+                            )}
+                            selectedStyle={styles.selectedStyle}
+                        />
+                    </View>
+
+                    <View style={styles.dropdownContainer}>
+                        <MultiSelect
+                            style={styles.dropdown}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            search
+                            data={allSizes}
+                            labelField="name"
+                            valueField="id"
+                            placeholder="Select sizes"
+                            searchPlaceholder="Search..."
+                            //   value={selected}
+                            value={selectedSizes}
+                            onChange={(item) => {
+                                // setSelected(item);
+                                setSelectedSizes(item);
+                            }}
+                            renderLeftIcon={() => (
+                                <AntDesign
+                                    style={styles.icon}
+                                    color="black"
+                                    name="tagso"
                                     size={20}
                                 />
                             )}
