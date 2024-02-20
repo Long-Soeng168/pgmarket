@@ -27,12 +27,13 @@ export default function AccountNavigator() {
                     user ? 
                     <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
                     :
-                    <Stack.Screen name="AccountScreen" component={AccountScreen} />
+                    <Stack.Screen name="LoginScreen" component={LoginScreen} />
                 }
+                {/* <Stack.Screen name="AccountScreen" component={AccountScreen} /> */}
+
             <Stack.Screen name="PurchaseHistoryScreen" component={PurchaseHistoryScreen} />
             <Stack.Screen name="AccountDetailScreen" component={AccountDetailScreen} />
             <Stack.Screen name="ShopProfile" component={ShopProfile} />
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
             <Stack.Screen name="AddProductScreen" component={AddProductScreen} />
             <Stack.Screen name="OrderDetailScreen" component={OrderDetailScreen} />

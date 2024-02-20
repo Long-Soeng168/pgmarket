@@ -7,6 +7,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Alert,
+    FlatList,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,20 +15,57 @@ import HeaderText from "../components/HeaderText";
 import colors from "../config/colors";
 import LoadingOverlay from "../components/LoadingOverlay";
 
-const ProductImagesScreen = ({route, navigation}) => {
+const ProductImagesScreen = ({ route, navigation }) => {
     const proId = route.params;
     const [images, setImages] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [productImages, setProductImages] = useState([]);
 
-    const urls = [
-        "https://pgmarket.online/public/images/product/1705979855-.jpg",
-        "https://pgmarket.online/public/images/product/1705979855-.jpg",
-        "https://pgmarket.online/public/images/product/1705979855-.jpg",
-        "https://pgmarket.online/public/images/product/1705979855-.jpg",
-    ];
+    React.useEffect(() => {
+        fetch(
+            "https://pgmarket.longsoeng.website/api/getproductimages/" + proId
+        )
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result.images);
+                setProductImages(result.images);
+            })
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
+    }, []);
 
     const handleDeleteImage = (index) => {
         setImages(images.filter((_, i) => i !== index));
+    };
+
+    const handleDeleteProductImage = (id) => {
+        console.log("Delete Image");
+        Alert.alert(
+            "Delete Image",
+            "Are you sure you want to delete Image?",
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        fetch(
+                            "https://pgmarket.longsoeng.website/api/deleteproductimage/" +
+                                id
+                        )
+                            .then((response) => response.json())
+                            .then((result) => {
+                                // console.log(JSON.stringify(result, null, 2));
+                                navigation.replace(
+                                    "ProductImagesScreen",
+                                    proId
+                                );
+                            })
+                            .catch((error) => console.log("error", error));
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
     };
 
     const pickImage = async () => {
@@ -72,9 +110,9 @@ const ProductImagesScreen = ({route, navigation}) => {
             ],
             { cancelable: false }
         );
-    }
+    };
 
-    const uploadImages = () => { 
+    const uploadImages = () => {
         images.forEach((uri, index) => {
             const formData = new FormData();
 
@@ -88,7 +126,8 @@ const ProductImagesScreen = ({route, navigation}) => {
             });
 
             fetch(
-                "https://pgmarket.longsoeng.website/api/addProductImages/" + proId,
+                "https://pgmarket.longsoeng.website/api/addProductImages/" +
+                    proId,
                 {
                     method: "POST",
                     body: formData,
@@ -105,30 +144,31 @@ const ProductImagesScreen = ({route, navigation}) => {
                     return response.json(); // assuming server responds with JSON
                 })
                 .then((data) => {
-                    if(index == images.length - 1) {
+                    if (index == images.length - 1) {
                         setLoading(false);
                         showSuccess();
                     }
-                        console.log("Images uploaded successfully:", data);
-                    
+                    console.log("Images uploaded successfully:", data);
                 })
                 .catch((error) => {
-                    if(index == images.length - 1) {
+                    if (index == images.length - 1) {
                         setLoading(false);
                         showSuccess();
                     }
                     console.error("Error uploading images:", error);
                 });
-            });
+        });
     };
 
     const renderImages = () => {
         return (
             <View>
                 <HeaderText title="Product Images" />
-                <View style={styles.imageContainer}>
-                    {images.map((uri, index) => (
-                        <View key={index} style={styles.imageWrapper}>
+                <FlatList
+                    horizontal
+                    data={images}
+                    renderItem={({ item: uri, index }) => (
+                        <View style={{ width: 150, borderWidth: 2, borderColor: 'tomato', borderRadius: 12 }}>
                             <Image source={{ uri }} style={styles.image} />
                             <TouchableOpacity
                                 onPress={() => handleDeleteImage(index)}
@@ -139,9 +179,13 @@ const ProductImagesScreen = ({route, navigation}) => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    ))}
+                    )}
+                    keyExtractor={(item, index) => index.toString()} // Use index as the key extractor
+                    ItemSeparatorComponent={() => <View style={{ width: 10 }} />} // Add gap between items
+                    contentContainerStyle={{ padding: 20 }}
+                    showsHorizontalScrollIndicator = {false}
+                />
                 </View>
-            </View>
         );
     };
 
@@ -162,26 +206,53 @@ const ProductImagesScreen = ({route, navigation}) => {
                     onPress={handleUploadImages}
                 />
             </View>
-            <View style={{ height: 1, width: "90%", alignSelf: 'center', marginTop: 35, backgroundColor: "black" }}></View>
-            <View style={[styles.imageContainer, {marginBottom: 200}]}>
-                    {urls.map((url, index) => (
-                        <View key={index} style={[styles.imageWrapper, {marginBottom: 40}]}>
-                            <Image source={{ uri: url }} style={styles.image} />
-                            <TouchableOpacity
-                                onPress={() => {
-                                    console.log("Press");
+            <View
+                style={{
+                    height: 1,
+                    width: "90%",
+                    alignSelf: "center",
+                    marginTop: 35,
+                    backgroundColor: "black",
+                }}
+            ></View>
+            <View style={[styles.imageContainer, { marginBottom: 200 }]}>
+                {productImages.map((row, index) => (
+                    <View
+                        key={index}
+                        style={[styles.imageWrapper, { marginBottom: 30 }]}
+                    >
+                        <Image
+                            source={{
+                                uri:
+                                    "https://pgmarket.longsoeng.website/public/images/product_images/" +
+                                    row.images,
+                            }}
+                            style={styles.image}
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                handleDeleteProductImage(row.id);
+                            }}
+                            style={{
+                                backgroundColor: "red",
+                                padding: 8,
+                                borderRadius: 5,
+                                marginTop: 5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: "white",
+                                    alignSelf: "center",
+                                    fontSize: 16,
                                 }}
-                                style={{ backgroundColor: 'red', padding: 8, borderRadius: 5 }}
                             >
-                                <Text
-                                    style={{ color: 'white', alignSelf: "center", fontSize: 16 }}
-                                >
-                                    Delete
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    ))}
-                </View>
+                                Delete
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                ))}
+            </View>
         </ScrollView>
     );
 };
@@ -237,7 +308,9 @@ const styles = StyleSheet.create({
     },
     image: {
         width: "100%",
-        height: "100%",
+        aspectRatio: 1,
+        objectFit: "cover",
+        // height: "100%",
         borderRadius: 10,
     },
     deleteButton: {

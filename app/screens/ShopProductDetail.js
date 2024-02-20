@@ -35,6 +35,7 @@ export default function ShopProductDetail({ route, navigation }) {
     
     const [loading, setLoading] = React.useState(true);
     const [product, setProduct] = React.useState([]);
+    
     const productInfo = product ? product.product : null;
     const productMainCategory = product ? product.mainCategory : null;
     const productCategory = product ? product.category : null;
