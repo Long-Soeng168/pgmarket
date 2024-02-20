@@ -3,35 +3,31 @@ import {
     View,
     Text,
     Image,
-    Button,
     ScrollView,
     StyleSheet,
     TouchableOpacity,
+    Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import HeaderText from "../components/HeaderText";
-const ProductImagesScreen = () => {
-    const [imageUrls, setImageUrls] = useState([]);
-    const [image, setImage] = useState(null);
-    useEffect(() => {
-        // Replace these placeholder URLs with the actual URLs of your images
-        const urls = [
-            "https://pgmarket.online/public/images/product/1705979855-.jpg",
-            "https://pgmarket.online/public/images/product/1705979855-.jpg",
-            "https://pgmarket.online/public/images/product/1705979855-.jpg",
-        ];
+import colors from "../config/colors";
+import LoadingOverlay from "../components/LoadingOverlay";
 
-        setImageUrls(urls);
-    }, []);
+const ProductImagesScreen = ({route, navigation}) => {
+    const proId = route.params;
+    const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const handleDeleteClick = (index) => {
-        // Implement your logic to delete the image at the specified index
-        console.log("Delete button clicked for index:", index);
-    };
-    const handleAddImage = () => {
-        // Implement your logic to delete the image at the specified index
-        console.log("addImage button");
+    const urls = [
+        "https://pgmarket.online/public/images/product/1705979855-.jpg",
+        "https://pgmarket.online/public/images/product/1705979855-.jpg",
+        "https://pgmarket.online/public/images/product/1705979855-.jpg",
+        "https://pgmarket.online/public/images/product/1705979855-.jpg",
+    ];
+
+    const handleDeleteImage = (index) => {
+        setImages(images.filter((_, i) => i !== index));
     };
 
     const pickImage = async () => {
@@ -39,39 +35,103 @@ const ProductImagesScreen = () => {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 1,
+                allowsMultipleSelection: true, // Enable multiple image selection
             });
 
             if (!result.canceled) {
-                const selectedAsset = result.assets[0];
-                setImage(selectedAsset.uri);
+                const selectedAssets = result.assets;
+                setImages([
+                    ...images,
+                    ...selectedAssets.map((asset) => asset.uri),
+                ]);
             }
         } catch (error) {
-            console.error("Error picking image:", error);
+            console.error("Error picking images:", error);
         }
     };
 
-    const ImageUploadButton = ({ onPress, image }) => (
-        <TouchableOpacity onPress={onPress}>
-            {image ? (
-                <Image style={styles.productImage} source={{ uri: image }} />
-            ) : (
-                <View style={styles.uploadButton}>
-                    <Ionicons name="camera" size={28} color="white" />
-                </View>
-            )}
-        </TouchableOpacity>
-    );
+    const handleUploadImages = () => {
+        images.length > 0 && setLoading(true);
+        setTimeout(() => {
+            uploadImages();
+        }, 10);
+    };
+
+    const showSuccess = () => {
+        Alert.alert(
+            "Add Images",
+            "Images has been added successfully",
+            [
+                { text: "", style: "" },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        navigation.goBack();
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+    }
+
+    const uploadImages = () => { 
+        images.forEach((uri, index) => {
+            const formData = new FormData();
+
+            const filename = uri.split("/").pop(); // Extract filename from URI
+            const fileExtension = filename.split(".").pop(); // Extract file extension
+
+            formData.append("image", {
+                uri,
+                name: "image.jpg", // Rename the file
+                type: `image/${fileExtension}`, // Set correct MIME type
+            });
+
+            fetch(
+                "https://pgmarket.longsoeng.website/api/addProductImages/" + proId,
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            )
+                .then((response) => {
+                    if (!response.ok) {
+                        index == images.length - 1 && setLoading(false);
+                        throw new Error("Failed to upload images");
+                    }
+                    return response.json(); // assuming server responds with JSON
+                })
+                .then((data) => {
+                    if(index == images.length - 1) {
+                        setLoading(false);
+                        showSuccess();
+                    }
+                        console.log("Images uploaded successfully:", data);
+                    
+                })
+                .catch((error) => {
+                    if(index == images.length - 1) {
+                        setLoading(false);
+                        showSuccess();
+                    }
+                    console.error("Error uploading images:", error);
+                });
+            });
+    };
 
     const renderImages = () => {
         return (
             <View>
                 <HeaderText title="Product Images" />
                 <View style={styles.imageContainer}>
-                    {imageUrls.map((url, index) => (
+                    {images.map((uri, index) => (
                         <View key={index} style={styles.imageWrapper}>
-                            <Image source={{ uri: url }} style={styles.image} />
+                            <Image source={{ uri }} style={styles.image} />
                             <TouchableOpacity
-                                onPress={() => handleDeleteClick(index)}
+                                onPress={() => handleDeleteImage(index)}
                                 style={styles.deleteButton}
                             >
                                 <Text style={styles.deleteButtonText}>
@@ -89,14 +149,77 @@ const ProductImagesScreen = () => {
         <ScrollView>
             {renderImages()}
             <View style={{ alignItems: "center" }}>
-                <ImageUploadButton onPress={pickImage} image={image} />
+                <LoadingOverlay visible={loading} />
+                <TouchableOpacity
+                    onPress={pickImage}
+                    style={styles.uploadButton}
+                >
+                    <Ionicons name="camera" size={28} color="white" />
+                </TouchableOpacity>
+                <Button
+                    title="Upload Images"
+                    bgColor={colors.primary}
+                    onPress={handleUploadImages}
+                />
             </View>
-            <View style={styles.buttonContainer}>
-                <Button title="Add Image" onPress={handleAddImage} />
-            </View>
+            <View style={{ height: 1, width: "90%", alignSelf: 'center', marginTop: 35, backgroundColor: "black" }}></View>
+            <View style={[styles.imageContainer, {marginBottom: 200}]}>
+                    {urls.map((url, index) => (
+                        <View key={index} style={[styles.imageWrapper, {marginBottom: 40}]}>
+                            <Image source={{ uri: url }} style={styles.image} />
+                            <TouchableOpacity
+                                onPress={() => {
+                                    console.log("Press");
+                                }}
+                                style={{ backgroundColor: 'red', padding: 8, borderRadius: 5 }}
+                            >
+                                <Text
+                                    style={{ color: 'white', alignSelf: "center", fontSize: 16 }}
+                                >
+                                    Delete
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    ))}
+                </View>
         </ScrollView>
     );
 };
+
+function Button({ title, onPress, bgColor }) {
+    return (
+        <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPress}
+            style={{
+                backgroundColor: bgColor,
+                alignItems: "center",
+                padding: 10,
+                borderRadius: 10,
+                flex: 1,
+            }}
+        >
+            <View
+                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+            >
+                {/* <FontAwesome
+                    name="shopping-cart"
+                    size={24}
+                    color={colors.white}
+                /> */}
+                <Text
+                    style={{
+                        color: colors.white,
+                        fontSize: 16,
+                        fontWeight: "500",
+                    }}
+                >
+                    {title}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    );
+}
 
 const styles = StyleSheet.create({
     imageContainer: {
@@ -108,7 +231,8 @@ const styles = StyleSheet.create({
     imageWrapper: {
         position: "relative",
         width: "45%", // Adjust the width as needed
-        height: 200,
+        // height: 200,
+        aspectRatio: 1,
         margin: 5,
     },
     image: {
@@ -127,21 +251,10 @@ const styles = StyleSheet.create({
     deleteButtonText: {
         color: "white",
     },
-    buttonContainer: {
-        margin: 20,
-    },
-    productImage: {
-        width: "50%",
-        // height: 200,
-        aspectRatio: 1 / 1,
-        borderRadius: 5,
-        marginTop: 20,
-    },
     uploadButton: {
-        width: "50%",
-        // height: 200,
-        aspectRatio: 1 / 1,
-        borderRadius: 5,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
         backgroundColor: "lightgray",
         justifyContent: "center",
         alignItems: "center",

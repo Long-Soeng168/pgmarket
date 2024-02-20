@@ -425,7 +425,7 @@ const AddProductScreen = ({ navigation, route }) => {
             style={{ flex: 1, backgroundColor: "white" }}
         >
             <View style={{ zIndex: 100 }}>
-                <HeaderText title="Add Product" />
+                <HeaderText title="Update Product" />
             </View>
             <LoadingOverlay visible={loading} />
             <ScrollView style={styles.container}>
@@ -752,7 +752,7 @@ const AddProductScreen = ({ navigation, route }) => {
                         style={styles.button}
                         onPress={addProduct}
                     >
-                        <Text style={styles.buttonText}>Add Product</Text>
+                        <Text style={styles.buttonText}>Update Product</Text>
                     </TouchableOpacity>
 
                     {/* Create modal for date picker */}

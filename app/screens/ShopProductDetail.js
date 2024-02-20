@@ -27,7 +27,7 @@ import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function ShopProductDetail({ route, navigation }) {
     const item = route.params;
-    console.log(JSON.stringify(item, null, 2));  
+    // console.log(JSON.stringify(item, null, 2));  
 
     const [user, setUser] = React.useContext(userContext);
     const userToken = user.token;
@@ -64,7 +64,7 @@ export default function ShopProductDetail({ route, navigation }) {
         fetch("https://pgmarket.longsoeng.website/api/getproduct/" + item.id)
             .then((response) => response.json())
             .then((result) => {
-                console.log(JSON.stringify(result, null, 2));
+                // console.log(JSON.stringify(result, null, 2));
                 setProduct(result);
 
                 setLoading(false);
@@ -76,7 +76,7 @@ export default function ShopProductDetail({ route, navigation }) {
 
     const addImages = () => {
         console.log('Adding images');
-        navigation.navigate('ProductImagesScreen');
+        navigation.navigate('ProductImagesScreen', productInfo.id);
     };
 
     const DeleteProduct = () => {
@@ -108,7 +108,7 @@ export default function ShopProductDetail({ route, navigation }) {
                         )
                             .then((response) => response.json())
                             .then((result) => {
-                                console.log(JSON.stringify(result, null, 2)); 
+                                // console.log(JSON.stringify(result, null, 2)); 
                                 navigation.pop();
                                 navigation.replace('ShopProfile');
                             })
