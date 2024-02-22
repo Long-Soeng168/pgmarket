@@ -74,7 +74,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
     const [cartItems, setCartItems] = React.useContext(cartContext);
-    // console.log(JSON.stringify(cartItems, null, 2));
+    console.log(JSON.stringify(cartItems, null, 2));
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
@@ -86,7 +86,7 @@ export default function ProductDetailScreen({ route, navigation }) {
         )
             .then((rest) => rest.json())
             .then((data) => {
-                setProducts(data);
+                setProducts(data.data);
             })
             .catch((err) => console.log(err))
             .finally(() => setIsFetching(false));

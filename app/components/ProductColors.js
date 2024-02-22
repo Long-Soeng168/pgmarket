@@ -4,12 +4,24 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native
 const ProductColors = ({ productColors, handleColorSelect, selectedColor }) => {
     const renderItem = ({ item }) => (
         <TouchableOpacity
-            style={styles.colorOption}
+            style={[styles.colorOption,
+                {
+                    borderWidth: 1,
+                    borderColor: 
+                        selectedColor === item.color.name ? 'tomato' : 'gray',
+                    backgroundColor: 
+                        selectedColor === item.color.name ? 'tomato' : 'white',
+                    borderStyle: 'solid'
+                }
+            ]}
             onPress={() => handleColorSelect(item.color.name)}>
             <View
                 style={[
                     styles.colorCircle,
-                    { backgroundColor: item.color.color_code },
+                    { backgroundColor: item.color.color_code,
+                        borderColor: 
+                        selectedColor === item.color.name ? 'white' : 'gray',
+                    },
                 ]}
             />
             <Text
@@ -22,7 +34,7 @@ const ProductColors = ({ productColors, handleColorSelect, selectedColor }) => {
                         selectedColor === item.color.name ? '500' : 'normal',
                     color:
                         selectedColor === item.color.name
-                            ? 'black'
+                            ? 'white'
                             : 'gray',
                 }}>
                 {item.color.name}
@@ -65,11 +77,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginRight: 20,
+        padding: 5,
     },
     colorCircle: {
-        width: 25,
-        height: 25,
-        borderRadius: 5,
+        width: 20,
+        height: 20,
+        borderRadius: 50,
         borderWidth: 1,
         borderColor: 'gray',
         marginHorizontal: 2,

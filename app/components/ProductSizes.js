@@ -7,7 +7,8 @@ const ProductSizes = ({ productSizes, handleSizeSelect, selectedSize }) => {
             style={[
                 styles.colorOption,
                 {
-                    backgroundColor: selectedSize === item.size.name ? 'gray' : 'white',
+                    backgroundColor: selectedSize === item.size.name ? 'tomato' : 'white',
+                    borderColor: selectedSize === item.size.name ? 'tomato' : 'gray',
                 },
             ]}
             onPress={() => handleSizeSelect(item.size.name)}>

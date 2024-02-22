@@ -30,28 +30,63 @@ const fetchData = async (url, setter) => {
     }
 };
 
+const fetchDataPage = async (url, page, setter) => {
+    try {
+        const response = await fetch(`${url}?page=${page}`);
+        const data = await response.json();
+        setter((prevData) => [...prevData, ...data.data]); // Append new data to existing data
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export default function HomeScreen({ navigation }) {
     const [isFetching, setIsFetching] = React.useState(true);
-    const [newProducts, setNewProducts] = React.useState([]);
-    const [bestSellingProducts, setBestSellingProducts] = React.useState([]);
     const [categories, setCategories] = React.useState([]);
-
+    
     const [slides, setSlides] = React.useState([]);
     const [banners, setBanners] = React.useState([]);
-
+    
+    
     React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData("https://pgmarket.longsoeng.website/api/toprecommendshops", setCategories);
-            await fetchData("https://pgmarket.longsoeng.website/api/getnewproducts", setNewProducts);
-            await fetchData("https://pgmarket.longsoeng.website/api/getbestselling", setBestSellingProducts);
             await fetchData("https://pgmarket.longsoeng.website/api/getslides", setSlides);
             await fetchData("https://pgmarket.longsoeng.website/api/getbanners", setBanners);
             
             setIsFetching(false);
         };
-
+        
         fetchDataAsync();
     }, []);
+    
+    const [newProducts, setNewProducts] = React.useState([]);
+    const [newProductsPage, setNewProductsPage] = React.useState(1);
+    React.useEffect(() => {
+        const fetchDataAsync = async () => {
+            await fetchDataPage("https://pgmarket.longsoeng.website/api/getnewproducts", newProductsPage, setNewProducts);
+        };
+        
+        fetchDataAsync();
+    }, [newProductsPage]);
+    
+    const handleLoadMoreNewProduct = () => {
+        setNewProductsPage((prevPage) => prevPage + 1); // Load next page
+    };
+    
+    const [bestSellingProducts, setBestSellingProducts] = React.useState([]);
+    const [bestSellingPage, setBestSellingPage] = React.useState(1);
+    React.useEffect(() => {
+        const fetchDataAsync = async () => {
+            await fetchDataPage("https://pgmarket.longsoeng.website/api/getbestselling", bestSellingPage, setBestSellingProducts);
+        };
+
+        fetchDataAsync();
+    }, [bestSellingPage]);
+
+    const handleLoadMoreBestSelling = () => {
+        setBestSellingPage((prevPage) => prevPage + 1); // Load next page
+    };
     // End Get New Product 
         
         // console.log(JSON.stringify(categories, null, 2));
@@ -117,6 +152,9 @@ export default function HomeScreen({ navigation }) {
                                         gap: 10,
                                         paddingHorizontal: 10,
                                     }}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    onEndReached={handleLoadMoreNewProduct}
+                                    onEndReachedThreshold={0.1}
                                 />
                             </View>
                             {/* Banner 1 */}
@@ -152,6 +190,9 @@ export default function HomeScreen({ navigation }) {
                                         gap: 10,
                                         paddingHorizontal: 10,
                                     }}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    onEndReached={handleLoadMoreBestSelling}
+                                    onEndReachedThreshold={0.1}
                                 />
                             </View>
                             {/* Banner 2 */}
