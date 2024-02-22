@@ -78,7 +78,7 @@ const AddProductScreen = ({ navigation, route }) => {
     const [brand, setBrand] = useState("");
     const [productName, setProductName] = useState(productInfo.pro_name);
     const [unitPrice, setUnitPrice] = useState(productInfo.price);
-    const [discount, setDiscount] = useState(productInfo.discount);
+    const [discount, setDiscount] = useState(productInfo.discount || 0);
     const [discountFromDate, setDiscountFromDate] = useState(productInfo.discount_date_start);
     const [discountToDate, setDiscountToDate] = useState(productInfo.discount_date_end);
     const [image, setImage] = useState(null);
@@ -305,13 +305,10 @@ const AddProductScreen = ({ navigation, route }) => {
 
         // Check for errors
         if (
-            categoryError ||
-            subCategoryError ||
-            productNameError ||
-            unitPriceError ||
-            !mainCategory ||
             !category ||
-            !subCategory
+            !subCategory ||
+            !productName ||
+            !unitPrice
         ) {
             return;
         } 
@@ -328,21 +325,21 @@ const AddProductScreen = ({ navigation, route }) => {
         formdata.append("pro_name", productName);
         formdata.append("price", unitPrice);
 
-        discountFromDate && formdata.append("start", discountFromDate);
-
-        if(discountFromDate){
-            formdata.append("end", discountToDate);
-        }else {
-            if(discountToDate){
+        if(discountFromDate) {
+            formdata.append("start", discountFromDate);
+            if(discountToDate) {
+                formdata.append("end", discountToDate);
+            }else {
                 formdata.append("end", discountFromDate);
             }
         }
-        discount ? formdata.append("discount", discount) : formdata.append("discount", 0);
-        videoUrl && formdata.append("video_url", videoUrl);
-        description && formdata.append("description", description);
-        shipping && formdata.append("shipping", shipping);
-        selectedColors && formdata.append("colors", JSON.stringify(selectedColors));
-        selectedSizes && formdata.append("sizes", JSON.stringify(selectedSizes));
+
+        if(discount !== "") formdata.append("discount", discount);
+        if(videoUrl !== "") formdata.append("video_url", videoUrl);
+        if(description !== "") formdata.append("description", description);
+        if(shipping !== "") formdata.append("shipping", shipping);
+        if(selectedColors.length > 0) formdata.append("colors", JSON.stringify(selectedColors));
+        if(selectedSizes.length > 0) formdata.append("sizes", JSON.stringify(selectedSizes));
         image && formdata.append("thumbnail", {
             uri: image.uri,
             name: "image.jpg",

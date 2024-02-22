@@ -75,7 +75,7 @@ export default function ShopProfile({ navigation, route }) {
 
         fetchDataAsync();
     }, []);
-    console.log(JSON.stringify(shop, null, 2));
+    // console.log(JSON.stringify(shop, null, 2));
 
     const bannerUrl = shop && "https://pgmarket.longsoeng.website/public/images/shop_banner/" + shop.image_banner;
     const imageUrl = shop && "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;

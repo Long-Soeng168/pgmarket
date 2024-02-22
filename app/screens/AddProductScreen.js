@@ -71,8 +71,8 @@ const AddProductScreen = ({ navigation }) => {
     const [productName, setProductName] = useState("");
     const [unitPrice, setUnitPrice] = useState("");
     const [discount, setDiscount] = useState("");
-    const [discountFromDate, setDiscountFromDate] = useState(new Date());
-    const [discountToDate, setDiscountToDate] = useState(new Date());
+    const [discountFromDate, setDiscountFromDate] = useState(null);
+    const [discountToDate, setDiscountToDate] = useState(null);
     const [image, setImage] = useState(null);
     const [videoUrl, setVideoUrl] = useState("");
     const [shipping, setShipping] = useState("");
@@ -285,10 +285,10 @@ const AddProductScreen = ({ navigation }) => {
 
         // Check for errors
         if (
-            categoryError ||
-            subCategoryError ||
-            productNameError ||
-            unitPriceError ||
+            !category ||
+            !subCategory ||
+            !productName ||
+            !unitPrice ||
             !image
         ) {
             return;
@@ -306,26 +306,28 @@ const AddProductScreen = ({ navigation }) => {
         formdata.append("pro_name", productName);
         formdata.append("price", unitPrice);
 
-        discountFromDate && formdata.append("start", discountFromDate);
-
-        if(discountFromDate){
-            formdata.append("end", discountToDate);
-        }else {
-            if(discountToDate){
+        if(discountFromDate) {
+            formdata.append("start", discountFromDate);
+            if(discountToDate) {
+                formdata.append("end", discountToDate);
+            }else {
                 formdata.append("end", discountFromDate);
             }
         }
-        discount ? formdata.append("discount", discount) : formdata.append("discount", 0);
-        videoUrl && formdata.append("video_url", videoUrl);
-        description && formdata.append("description", description);
-        shipping && formdata.append("shipping", shipping);
-        selectedColors && formdata.append("colors", JSON.stringify(selectedColors));
-        selectedSizes && formdata.append("sizes", JSON.stringify(selectedSizes));
+ 
+        if(discount !== "") formdata.append("discount", discount);
+        if(videoUrl !== "") formdata.append("video_url", videoUrl);
+        if(description !== "") formdata.append("description", description);
+        if(shipping !== "") formdata.append("shipping", shipping);
+        if(selectedColors.length > 0) formdata.append("colors", JSON.stringify(selectedColors));
+        if(selectedSizes.length > 0) formdata.append("sizes", JSON.stringify(selectedSizes));
         formdata.append("thumbnail", {
             uri: image.uri,
             name: "image.jpg",
             type: "image/jpeg",
         });
+
+        console.log(JSON.stringify(formdata, null, 2));
 
         var requestOptions = {
             method: "POST",

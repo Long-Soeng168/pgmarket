@@ -44,4 +44,4 @@ export default function AccountNavigator() {
             <Stack.Screen name="UpdateProductScreen" component={UpdateProductScreen} />
         </Stack.Navigator>
     );
-}
+} 
