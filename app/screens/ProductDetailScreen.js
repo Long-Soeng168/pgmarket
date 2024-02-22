@@ -7,6 +7,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View,
 } from "react-native";
@@ -19,32 +20,70 @@ import { cartContext, favoritesContext } from "../../App";
 
 import ActivityIndicator from "../components/ActivityIndicator";
 import Card from "../components/Card";
+import ProductColors from "../components/ProductColors";
 import ListHeader from "../components/ListHeader";
 import colors from "../config/colors";
+import ProductSizes from "../components/ProductSizes";
+import LineSeparator from "../components/LineSeparator";
+import ProductImages from "../components/ProductImages";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
+    // console.log(item);
+    const [selectedColor, setSelectedColor] = React.useState("");
+    const [selectedSize, setSelectedSize] = React.useState("");
+    const [buyerNote, setBuyerNote] = React.useState("");
+    const handleColorSelect = (color) => {
+        setSelectedColor(color);
+    };
+    const handleSizeSelect = (size) => {
+        setSelectedSize(size);
+    };
+    const handleTextBuyerNote = (text) => {
+        setBuyerNote(text);
+    };
 
-    const imageUrl = "https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail;
+    // const imageUrl =
+    //     "https://pgmarket.longsoeng.website/public/images/product/" +
+    //     item.thumbnail;
+    const [imageUrl, setImageUrl] = React.useState(
+        "https://pgmarket.longsoeng.website/public/images/product/" +
+            item.thumbnail
+    );
+    const handleImageUrlSelect = (url) => {
+        setImageUrl(url);
+    };
+
     const title = item.pro_name;
     const descriptionNoHtml = stripHtmlTags(item.description);
     const price = parseFloat(item.price).toFixed(2);
 
     const category = item.category;
     const [isFetching, setIsFetching] = React.useState(true);
+    const [loading, setLoading] = React.useState(true);
     const [isError, setIsError] = React.useState(false);
     const [products, setProducts] = React.useState([]);
+
+    const [productInfo, setProductInfo] = React.useState({});
+    const [productColors, setProductColors] = React.useState([]);
+    const [productSizes, setProductSizes] = React.useState([]);
+    const [productImages, setProductImages] = React.useState([]);
+    const [shopInfo, setShopInfo] = React.useState({});
     // const [relatedProducts, setRelatedProducts] = React.useState([]);
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
     const [cartItems, setCartItems] = React.useContext(cartContext);
+    // console.log(JSON.stringify(cartItems, null, 2));
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
 
-
     const getrelatedproducts = () => {
-        fetch("https://pgmarket.longsoeng.website/api/getrelatedproducts/" + item.main_cate_id)
+        fetch(
+            "https://pgmarket.longsoeng.website/api/getrelatedproducts/" +
+                item.main_cate_id
+        )
             .then((rest) => rest.json())
             .then((data) => {
                 setProducts(data);
@@ -52,6 +91,30 @@ export default function ProductDetailScreen({ route, navigation }) {
             .catch((err) => console.log(err))
             .finally(() => setIsFetching(false));
     };
+
+    const getProductFullDetail = () => {
+        fetch(
+            "https://pgmarket.longsoeng.website/api/getproductfulldetail/" +
+                item.id
+        )
+            .then((rest) => rest.json())
+            .then((data) => {
+                // console.log(JSON.stringify(data, null, 2));
+                setProductInfo(data.product);
+                setProductColors(data.colors);
+                setProductSizes(data.sizes);
+                setProductImages(data.images);
+                setShopInfo(data.shop);
+            })
+            .catch((err) => console.log(err))
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+    React.useEffect(() => {
+        getProductFullDetail();
+    }, []);
+
     React.useEffect(() => {
         getrelatedproducts();
     }, []);
@@ -75,7 +138,13 @@ export default function ProductDetailScreen({ route, navigation }) {
     const addToCart = () => {
         setCartItems((preCartItems) => [
             ...preCartItems,
-            { ...item, quantity: 1 },
+            {
+                ...item,
+                quantity: 1,
+                color: selectedColor,
+                size: selectedSize,
+                note: buyerNote,
+            },
         ]);
     };
 
@@ -83,6 +152,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     return (
         <ScrollView>
+            <LoadingOverlay visible={loading} />
             {/* Add and Remove to Favorite */}
             {favorites.some((favorite) => favorite.id === item.id) ? (
                 <FavoriteButton
@@ -107,11 +177,51 @@ export default function ProductDetailScreen({ route, navigation }) {
                     }}
                 />
             </TouchableOpacity>
+            {productImages.length > 1 && (
+                <ProductImages
+                    imageUrl={imageUrl}
+                    imageData={productImages}
+                    handleImageUrlSelect={handleImageUrlSelect}
+                />
+            )}
 
             <View style={{ backgroundColor: colors.white }}>
                 <View style={{ padding: 10 }}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.price}>$ {price}</Text>
+                    <ProductColors
+                        productColors={productColors}
+                        selectedColor={selectedColor}
+                        handleColorSelect={handleColorSelect}
+                    />
+                    <ProductSizes
+                        productSizes={productSizes}
+                        selectedSize={selectedSize}
+                        handleSizeSelect={handleSizeSelect}
+                    />
+                    <View
+                        style={{
+                            marginBottom: 10,
+                        }}
+                    >
+                        <Text>Buyer Note</Text>
+                        <TextInput
+                            style={{
+                                marginTop: 5,
+                                backgroundColor: "#f0f0f0",
+                                paddingHorizontal: 15,
+                                paddingVertical: 12,
+                                fontSize: 16,
+                                color: "#333",
+                                textAlignVertical: "top",
+                                height: 68,
+                            }}
+                            placeholder="Buyer note ..."
+                            onChangeText={(text) => handleTextBuyerNote(text)}
+                            placeholderTextColor="#999"
+                            multiline
+                        />
+                    </View>
                     {/* Add and Remove from Cart */}
                     {cartItems.some((cartItem) => cartItem.id === item.id) ? (
                         <CartButton
@@ -155,6 +265,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 Video
                             </Text>
                         </View> */}
+                        {/* <LabelValue label="" /> */}
                         <Text
                             style={{
                                 fontSize: 18,
@@ -167,13 +278,16 @@ export default function ProductDetailScreen({ route, navigation }) {
                             {descriptionNoHtml}
                         </Text>
                     </View>
-                    
                 </View>
                 <View style={{ marginBottom: 30 }}>
-                    <ListHeader title="Relate Product" 
+                    <ListHeader
+                        title="Relate Product"
                         onPress={() => {
-                            navigation.navigate("SeeMoreScreen", `getrelatedproducts/${item.main_cate_id}`);
-                        }} 
+                            navigation.navigate(
+                                "SeeMoreScreen",
+                                `getrelatedproducts/${item.main_cate_id}`
+                            );
+                        }}
                     />
                     <ActivityIndicator visibility={isFetching} />
                     {!isFetching && (
@@ -182,13 +296,18 @@ export default function ProductDetailScreen({ route, navigation }) {
                             keyExtractor={(item) => item.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => <Card 
-                                item={item} 
-                                title = {item.pro_name}
-                                imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
-                                description= {item.description}
-                                price = {item.price}
-                            />}
+                            renderItem={({ item }) => (
+                                <Card
+                                    item={item}
+                                    title={item.pro_name}
+                                    imageUrl={
+                                        "https://pgmarket.longsoeng.website/public/images/product/" +
+                                        item.thumbnail
+                                    }
+                                    description={item.description}
+                                    price={item.price}
+                                />
+                            )}
                             contentContainerStyle={{
                                 gap: 10,
                                 paddingHorizontal: 10,
@@ -259,7 +378,7 @@ function CartButton({ title, onPress, bgColor }) {
                 backgroundColor: bgColor,
                 alignItems: "center",
                 padding: 10,
-                borderRadius: 100,
+                borderRadius: 10,
             }}
         >
             <View
@@ -284,16 +403,30 @@ function CartButton({ title, onPress, bgColor }) {
     );
 }
 
-
+function LabelValue({ label, value }) {
+    return (
+        <View style={{ flexDirection: "row", gap: 10 }}>
+            <Text
+                style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                }}
+            >
+                {label} :
+            </Text>
+            <Text style={styles.description}>{value}</Text>
+        </View>
+    );
+}
 
 const stripHtmlTags = (htmlString) => {
     // Remove HTML tags, attributes, and entities using regular expressions
-    if(htmlString) {
+    if (htmlString) {
         return htmlString
-        .replace(/<[^>]*>/g, '') // Remove HTML tags
-        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
-        .replace(/&\w+;/g, ''); // Remove HTML entities
-    }else {
+            .replace(/<[^>]*>/g, "") // Remove HTML tags
+            .replace(/(\w+)\s*=\s*("[^"]*")/g, "") // Remove attributes
+            .replace(/&\w+;/g, ""); // Remove HTML entities
+    } else {
         return htmlString;
-    };
-}
+    }
+};
