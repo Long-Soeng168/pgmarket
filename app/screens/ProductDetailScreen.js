@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import {
+    Alert,
     FlatList,
     Image,
     KeyboardAvoidingView,
@@ -27,6 +28,7 @@ import ProductSizes from "../components/ProductSizes";
 import LineSeparator from "../components/LineSeparator";
 import ProductImages from "../components/ProductImages";
 import LoadingOverlay from "../components/LoadingOverlay";
+import ShopCardComponent from "../components/ShopCardComponent";
 
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
@@ -74,7 +76,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
     const [cartItems, setCartItems] = React.useContext(cartContext);
-    console.log(JSON.stringify(cartItems, null, 2));
+    // console.log(JSON.stringify(cartItems, null, 2));
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
@@ -130,22 +132,53 @@ export default function ProductDetailScreen({ route, navigation }) {
     };
 
     const removeFromCart = () => {
+
         setCartItems((preCartItems) =>
             preCartItems.filter((preCartItem) => preCartItem.id !== item.id)
         );
     };
 
     const addToCart = () => {
-        setCartItems((preCartItems) => [
-            ...preCartItems,
-            {
-                ...item,
-                quantity: 1,
-                color: selectedColor,
-                size: selectedSize,
-                note: buyerNote,
-            },
-        ]);
+        // console.log(JSON.stringify("preShopId" + cartItems[0].shop_id, null, 2));
+        // console.log(JSON.stringify("newShopId" + item.shop_id, null, 2));
+        if(cartItems.length > 0) {
+            if(cartItems[0].shop_id === item.shop_id) {
+                setCartItems((preCartItems) => [
+                    ...preCartItems,
+                    {
+                        ...item,
+                        quantity: 1,
+                        color: selectedColor,
+                        size: selectedSize,
+                        note: buyerNote,
+                    },
+                ]);
+            }else {
+                Alert.alert(
+                    'Message',
+                    'Difference shop cannot add to cart!',
+                    [
+                      {
+                        text: 'Close',
+                        onPress: () => console.log('Close button pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+            }
+        }else {
+            setCartItems((preCartItems) => [
+                ...preCartItems,
+                {
+                    ...item,
+                    quantity: 1,
+                    color: selectedColor,
+                    size: selectedSize,
+                    note: buyerNote,
+                },
+            ]);
+        }
     };
 
     // console.log(JSON.stringify(item, null, 2));
@@ -238,7 +271,20 @@ export default function ProductDetailScreen({ route, navigation }) {
                     )}
                     {/* End Add and Remove from Cart */}
 
-                    <View style={{ marginTop: 25, alignItems: "flex-start" }}>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            console.log('press shop card');
+                        }}
+                    >
+                        <ShopCardComponent 
+                            imageURL="http://helejance.com/public/images/product/1707874421-.jpg"
+                            title="Shop Name"
+                            contact="Contact Info"
+                            description="Description of the shop."
+                            />
+                    </TouchableOpacity>
+
+                    <View style={{ marginTop: 15, alignItems: "flex-start" }}>
                         {/* Video Play */}
                         {/* <View
                             style={{
@@ -272,7 +318,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 fontWeight: "500",
                             }}
                         >
-                            Description :
+                            Product Description
                         </Text>
                         <Text style={styles.description}>
                             {descriptionNoHtml}

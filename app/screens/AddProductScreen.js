@@ -62,7 +62,7 @@ const ImageUploadButton = ({ onPress, image }) => (
 
 const AddProductScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [mainCategory, setMainCategory] = useState("");
     const [category, setCategory] = useState("");
@@ -144,7 +144,8 @@ const AddProductScreen = ({ navigation }) => {
                 setAllSizes(result);
                 console.log(JSON.stringify(result, null, 2));
             })
-            .catch((error) => console.error(error));
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
     }, []);
 
     const [openStartDatePicker, setOpenStartDatePicker] = useState(false);

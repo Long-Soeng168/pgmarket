@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, FlatList, ScrollView, Text, View } from "react-native";
+import { Dimensions, ScrollView, Text, View } from "react-native";
 import Card from "../components/Card";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -24,7 +24,6 @@ export default function SeeMoreScreen({ route }) {
     const [products, setProducts] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
 
-
     React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData("https://pgmarket.longsoeng.website/api/" + item, currentPage, setProducts);
@@ -37,40 +36,47 @@ export default function SeeMoreScreen({ route }) {
 
     const handleLoadMore = () => {
         setPageLoading(true);
-        setTimeout(() => {
-            setCurrentPage((prevPage) => prevPage + 1); // Load next page
-        }, 10);
+        setCurrentPage((prevPage) => prevPage + 1); // Load next page
     };
-    
+
+    const handleScroll = (event) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isCloseToBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+        if (isCloseToBottom && !pageLoading) {
+            handleLoadMore();
+        }
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.white}}>
             <ActivityIndicator visibility={isFetching} />
-            {!isFetching && (
-                <FlatList
-                    numColumns={2}
-                    data={products}
-                    renderItem={({ item }) => (
-                        <Card
-                            item={item}
-                            width={width}
-                            title={item.pro_name}
-                            imageUrl={"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
-                            description={item.description}
-                            price={item.price}
-                        />
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
-                    contentContainerStyle={{ paddingVertical: 25, gap: 15 }}
-                    columnWrapperStyle={{ justifyContent: "space-evenly"}}
-                    onEndReached={handleLoadMore}
-                    onEndReachedThreshold={0.1} // Trigger threshold for reaching the end
-                />
-                )}
-                <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator visibility={pageLoading} />
-                </View>
-
+            <ScrollView
+                contentContainerStyle={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-evenly',
+                    paddingVertical: 25,
+                    rowGap: 15,
+                    // paddingHorizontal: 10,
+                }}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+            >
+                {products.map((product, index) => (
+                    <Card
+                        key={index}
+                        item={product}
+                        width={width}
+                        title={product.pro_name}
+                        imageUrl={"https://pgmarket.longsoeng.website/public/images/product/thumb/" + product.thumbnail}
+                        description={product.description}
+                        price={product.price}
+                    />
+                ))}
+            </ScrollView>
+            <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator visibility={pageLoading} />
+            </View>
         </View>
     );
 }

@@ -71,7 +71,7 @@ export default function HomeScreen({ navigation }) {
     }, [newProductsPage]);
     
     const handleLoadMoreNewProduct = () => {
-        setNewProductsPage((prevPage) => prevPage + 1); // Load next page
+        newProductsPage < 3 && setNewProductsPage((prevPage) => prevPage + 1); // Load next page
     };
     
     const [bestSellingProducts, setBestSellingProducts] = React.useState([]);
@@ -85,7 +85,7 @@ export default function HomeScreen({ navigation }) {
     }, [bestSellingPage]);
 
     const handleLoadMoreBestSelling = () => {
-        setBestSellingPage((prevPage) => prevPage + 1); // Load next page
+        bestSellingPage < 3 && setBestSellingPage((prevPage) => prevPage + 1); // Load next page
     };
     // End Get New Product 
         
