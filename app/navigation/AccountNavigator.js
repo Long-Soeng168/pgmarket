@@ -15,6 +15,7 @@ import ShopProductDetail from "../screens/ShopProductDetail";
 import ProductImagesScreen from "../screens/ProductImagesScreen";
 import UpdateProductScreen from "../screens/UpdateProductScreen";
 import { userContext } from "../../App";
+import UserOrders from "../screens/account/UserOrders";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,7 @@ export default function AccountNavigator() {
             <Stack.Screen name="ShopProductDetail" component={ShopProductDetail} />
             <Stack.Screen name="ProductImagesScreen" component={ProductImagesScreen} />
             <Stack.Screen name="UpdateProductScreen" component={UpdateProductScreen} />
+            <Stack.Screen name="UserOrders" component={UserOrders} />
         </Stack.Navigator>
     );
 } 

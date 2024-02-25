@@ -249,6 +249,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 textAlignVertical: "top",
                                 height: 68,
                             }}
+                            maxLength={250}
                             placeholder="Buyer note ..."
                             onChangeText={(text) => handleTextBuyerNote(text)}
                             placeholderTextColor="#999"

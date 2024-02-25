@@ -65,8 +65,7 @@ const LoginScreenCart = () => {
                         // console.log(JSON.stringify(result, null, 2));
                         setUser(result);
                         storage.storeToken(JSON.stringify(result));
-
-                        navigation.replace('CheckoutProcess');
+                        navigation.replace('CartScreen')
                         setIsError(false);
                     } else {
                         setIsError(true);

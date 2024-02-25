@@ -69,14 +69,22 @@ const OrderDetailScreen = ({ route }) => {
                 data={products}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <ItemComponents qty = {item.qty} title={item.product_name} imageUrl={item.thumbnail} price={item.price} />
+                    <ItemComponents 
+                        qty = {item.qty} 
+                        title={item.product_name} 
+                        imageUrl={item.thumbnail} 
+                        price={item.price} 
+                        note={item.input_description}
+                        size={item.size}
+                        color={item.color}
+                    />
                 )}
             />
     </View>
   );
 };
 
-const ItemComponents = ({ qty, title, imageUrl, price }) => {
+const ItemComponents = ({ qty, title, imageUrl, price, note, size, color }) => {
     return (
         <View style={styles.productContainer}>
             {/* Remove Button */}
@@ -91,14 +99,16 @@ const ItemComponents = ({ qty, title, imageUrl, price }) => {
                     <Text numberOfLines={2} style={styles.title}>
                         {title}
                     </Text>
-                    <Text numberOfLines={2}>
-                        <Text style={{ color: 'tomato' }}>Note</Text> : { 'I want it in 3 days, And I want you to setup for me.'}
+                    <Text 
+                        numberOfLines={3}
+                    >
+                        <Text style={{ color: 'tomato' }}>Note</Text> : {note}
                     </Text>
                     <Text numberOfLines={1}>
-                        <Text style={{ color: 'tomato' }}>Size</Text> : { 'XL'}
+                        <Text style={{ color: 'tomato' }}>Size</Text> : {size}
                     </Text>
                     <Text numberOfLines={1}>
-                        <Text style={{ color: 'tomato' }}>Color</Text> : { 'White'}
+                        <Text style={{ color: 'tomato' }}>Color</Text> : {color}
                     </Text>
                 </View>
                
@@ -235,7 +245,7 @@ const styles = StyleSheet.create({
     orderContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: "flex-start",
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
         paddingVertical: 12,

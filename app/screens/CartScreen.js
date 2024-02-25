@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native";
 
 import { cartContext, userContext } from "../../App";
@@ -22,7 +22,13 @@ export default function CartScreen({navigation}) {
 
     const handleCheckout = () => {
         if(user) {
+            user.user.type_roles === "customer" 
+            ? 
             navigation.navigate('CheckoutProcess')
+            :
+            Alert.alert('Message', 'Dealer account cannot buy!')
+            
+
         }else {
             navigation.navigate('LoginScreenCart')
         }

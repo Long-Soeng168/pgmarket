@@ -20,35 +20,20 @@ import { userContext } from "../../../App";
 
 const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
     const [user, setUser] = React.useContext(userContext);
-    const [message, setMessage] = React.useState("");
     const [reload, setReload] = React.useState(false);
-    const userInfo = user && user.user;
-    console.log(userInfo);
+    const userInfo = user ? user.user : null;
+    // console.log(userInfo);
 
     const [name, setName] = useState(userInfo && userInfo.name);
     const [phoneNumber, setPhoneNumber] = useState(userInfo && userInfo.phone);
     const [email, setEmail] = useState(userInfo && userInfo.email);
     const [address, setAddress] = useState(userInfo && userInfo.address);
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [passwordVisible, setPasswordVisible] = useState(false);
 
     const [nameError, setNameError] = useState(null);
     const [phoneNumberError, setPhoneNumberError] = useState(null);
     const [emailError, setEmailError] = useState(null);
     const [addressError, setAddressError] = useState(null);
-    const [confirmPasswordError, setConfirmPasswordError] = useState(null);
-    const [passwordMatchError, setPasswordMatchError] = useState(null);
 
-    React.useEffect(() => {
-        if (message) {
-            setTimeout(() => {
-                setMessage(null); // Reset message state to false after 3 seconds
-                // navigation.goBack();
-            }, 2000);
-        }
-    }, [reload]);
 
     const validateField = (field, value) => {
         switch (field) {
@@ -72,81 +57,28 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
                     value.trim() !== "" ? null : "Address cannot be empty"
                 );
                 break;
-            case "passwordMatch":
-                setPasswordMatchError(
-                    value === newPassword ? null : "Passwords do not match"
-                );
-                break;
             default:
                 break;
         }
     };
 
-    useEffect(() => {
-        (async () => {
-            if (Platform.OS !== "web") {
-                try {
-                    const { status } =
-                        await ImagePicker.requestMediaLibraryPermissionsAsync();
-                    if (status !== "granted") {
-                        alert(
-                            "Sorry, we need camera roll permissions to make this work!"
-                        );
-                    }
-                } catch (error) {
-                    console.error(
-                        "Error requesting media library permissions:",
-                        error
-                    );
-                }
-            }
-        })();
-    }, []);
-
-    const pickImage = async () => {
-        try {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1,
-            });
-
-            if (!result.canceled) {
-                // Use the first asset in the "assets" array
-                const selectedAsset = result.assets[0];
-                setProfilePicture(selectedAsset.uri);
-            }
-        } catch (error) {
-            console.error("Error picking image:", error);
+      const updateDetails = () => {
+        if(!userInfo) {
+            return;
         }
-    };
-
-    const updateDetails = () => {
         validateField("name", name);
         validateField("phoneNumber", phoneNumber);
         validateField("email", email);
-        validateField("passwordMatch", confirmPassword);
+        validateField("address", address);
 
         if (
             nameError ||
             phoneNumberError ||
             emailError ||
-            addressError ||
-            passwordMatchError
+            addressError
         ) {
             return;
-        }
-
-        // Implement logic to update user details (e.g., make API call)
-        // console.log("Updating user details...");
-        // console.log("Name:", name);
-        // console.log("Phone Number:", phoneNumber);
-        // console.log("Email:", email);
-        // console.log("Address:", address);
-        // console.log("New Password:", newPassword);
-        // console.log("Confirm Password:", confirmPassword);
-        // console.log("Profile Picture:", profilePicture);
+        } 
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json");
         myHeaders.append("Authorization", "Bearer " + user.token);
@@ -155,9 +87,6 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
         formdata.append("name", name);
         formdata.append("phone", phoneNumber);
         formdata.append("email", email);
-        if(newPassword) {
-            formdata.append("password", newPassword);
-        }
         formdata.append("address", address);
 
         var requestOptions = {
@@ -167,17 +96,15 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
         redirect: 'follow'
         };
 
-        fetch("https://pgmarket.longsoeng.website/api/updateUserDetail/" + userInfo && userInfo.id, requestOptions)
+        fetch("https://pgmarket.longsoeng.website/api/updateUserDetail/" + userInfo.id, requestOptions)
         .then(response => response.json())
         .then(result => {
             if(result.errors) {
                 console.log('Update Unsuccess!');
-                setMessage('Update Unsuccess');
                 setReload(!reload)
             }
             else {
                 console.log('Update Successfully!');
-                setMessage('Update Successfully');
                 setReload(!reload);
                 // console.log(result.user);
                 setUser(user => {
@@ -203,7 +130,22 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
 
             }
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {console.log('error', error);
+        Alert.alert(
+            "Message",
+            "Update Unsuccessfully!",
+            [
+                { text: "", style: "" },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        setIsVisible(false);
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+        });
 
         // Optionally, reset password-related states after updating details
         // setNewPassword("");
@@ -214,84 +156,88 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
         <Modal
             visible={isVisible}
             style={{ flex: 1 }}
+            transparent={true}
+            animationType="slide"
         >
-            <View style={{ zIndex: 100 }}>
-                {message && (
-                    <Text
-                        style={{
-                            color: "red",
-                            textAlign: "center",
-                            fontSize: 16,
-                            backgroundColor: colors.lightGreen,
-                            padding: 10,
-                        }}
-                    >
-                        {message}
-                    </Text>
-                )}
-            </View>
             <View style={styles.container}>
+                <View style={styles.innerContainer}>
                     <TouchableOpacity
                         style={{ 
-                            backgroundColor: '#00000077',
-                            padding: 10,
+                            backgroundColor: '#000000c7',
+                            // padding: 10,
+                            width: 50,
+                            height: 50,
+                            justifyContent: 'center',
+                            alignItems: 'center',
                             borderRadius: 200,
                             position: 'absolute',
-                            top: 10,
-                            right: 10,
+                            top: -20,
+                            right: -20,
                          }}
                          onPress={() => setIsVisible(false)}
                         >
                         <Ionicons name="close" size={28} color="white" />
                     </TouchableOpacity>
-                <View style={styles.innerContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Name"
-                        value={name}
-                        onChangeText={(text) => setName(text)}
-                    />
-                    {nameError && (
-                        <Text style={styles.errorText}>{nameError}</Text>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Phone Number"
-                        keyboardType="phone-pad"
-                        value={phoneNumber}
-                        onChangeText={(text) => setPhoneNumber(text)}
-                    />
-                    {phoneNumberError && (
-                        <Text style={styles.errorText}>{phoneNumberError}</Text>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
-                    />
-                    {emailError && (
-                        <Text style={styles.errorText}>{emailError}</Text>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Address"
-                        value={address}
-                        onChangeText={(text) => setAddress(text)}
-                    />
-                    {addressError && (
-                        <Text style={styles.errorText}>{addressError}</Text>
-                    )}
-                   
+                    <Text style={styles.label}>Username:</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Name"
+                            value={name}
+                            onChangeText={(text) => setName(text)}
+                        />
+                        {nameError && (
+                            <Text style={styles.errorText}>{nameError}</Text>
+                            )}
+                            <Text style={styles.label}>Phone:</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Phone Number"
+                            keyboardType="phone-pad"
+                            value={phoneNumber}
+                            onChangeText={(text) => setPhoneNumber(text)}
+                        />
+                        {phoneNumberError && (
+                            <Text style={styles.errorText}>{phoneNumberError}</Text>
+                            )}
+                            <Text style={styles.label}>Email:</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email"
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            value={email}
+                            onChangeText={(text) => setEmail(text)}
+                        />
+                        {emailError && (
+                            <Text style={styles.errorText}>{emailError}</Text>
+                            )}
+                            <Text style={styles.label}>Address:</Text>
+                        <TextInput
+                            multiline
+                            style={[styles.input,
+                                {
+                                    height: 70,
+                                    paddingTop: 5,
+                                    textAlignVertical: 'top'
+                                }
+                            ]}
+                            placeholder="Address"
+                            value={address}
+                            onChangeText={(text) => setAddress(text)}
+                        />
+                        {addressError && (
+                            <Text 
+                                
+                            style={styles.errorText}>{addressError}</Text>
+                        )}
+                    
 
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={updateDetails}
-                    >
-                        <Text style={styles.buttonText}>Update Details</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={updateDetails}
+                        >
+                            <Text style={styles.buttonText}>Update Details</Text>
+                        </TouchableOpacity>
                 </View>
             </View>
         </Modal>
@@ -302,12 +248,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        paddingHorizontal: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#000000b2',
+        paddingHorizontal: 25,
     },
     innerContainer: {
+        padding: 20,
+        borderRadius: 20,
         justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: 'white',
+
+        // alignItems: "center",
     },
     profilePicture: {
         width: 120,
@@ -323,13 +273,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         margin: 25,
     },
+    label: {
+        fontSize: 16,
+        fontWeight: "bold",
+        // marginBottom: 5,
+    },
     input: {
         width: "100%",
         height: 45,
         borderColor: "gray",
         borderWidth: 1,
-        // marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 20,
+        // marginTop: 20,
         paddingHorizontal: 10,
         fontSize: 16, // Adjust the font size as needed
         borderRadius: 5,
@@ -356,7 +311,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.accent,
         paddingHorizontal: 17,
         paddingVertical: 15,
-        borderRadius: 5,
+        borderRadius: 10,
         marginTop: 20,
     },
     buttonText: {

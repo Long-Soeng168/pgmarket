@@ -15,7 +15,9 @@ import { cartContext, userContext } from "../../../App";
 import LoadingOverlay from "../../components/LoadingOverlay";
 import EditInfoModal from "./EditInfoModal";
 import HeaderText from "../../components/HeaderText";
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 const UserInfo = ({ navigation }) => {
     const [selectedBank, setSelectedBank] = React.useState(null);
@@ -28,6 +30,8 @@ const UserInfo = ({ navigation }) => {
     const userInfo = user && user.user;
 
     const [banks, setBanks] = React.useState([]);
+    const [invoiceCreatedId, setInvoiceCreateId] = React.useState(null);
+    const [imageUpload, setImageUpload] = React.useState(null);
 
     React.useEffect(() => {
         if (cartItems.length > 0) {
@@ -95,27 +99,32 @@ const UserInfo = ({ navigation }) => {
         )
             .then((response) => response.json())
             .then((result) => {
-                console.log(result);
+                // console.log(result);
                 if (!result.error) {
                     setCartItems([]);
-                    Alert.alert(
-                        "Message",
-                        "Your order request successfully",
-                        [
-                            { text: "", style: "" },
-                            {
-                                text: "OK",
-                                onPress: () => {
-                                    navigation.goBack();
+                    // setInvoiceCreateId(result.invoiceId);
+                    if (imageUpload) {
+                        handleUploadImage(result.invoiceId);
+                    } else {
+                        Alert.alert(
+                            "Message",
+                            "Your order submit successfully",
+                            [
+                                { text: "", style: "" },
+                                {
+                                    text: "OK",
+                                    onPress: () => {
+                                        navigation.goBack();
+                                    },
                                 },
-                            },
-                        ],
-                        { cancelable: false }
-                    );
+                            ],
+                            { cancelable: false }
+                        );
+                    }
                 } else {
                     Alert.alert(
                         "Message",
-                        "Your order request unsuccessfully",
+                        "Your order submit unsuccessfully",
                         [
                             { text: "", style: "" },
                             {
@@ -129,7 +138,23 @@ const UserInfo = ({ navigation }) => {
                     );
                 }
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                console.error(error);
+                Alert.alert(
+                    "Message",
+                    "Your order submit unsuccessfully",
+                    [
+                        { text: "", style: "" },
+                        {
+                            text: "OK",
+                            onPress: () => {
+                                navigation.goBack();
+                            },
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            });
         // Alert.alert("Confirmation", "You clicked confirm.");
     };
 
@@ -145,7 +170,7 @@ const UserInfo = ({ navigation }) => {
                 {
                     backgroundColor:
                         item.payment_name === selectedBank
-                            ? "#ffc4b9"
+                            ? colors.secondary
                             : "#f0f0f0",
                 },
             ]}
@@ -166,6 +191,109 @@ const UserInfo = ({ navigation }) => {
         </TouchableOpacity>
     );
 
+    // ==========Image PickerX
+    React.useEffect(() => {
+        (async () => {
+            if (Platform.OS !== "web") {
+                try {
+                    const { status } =
+                        await ImagePicker.requestMediaLibraryPermissionsAsync();
+                    if (status !== "granted") {
+                        alert(
+                            "Sorry, we need camera roll permissions to make this work!"
+                        );
+                    }
+                } catch (error) {
+                    console.error(
+                        "Error requesting media library permissions:",
+                        error
+                    );
+                }
+            }
+        })();
+    }, []);
+
+    const handlePickImage = async () => {
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 1,
+            });
+
+            if (!result.canceled) {
+                // Use the first asset in the "assets" array
+                const selectedAsset = result.assets[0];
+                setImageUpload(selectedAsset.uri);
+            }
+        } catch (error) {
+            console.error("Error picking image:", error);
+        }
+    };
+
+    const handleUploadImage = (invoiceId) => {
+        const myHeaders = new Headers();
+        myHeaders.append("Accept", "application/json");
+
+        const formdata = new FormData();
+        if (imageUpload) {
+            const filename = imageUpload.split("/").pop(); // Extract filename from URI
+            const fileExtension = filename.split(".").pop(); // Extract file extension
+
+            formdata.append("image", {
+                uri: imageUpload,
+                name: "image.jpg",
+                type: `image/${fileExtension}`, // Set correct MIME type
+            });
+        }
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow",
+        };
+        fetch(
+            "https://pgmarket.longsoeng.website/api/uploadTransaction/" +
+                invoiceId,
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                Alert.alert(
+                    "Message",
+                    "Your order submit successfully",
+                    [
+                        { text: "", style: "" },
+                        {
+                            text: "OK",
+                            onPress: () => {
+                                navigation.goBack();
+                            },
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+                Alert.alert(
+                    "Message",
+                    "Your order submit unsuccessfully",
+                    [
+                        { text: "", style: "" },
+                        {
+                            text: "OK",
+                            onPress: () => {
+                                navigation.goBack();
+                            },
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            });
+    };
+    // ==========End Image PickerX
     return (
         <>
             <HeaderText title="Checkout Process" />
@@ -183,22 +311,30 @@ const UserInfo = ({ navigation }) => {
                     style={styles.userInfo}
                 >
                     <View
-                        style={{ 
-                            position: 'absolute',
+                        style={{
+                            position: "absolute",
                             right: 10,
                             top: 10,
-                         }}
+                        }}
                     >
                         <Feather name="edit" size={24} color="gray" />
                     </View>
-                    <Text style={styles.label}>Username:</Text>
-                    <Text style={styles.value}>{userInfo && userInfo.name}</Text>
-                    <Text style={styles.label}>Phone:</Text>
-                    <Text style={styles.value}>{userInfo && userInfo.phone}</Text>
-                    <Text style={styles.label}>Email:</Text>
-                    <Text style={styles.value}>{userInfo && userInfo.email}</Text>
-                    <Text style={styles.label}>Address:</Text>
-                    <Text style={styles.value}>{userInfo && userInfo.address}</Text>
+                    <Text style={styles.value}>
+                        <Text style={styles.label}>Name: </Text>
+                        {userInfo && userInfo.name}
+                    </Text>
+                    <Text style={styles.value}>
+                        <Text style={styles.label}>Phone: </Text>
+                        {userInfo && userInfo.phone}
+                    </Text>
+                    <Text style={styles.value}>
+                        <Text style={styles.label}>Email: </Text>
+                        {userInfo && userInfo.email}
+                    </Text>
+                    <Text style={styles.value}>
+                        <Text style={styles.label}>Address: </Text>
+                        {userInfo && userInfo.address}
+                    </Text>
                 </TouchableOpacity>
                 <Text style={styles.title}>Payment Method</Text>
                 <FlatList
@@ -207,6 +343,28 @@ const UserInfo = ({ navigation }) => {
                     renderItem={renderBankItem}
                     style={styles.flatList}
                 />
+                <View
+                    style={{
+                        alignItems: "center",
+                    }}
+                >
+                    {imageUpload ? (
+                        <TouchableOpacity onPress={handlePickImage}>
+                            <Image
+                                style={styles.profilePicture}
+                                source={{ uri: imageUpload }}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity
+                            style={styles.uploadButton}
+                            onPress={handlePickImage}
+                        >
+                            <Ionicons name="camera" size={28} color="white" />
+                        </TouchableOpacity>
+                    )}
+                    <Text>Upload Transaction</Text>
+                </View>
                 <TouchableOpacity style={styles.button} onPress={handleConfirm}>
                     <Text style={styles.buttonText}>Checkout</Text>
                 </TouchableOpacity>
@@ -228,10 +386,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         marginVertical: 10,
-        textDecorationLine: 'underline',
+        textDecorationLine: "underline",
     },
     userInfo: {
-        backgroundColor: "#f0f0f0",
+        backgroundColor: colors.secondary,
+        // backgroundColor: "#f0f0f0",
         padding: 10,
         borderRadius: 10,
         marginBottom: 20,
@@ -244,7 +403,7 @@ const styles = StyleSheet.create({
     },
     value: {
         fontSize: 16,
-        marginBottom: 10,
+        marginBottom: 5,
     },
     button: {
         backgroundColor: colors.primary,
@@ -265,9 +424,9 @@ const styles = StyleSheet.create({
     bankItem: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 20,
+        marginBottom: 10,
         backgroundColor: "#f0f0f0",
-        padding: 5,
+        padding: 6,
         borderRadius: 10,
     },
     bankLogo: {
@@ -280,6 +439,33 @@ const styles = StyleSheet.create({
     bankName: {
         fontSize: 16,
         fontWeight: "bold",
+    },
+    profilePicture: {
+        // width: 120,
+        height: 150,
+        aspectRatio: 9 / 16,
+        // marginTop: -60,
+        // borderRadius: 100,
+        borderWidth: 1,
+        borderColor: "white",
+    },
+    coverPicture: {
+        width: "100%",
+        // aspectRatio: 9/16,
+        backgroundColor: "lightgray",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    uploadButton: {
+        // width: 120,
+        height: 150,
+        aspectRatio: 9 / 16,
+        // borderRadius: 100,
+        backgroundColor: "lightgray",
+        justifyContent: "center",
+        alignItems: "center",
+        // marginTop: -60,
+        // margin: 25,
     },
 });
 

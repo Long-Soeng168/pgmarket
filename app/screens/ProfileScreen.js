@@ -126,7 +126,9 @@ const ProfileScreen = ({ navigation }) => {
 
                     {/* Show for normal user */}
                     {userInfo.type_roles === "customer" && (
-                        <TouchableOpacity style={styles.menuItem}>
+                        <TouchableOpacity style={styles.menuItem}
+                            onPress={() => navigation.navigate("UserOrders")}
+                        >
                             <Icon name="list" size={20} color="#555" />
                             <Text style={styles.menuItemText}>
                                 Orders History
