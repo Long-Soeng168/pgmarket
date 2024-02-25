@@ -2,14 +2,15 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native";
 
-import { cartContext } from "../../App";
+import { cartContext, userContext } from "../../App";
 
 import colors from "../config/colors";
 import CartItem from "../components/CartItem";
-import { rows } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
 
-export default function CartScreen() {
+export default function CartScreen({navigation}) {
     const [cartItems, setCartItems] = React.useContext(cartContext);
+    console.log(JSON.stringify(cartItems, null, 2));
+    const [user, setUser] = React.useContext(userContext);
 
     let totalPrice = 0;
     cartItems.forEach((cartItem) => {
@@ -19,21 +20,44 @@ export default function CartScreen() {
     });
     console.log(totalPrice);
 
+    const handleCheckout = () => {
+        if(user) {
+            navigation.navigate('CheckoutProcess')
+        }else {
+            navigation.navigate('LoginScreenCart')
+        }
+    }
+
     return (
         <View style={{ backgroundColor: colors.white, flex: 1 }}>
+            {cartItems.length < 1 
+              &&
+              <View
+                style={{ 
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    // backgroundColor: 'red',
+                    height: '100%'
+                 }}
+              >
+                  <Text>No Item</Text> 
+              </View> 
+            }
             <FlatList
                 data={cartItems}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <CartItem item={item} 
                         title = {item.pro_name}
-                        imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
-                        description= {item.description}
+                        imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
+                        buyerNote= {item.note}
                         price = {item.price}
+                        color = {item.color}
+                        size = {item.size}
                     />
                 )}
             />
-            <View
+            {cartItems.length > 0 && <View
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
@@ -72,12 +96,13 @@ export default function CartScreen() {
                         padding: 10,
                         borderRadius: 10,
                     }}
+                    onPress={() => handleCheckout()}
                 >
                     <Text style={{ color: colors.white, fontSize: 16 }}>
                         Checkout
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View>}
         </View>
     );
 }

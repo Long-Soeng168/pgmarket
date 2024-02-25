@@ -12,9 +12,9 @@ import { TouchableOpacity } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { TouchableWithoutFeedback } from "react-native";
 
-export default function CartItem({ item, title, description, imageUrl, price }) {
+export default function CartItem({ item, title, buyerNote, imageUrl, price, color, size }) {
 
-    const descriptionNoHtml = stripHtmlTags(description);
+    const buyerNoteNoHtml = stripHtmlTags(buyerNote);
 
     const [cartItems, setCartItems] = React.useContext(cartContext);
 
@@ -72,11 +72,12 @@ export default function CartItem({ item, title, description, imageUrl, price }) 
                         <Text numberOfLines={1} style={styles.title}>
                             {title}
                         </Text>
-                        <Text numberOfLines={1} style={styles.description}>
-                            {descriptionNoHtml}
+                        <Text numberOfLines={1} style={styles.buyerNote}>
+                            Note: {buyerNoteNoHtml}
                         </Text>
                         <Text numberOfLines={1} style={styles.pricePerUnit}>
-                            $ {price}
+                            $ {parseInt(price).toFixed(2)} 
+                            {color && " (Color: Red)"} {size && "(Size: XL)"}
                         </Text>
                     </View>
                     <View style={styles.updateContainer}>
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
     rightSideContainer: {
         flexDirection: "column",
         justifyContent: "space-between",
+        // backgroundColor: 'red',
         marginLeft: 10,
         flex: 1,
         height: "100%",
@@ -167,24 +169,26 @@ const styles = StyleSheet.create({
     },
 
     title: { fontSize: 16, fontWeight: "500" },
-    description: { fontSize: 14, color: colors.medium },
+    buyerNote: { fontSize: 14, color: colors.medium },
     pricePerUnit: { fontSize: 14, color: colors.dark },
 
     updateContainer: {
-        flex: 1,
+        // flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginRight: 5,
-        padding: 5,
+        // marginRight: 5,
+        // padding: 5,
+        // backgroundColor: 'yellow'
     },
 
     updateQty: {
         maxWidth: 130,
         flexDirection: "row",
-        height: "100%",
+        // height: "100%",
         alignItems: "center",
         gap: 10,
+        // backgroundColor: 'green'
     },
     increaseQty: {
         backgroundColor: colors.secondary,
