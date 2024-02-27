@@ -31,7 +31,7 @@ export default function TabNavigator() {
                         <MaterialCommunityIcons
                             name={focused ? "home" : "home-outline"}
                             color={color}
-                            size={size * 1.1}
+                            size={size * 1.2}
                         />
                     ),
                 }}
@@ -48,7 +48,7 @@ export default function TabNavigator() {
                         <Ionicons
                             name={focused ? "apps-sharp" : "apps-outline"}
                             color={color}
-                            size={size * 1.1}
+                            size={size * 1.2}
                         />
                     ),
                 }}
@@ -65,7 +65,7 @@ export default function TabNavigator() {
                                 focused ? "cards-heart" : "cards-heart-outline"
                             }
                             color={color}
-                            size={size * 1.1}
+                            size={size * 1.2}
                         />
                     ),
                 }}
@@ -80,7 +80,7 @@ export default function TabNavigator() {
                         <MaterialCommunityIcons
                             name={focused ? "cart" : "cart-outline"}
                             color={color}
-                            size={size * 1.1}
+                            size={size * 1.2}
                         />
                     ),
                 }}
@@ -95,7 +95,7 @@ export default function TabNavigator() {
                         <MaterialCommunityIcons
                             name={focused ? "account" : "account-outline"}
                             color={color}
-                            size={size * 1.1}
+                            size={size * 1.2}
                         />
                     ),
                 }}

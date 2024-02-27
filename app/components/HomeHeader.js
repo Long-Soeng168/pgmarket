@@ -4,7 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../config/colors";
 
-export default function HomeHeader() {
+export default function HomeHeader({showSearch = true}) {
     const navigation = useNavigation();
     return (
         <View
@@ -37,7 +37,7 @@ export default function HomeHeader() {
                             PG Market
                         </Text> */}
             </View>
-            <TouchableOpacity
+            {showSearch && <TouchableOpacity
                 onPress={() => navigation.navigate("SearchScreen")}
             >
                 <Feather
@@ -46,7 +46,7 @@ export default function HomeHeader() {
                     size={30}
                     color="black"
                 />
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     );
 }

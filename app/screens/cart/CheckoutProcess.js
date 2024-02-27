@@ -9,6 +9,8 @@ import {
     Image,
     Alert,
     Linking,
+    Dimensions,
+    ScrollView,
 } from "react-native";
 import colors from "../../config/colors";
 import { cartContext, userContext } from "../../../App";
@@ -17,9 +19,10 @@ import EditInfoModal from "./EditInfoModal";
 import HeaderText from "../../components/HeaderText";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Fontisto } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const UserInfo = ({ navigation }) => {
+const CheckoutProcess = ({ navigation }) => {
     const [selectedBank, setSelectedBank] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [isVisibleModal, setIsVisibleModal] = React.useState(false);
@@ -30,6 +33,7 @@ const UserInfo = ({ navigation }) => {
     const userInfo = user && user.user;
 
     const [banks, setBanks] = React.useState([]);
+    const [cashOnDelivery, setCashOnDelivery] = React.useState(null);
     const [invoiceCreatedId, setInvoiceCreateId] = React.useState(null);
     const [imageUpload, setImageUpload] = React.useState(null);
 
@@ -48,7 +52,8 @@ const UserInfo = ({ navigation }) => {
                 .then((response) => response.json())
                 .then((result) => {
                     console.log(JSON.stringify(result, null, 2));
-                    setBanks(result);
+                    setBanks(result.banks);
+                    setCashOnDelivery(result.cashOnDelivery);
                 })
                 .catch((error) => console.error(error))
                 .finally(() => setLoading(false));
@@ -163,35 +168,35 @@ const UserInfo = ({ navigation }) => {
         Linking.openURL(link);
     };
 
-    const renderBankItem = ({ item }) => (
-        <TouchableOpacity
-            style={[
-                styles.bankItem,
-                {
-                    backgroundColor:
-                        item.payment_name === selectedBank
-                            ? colors.secondary
-                            : "#f0f0f0",
-                },
-            ]}
-            onPress={() => handleSelectBank(item.payment_name, item.link)}
-        >
-            <Image
-                source={{
-                    uri:
-                        "https://pgmarket.longsoeng.website/public/images/shop/thumb/" +
-                        item.image,
-                }}
-                style={styles.bankLogo}
-            />
-            <View>
-                <Text style={styles.bankName}>{item.payment_name}</Text>
-                <Text>Tap here to pay with {item.payment_name}</Text>
-            </View>
-        </TouchableOpacity>
-    );
+    const RenderBankItem = ({ item }) => {
+        return (
+            <TouchableOpacity
+                style={[
+                    styles.bankItem,
+                    {
+                        backgroundColor:
+                            item.payment_name === selectedBank
+                                ? colors.secondary
+                                : "#f0f0f0",
+                    },
+                ]}
+                onPress={() => handleSelectBank(item.payment_name, item.link)}
+            >
+                <Image
+                    source={{
+                        uri: item.image,
+                    }}
+                    style={styles.bankLogo}
+                />
+                <View>
+                    <Text style={styles.bankName}>{item.payment_name}</Text>
+                    <Text>Tap here to pay with {item.payment_name}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
 
-    // ==========Image PickerX
+    // ==========Image Picker ========================
     React.useEffect(() => {
         (async () => {
             if (Platform.OS !== "web") {
@@ -293,81 +298,167 @@ const UserInfo = ({ navigation }) => {
                 );
             });
     };
-    // ==========End Image PickerX
+    // ==========End Image Picker===============
     return (
         <>
             <HeaderText title="Checkout Process" />
-            <View style={styles.container}>
-                <LoadingOverlay visible={loading} />
-                <EditInfoModal
-                    isVisible={isVisibleModal}
-                    setIsVisible={setIsVisibleModal}
-                    userInfo={userInfo && userInfo}
-                />
-
-                <Text style={styles.title}>User Information</Text>
-                <TouchableOpacity
-                    onPress={() => setIsVisibleModal(true)}
-                    style={styles.userInfo}
-                >
+            <View
+                style={{
+                    flex: 1,
+                    // backgroundColor: 'yellow'
+                }}
+            >
+                <ScrollView style={styles.container}>
                     <View
                         style={{
-                            position: "absolute",
-                            right: 10,
-                            top: 10,
+                            justifyContent: "space-between",
+                            // backgroundColor: 'red',
                         }}
                     >
-                        <Feather name="edit" size={24} color="gray" />
+                        <LoadingOverlay visible={loading} />
+                        <EditInfoModal
+                            isVisible={isVisibleModal}
+                            setIsVisible={setIsVisibleModal}
+                            userInfo={userInfo && userInfo}
+                        />
+
+                        <Text style={styles.title}>User Information</Text>
+                        <TouchableOpacity
+                            onPress={() => setIsVisibleModal(true)}
+                            style={styles.userInfo}
+                        >
+                            <View
+                                style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    top: 10,
+                                }}
+                            >
+                                <Feather name="edit" size={24} color="gray" />
+                            </View>
+                            <Text style={styles.value}>
+                                <Text style={styles.label}>Name: </Text>
+                                {userInfo && userInfo.name}
+                            </Text>
+                            <Text style={styles.value}>
+                                <Text style={styles.label}>Phone: </Text>
+                                {userInfo && userInfo.phone}
+                            </Text>
+                            <Text style={styles.value}>
+                                <Text style={styles.label}>Email: </Text>
+                                {userInfo && userInfo.email}
+                            </Text>
+                            <Text style={styles.value}>
+                                <Text style={styles.label}>Address: </Text>
+                                {userInfo && userInfo.address}
+                            </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.title}>Payment Method</Text>
+
+                        {/* <FlatList
+                        data={banks}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={renderBankItem}
+                        style={styles.flatList}
+                    /> */}
+                        <View>
+                            <View>
+                                {banks.map((item) => (
+                                    <RenderBankItem
+                                        item={item}
+                                        key={item.id.toString()}
+                                    />
+                                ))}
+                                {cashOnDelivery == 1 && (
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.bankItem,
+                                            {
+                                                backgroundColor:
+                                                    "On Delivery" ===
+                                                    selectedBank
+                                                        ? colors.secondary
+                                                        : "#f0f0f0",
+                                            },
+                                        ]}
+                                        onPress={() =>
+                                            setSelectedBank("On Delivery")
+                                        }
+                                    >
+                                        <View
+                                            style={[
+                                                styles.bankLogo,
+                                                {
+                                                    backgroundColor:
+                                                        colors.primary,
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                },
+                                            ]}
+                                        >
+                                            <FontAwesome5
+                                                name="hand-holding-usd"
+                                                size={35}
+                                                color="white"
+                                            />
+                                        </View>
+                                        <View>
+                                            <Text style={styles.bankName}>
+                                                Cash on delivery
+                                            </Text>
+                                            <Text>
+                                                Tap here to pay on delivery
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                            </View>
+
+                            <View
+                                style={{
+                                    alignItems: "center",
+                                    paddingBottom: 30,
+                                }}
+                            >
+                                {imageUpload ? (
+                                    <TouchableOpacity onPress={handlePickImage}>
+                                        <Image
+                                            style={styles.profilePicture}
+                                            source={{ uri: imageUpload }}
+                                        />
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity
+                                        style={styles.uploadButton}
+                                        onPress={handlePickImage}
+                                    >
+                                        <Ionicons
+                                            name="camera"
+                                            size={28}
+                                            color="white"
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                                <Text>Upload Transaction</Text>
+                            </View>
+                        </View>
                     </View>
-                    <Text style={styles.value}>
-                        <Text style={styles.label}>Name: </Text>
-                        {userInfo && userInfo.name}
-                    </Text>
-                    <Text style={styles.value}>
-                        <Text style={styles.label}>Phone: </Text>
-                        {userInfo && userInfo.phone}
-                    </Text>
-                    <Text style={styles.value}>
-                        <Text style={styles.label}>Email: </Text>
-                        {userInfo && userInfo.email}
-                    </Text>
-                    <Text style={styles.value}>
-                        <Text style={styles.label}>Address: </Text>
-                        {userInfo && userInfo.address}
-                    </Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>Payment Method</Text>
-                <FlatList
-                    data={banks}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={renderBankItem}
-                    style={styles.flatList}
-                />
+                </ScrollView>
                 <View
                     style={{
-                        alignItems: "center",
+                        backgroundColor: "white",
+                        paddingHorizontal: 20,
+                        borderTopColor: colors.secondary,
+                        borderTopWidth: 1,
                     }}
                 >
-                    {imageUpload ? (
-                        <TouchableOpacity onPress={handlePickImage}>
-                            <Image
-                                style={styles.profilePicture}
-                                source={{ uri: imageUpload }}
-                            />
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity
-                            style={styles.uploadButton}
-                            onPress={handlePickImage}
-                        >
-                            <Ionicons name="camera" size={28} color="white" />
-                        </TouchableOpacity>
-                    )}
-                    <Text>Upload Transaction</Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={handleConfirm}
+                    >
+                        <Text style={styles.buttonText}>Checkout</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={handleConfirm}>
-                    <Text style={styles.buttonText}>Checkout</Text>
-                </TouchableOpacity>
             </View>
         </>
     );
@@ -376,7 +467,8 @@ const UserInfo = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
+        // minHeight: Dimensions.get('screen').height,
+        // justifyContent: "space-between",
         // alignItems: "center",
         paddingHorizontal: 20,
         backgroundColor: "white",
@@ -469,4 +561,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserInfo;
+export default CheckoutProcess;

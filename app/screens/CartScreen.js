@@ -6,6 +6,7 @@ import { cartContext, userContext } from "../../App";
 
 import colors from "../config/colors";
 import CartItem from "../components/CartItem";
+import HeaderText from "../components/HeaderText";
 
 export default function CartScreen({navigation}) {
     const [cartItems, setCartItems] = React.useContext(cartContext);
@@ -36,6 +37,7 @@ export default function CartScreen({navigation}) {
 
     return (
         <View style={{ backgroundColor: colors.white, flex: 1 }}>
+            <HeaderText title="Cart" showBackBtn={false}/>
             {cartItems.length < 1 
               &&
               <View

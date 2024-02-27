@@ -64,7 +64,7 @@ export default function AllCategoryScreen({navigation}) {
       {!isFetching && (
         <View style={{ flex: 1 }}>
           {/* Header */}
-          <HomeHeader />
+          <HomeHeader showSearch={false} />
           <View
             style={{
               flexDirection: "row",

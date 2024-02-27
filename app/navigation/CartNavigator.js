@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CartScreen from "../screens/CartScreen";
-import CheckoutProcess from "../screens/cart/CheckoutPrecess";
+import CheckoutProcess from "../screens/cart/CheckoutProcess";
 import PaymentProcess from "../screens/cart/PaymentProcess";
 import LoginScreenCart from "../screens/cart/LoginScreenCart";
 import RegisterScreenCart from "../screens/cart/RegisterScreenCart";
@@ -17,6 +17,7 @@ export default function HomeNavigator() {
                 options={{
                     title: "Cart",
                     headerTitleAlign: "center",
+                    headerShown: false
                 }}
             />
             <Stack.Screen
