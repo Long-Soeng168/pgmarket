@@ -15,26 +15,6 @@ import HeaderText from "../components/HeaderText";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { userContext } from "../../App";
 
-// const orders = [
-//   {
-//     id: '1',
-//     invoiceNumber: 'INV-001',
-//     date: '2022-01-22',
-//     amount: '$50.00',
-//     paymentMethod: 'Credit Card',
-//     deliveryStatus: 'Delivered',
-//   },
-//   {
-//     id: '2',
-//     invoiceNumber: 'INV-002',
-//     date: '2022-01-23',
-//     amount: '$30.00',
-//     paymentMethod: 'Credit Card',
-//     deliveryStatus: 'Delivered',
-//   },
-//   // Add more orders as needed
-// ];
-
 const fetchData = async (url, setter) => {
     try {
         const response = await fetch(url);
@@ -77,7 +57,7 @@ const PurchaseHistoryScreen = ({ navigation }) => {
         if (message) {
             setTimeout(() => {
                 setMessage(null); // Reset message state to false after 3 seconds
-            }, 3000);
+            }, 5000);
         }
     }, [reload]);
 
@@ -135,10 +115,20 @@ const PurchaseHistoryScreen = ({ navigation }) => {
                 <Text style={styles.orderText}>{item.inv_number}</Text>
                 <Text style={styles.orderText}>{item.inv_date}</Text>
                 <Text style={[styles.orderText, { color: "red" }]}>
-                    {item.amount}
+                    $ {parseFloat(item.amount).toFixed(2)}
                 </Text>
                 <Text style={styles.orderText}>{item.payment_method}</Text>
-                <Text style={styles.orderText}>{item.status_delivery}</Text>
+                {
+                    item.status_delivery == 1
+                    ?
+                    <Text style={[styles.orderText, {color: '#06a4d8', fontWeight: 'bold'}]}>Pending</Text>
+                    :
+                    item.status_delivery == 2 ? 
+                        <Text style={[styles.orderText, {color: '#e6a800', fontWeight: 'bold'}]}>Delivery</Text> 
+                        : 
+                        <Text style={[styles.orderText, {color: 'green', fontWeight: 'bold'}]}>Completed</Text>
+                
+                }
             </View>
             <View style={styles.optionsContainer}>
                 <TouchableOpacity onPress={() => handleViewOrder(item.id)}>
@@ -168,7 +158,7 @@ const PurchaseHistoryScreen = ({ navigation }) => {
                         color: "red",
                         textAlign: "center",
                         fontSize: 16,
-                        backgroundColor: colors.lightGreen,
+                        backgroundColor: colors.secondary,
                         padding: 10,
                     }}
                 >
@@ -218,6 +208,7 @@ const styles = StyleSheet.create({
     },
     optionsContainer: {
         flexDirection: "row",
+        columnGap: 5,
     },
 });
 

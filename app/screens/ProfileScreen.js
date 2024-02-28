@@ -18,7 +18,7 @@ const ProfileScreen = ({ navigation }) => {
 
     const onViewOrders = () => {
         // Logic for navigating to the edit information screen
-        navigation.navigate("PurchaseHistoryScreen");
+        navigation.navigate("DealerOrdersScreen");
         console.log("Edit Information");
     };
 

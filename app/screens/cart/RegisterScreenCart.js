@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../../config/colors'; 
@@ -73,6 +73,10 @@ const RegisterScreenCart = () => {
       return;
     }
 
+    if(password !== confirmPassword) {
+      return;
+    }
+
     // Implement your registration logic here
     // console.log('Name:', name);
     // console.log('Phone Number:', phoneNumber);
@@ -115,7 +119,7 @@ const RegisterScreenCart = () => {
                   // console.log(JSON.stringify(result, null, 2)); 
                   setUser(result);
                   storage.storeToken(JSON.stringify(result));
-                  navigation.replace("CheckoutProcess");
+                  navigation.replace("CartScreen");
               } 
               if(result.errors) {
                 // console.log(JSON.stringify(result, null, 2)); 
@@ -146,115 +150,127 @@ const RegisterScreenCart = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <View style={styles.innerContainer}>
-        <Image
-          style={{
-            width: 100,
-            height: 100,
-            objectFit: "contain",
-            margin: 25,
-          }}
-          source={require("../../assets/images/pgmarketLogo.png")}
-        />
-        <Text style={styles.title}>Register</Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={(text) => {
-            setName(text);
-            validateField('name', text);
-          }}
-        />
-        {nameError && <Text style={styles.errorText}>{nameError}</Text>}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
-          value={phoneNumber}
-          onChangeText={(text) => {
-            setPhoneNumber(text);
-            validateField('phoneNumber', text);
-          }}
-        />
-        {phoneNumberError && <Text style={styles.errorText}>{phoneNumberError}</Text>}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            validateField('email', text);
-          }}
-        />
-        {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Address"
-          value={address}
-          onChangeText={(text) => {
-            setAddress(text);
-            validateField('address', text);
-          }}
-        />
-        {addressError && <Text style={styles.errorText}>{addressError}</Text>}
-
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.passwordInput}
-            placeholder="Password"
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={(text) => {
-              setPassword(text);
-              validateField('password', text);
+    <ScrollView style={{ backgroundColor: 'white' }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <View style={styles.innerContainer}>
+          <Image
+            style={{
+              width: 100,
+              height: 100,
+              objectFit: "contain",
+              margin: 25,
             }}
+            source={require("../../assets/images/pgmarketLogo.png")}
           />
-          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />
+          <Text style={styles.title}>Register</Text>
+          <View style={{ width: '100%',  }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                value={name}
+                onChangeText={(text) => {
+                  setName(text);
+                  validateField('name', text);
+                }}
+              />
+            </View>
+            {nameError && <Text style={styles.errorText}>{nameError}</Text>}
+            <View style={{ width: '100%',  }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Phone Number</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Phone Number"
+              keyboardType="phone-pad"
+              value={phoneNumber}
+              onChangeText={(text) => {
+                setPhoneNumber(text);
+                validateField('phoneNumber', text);
+              }}
+            />
+            </View>
+            {phoneNumberError && <Text style={styles.errorText}>{phoneNumberError}</Text>}
+            <View style={{ width: '100%',  }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                validateField('email', text);
+              }}
+            />
+               </View>
+            {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+            <View style={{ width: '100%',  }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Address</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Address"
+              value={address}
+              onChangeText={(text) => {
+                setAddress(text);
+                validateField('address', text);
+              }}
+            />
+               </View>
+            {addressError && <Text style={styles.errorText}>{addressError}</Text>}
+            <View style={{ width: '100%',  }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Passowrd</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  validateField('password', text);
+                }}
+              />
+              <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+                <Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="gray" />
+              </TouchableOpacity>
+            </View>
+            </View>
+            {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
+            <View style={{ width: '100%',  }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Confirm Password</Text>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Confirm Password"
+                secureTextEntry={!showPassword}
+                value={confirmPassword}
+                onChangeText={(text) => {
+                  setConfirmPassword(text);
+                  validateField('confirmPassword', text);
+                }}
+              />
+              <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
+                <Ionicons name={showPassword ? "eye" : "eye-off"} size={24} color="gray" />
+              </TouchableOpacity>
+            </View>
+            </View>
+          {confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
+          {passwordMatchError && <Text style={styles.errorText}>{passwordMatchError}</Text>}
+      
+          {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>Phone or Email was Taken</Text>}
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginScreenCart')}>
+            <Text style={styles.loginText}>Already have an account? Login here</Text>
           </TouchableOpacity>
         </View>
-        {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
-
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.passwordInput}
-            placeholder="Confirm Password"
-            secureTextEntry={!showPassword}
-            value={confirmPassword}
-            onChangeText={(text) => {
-              setConfirmPassword(text);
-              validateField('confirmPassword', text);
-            }}
-          />
-          <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />
-          </TouchableOpacity>
-        </View>
-        {confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
-        {passwordMatchError && <Text style={styles.errorText}>{passwordMatchError}</Text>}
-        
-        {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>Phone or Email was Taken</Text>}
-
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreenCart')}>
-          <Text style={styles.loginText}>Already have an account? Login here</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -276,12 +292,12 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 45,
+    height: 50,
     borderColor: 'gray',
     borderWidth: 1,
     // marginBottom: 20,
     paddingHorizontal: 10,
-    marginTop: 20,
+    marginBottom: 10,
     borderRadius: 5,
   },
   passwordContainer: {
@@ -292,11 +308,11 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    marginTop: 20,
+    marginBottom: 10,
   },
   passwordInput: {
     flex: 1,
-    height: 45,
+    height: 48,
     paddingHorizontal: 10,
   },
   eyeIcon: {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
+import colors from '../config/colors';
 
 const ShopCardComponent = ({ imageURL, title, contact, description, style }) => {
   return (
@@ -10,7 +11,7 @@ const ShopCardComponent = ({ imageURL, title, contact, description, style }) => 
       <View style={styles.rightPart}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.contact}>{contact}</Text>
-        <Text style={styles.description}>{description}</Text>
+        <Text numberOfLines={2} style={styles.description}>{description}</Text>
       </View>
     </View>
   );
@@ -28,14 +29,17 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     borderTopWidth: 1,
     borderTopColor: '#ccc',
+    // backgroundColor: colors.secondary
   },
   leftPart: {
     marginRight: 16,
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 65,
+    height: 65,
+    borderRadius: 5, 
+    borderColor: colors.secondary,
+    borderWidth: 1,
   },
   rightPart: {
     flex: 1,

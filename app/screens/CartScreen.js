@@ -64,6 +64,7 @@ export default function CartScreen({navigation}) {
                         size = {item.size}
                     />
                 )}
+                contentContainerStyle={{ paddingBottom: 20 }}
             />
             {cartItems.length > 0 && <View
                 style={{

@@ -4,7 +4,7 @@ import AccountScreen from "../screens/AccountScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import PurchaseHistoryScreen from "../screens/PurchaseHistoryScreen";
+import DealerOrdersScreen from "../screens/DealerOrdersScreen";
 import AccountDetailScreen from "../screens/AccountDetailScreen";
 import ShopProfile from "../screens/ShopProfile";
 import AddProductScreen from "../screens/AddProductScreen";
@@ -32,7 +32,7 @@ export default function AccountNavigator() {
                 }
                 {/* <Stack.Screen name="AccountScreen" component={AccountScreen} /> */}
 
-            <Stack.Screen name="PurchaseHistoryScreen" component={PurchaseHistoryScreen} />
+            <Stack.Screen name="DealerOrdersScreen" component={DealerOrdersScreen} />
             <Stack.Screen name="AccountDetailScreen" component={AccountDetailScreen} />
             <Stack.Screen name="ShopProfile" component={ShopProfile} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />

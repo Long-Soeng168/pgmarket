@@ -62,10 +62,8 @@ export default function ProductDetailScreen({ route, navigation }) {
     const descriptionNoHtml = stripHtmlTags(item.description);
     const price = parseFloat(item.price).toFixed(2);
 
-    const category = item.category;
     const [isFetching, setIsFetching] = React.useState(true);
     const [loading, setLoading] = React.useState(true);
-    const [isError, setIsError] = React.useState(false);
     const [products, setProducts] = React.useState([]);
 
     const [productInfo, setProductInfo] = React.useState({});
@@ -73,6 +71,7 @@ export default function ProductDetailScreen({ route, navigation }) {
     const [productSizes, setProductSizes] = React.useState([]);
     const [productImages, setProductImages] = React.useState([]);
     const [shopInfo, setShopInfo] = React.useState({});
+    // console.log(JSON.stringify(shopInfo, null, 2));
     // const [relatedProducts, setRelatedProducts] = React.useState([]);
 
     const [favorites, setFavorites] = React.useContext(favoritesContext);
@@ -275,14 +274,14 @@ export default function ProductDetailScreen({ route, navigation }) {
 
                     <TouchableOpacity
                         onPress={()=>{
-                            console.log('press shop card');
+                            navigation.navigate('ShopScreen', shopInfo);
                         }}
                     >
                         <ShopCardComponent 
-                            imageURL="http://helejance.com/public/images/product/1707874421-.jpg"
-                            title="Shop Name"
-                            contact="Contact Info"
-                            description="Description of the shop."
+                            imageURL={"https://pgmarket.longsoeng.website/public/images/shop/" + shopInfo.image}
+                            title={shopInfo.shop_name}
+                            contact={shopInfo.shop_phone}
+                            description={shopInfo.shop_address}
                             />
                     </TouchableOpacity>
 

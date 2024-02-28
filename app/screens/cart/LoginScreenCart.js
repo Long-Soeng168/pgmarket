@@ -8,6 +8,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     Image,
+    Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -65,7 +66,7 @@ const LoginScreenCart = () => {
                         // console.log(JSON.stringify(result, null, 2));
                         setUser(result);
                         storage.storeToken(JSON.stringify(result));
-                        navigation.replace('CartScreen')
+                        navigation.replace("CartScreen");
                         setIsError(false);
                     } else {
                         setIsError(true);
@@ -110,31 +111,58 @@ const LoginScreenCart = () => {
                     source={require("../../assets/images/pgmarketLogo.png")}
                 />
                 <Text style={styles.title}>Login</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
-                />
-                <View style={styles.passwordContainer}>
+                <View style={{ width: "100%" }}>
+                    <Text style={{ fontWeight: "bold", marginBottom: 3 }}>
+                        Email or Phone
+                    </Text>
                     <TextInput
-                        style={styles.passwordInput}
-                        placeholder="Password"
-                        secureTextEntry={!showPassword}
-                        value={password}
-                        onChangeText={(text) => setPassword(text)}
+                        style={styles.input}
+                        placeholder="Email or Phone Number"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
                     />
-                    <TouchableOpacity
-                        onPress={togglePasswordVisibility}
-                        style={styles.eyeIcon}
-                    >
-                        <Ionicons
-                            name={showPassword ? "eye-off" : "eye"}
-                            size={24}
-                            color="gray"
+                </View>
+                <View style={{ width: "100%" }}>
+                    <Text style={{ fontWeight: "bold", marginBottom: 3 }}>
+                        Password
+                    </Text>
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.passwordInput}
+                            placeholder="Password"
+                            secureTextEntry={!showPassword}
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
                         />
+                        <TouchableOpacity
+                            onPress={togglePasswordVisibility}
+                            style={styles.eyeIcon}
+                        >
+                            <Ionicons
+                                name={showPassword ? "eye" : "eye-off"}
+                                size={24}
+                                color="gray"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            Linking.openURL(
+                                "https://pgmarket.online/forgetpassword"
+                            );
+                        }}
+                        style={{ alignItems: "flex-end", marginTop: 3 }}
+                    >
+                        <Text
+                            style={{
+                                color: colors.primary,
+                                textDecorationLine: "underline",
+                            }}
+                        >
+                            Forgot Password?
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 {isError && (
@@ -175,10 +203,10 @@ const styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        height: 45,
+        height: 50,
         borderColor: "gray",
         borderWidth: 1,
-        marginBottom: 20,
+        marginBottom: 10,
         paddingHorizontal: 15,
         borderRadius: 5,
     },
@@ -210,7 +238,7 @@ const styles = StyleSheet.create({
     },
     passwordInput: {
         flex: 1,
-        height: 45,
+        height: 48,
         paddingHorizontal: 10,
     },
     eyeIcon: {

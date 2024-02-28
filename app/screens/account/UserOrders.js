@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Alert,
+    SafeAreaView,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../../config/colors";
@@ -135,10 +136,20 @@ const UserOrder = ({ navigation }) => {
                 <Text style={styles.orderText}>{item.inv_number}</Text>
                 <Text style={styles.orderText}>{item.inv_date}</Text>
                 <Text style={[styles.orderText, { color: "red" }]}>
-                    {item.amount}
+                    $ {parseFloat(item.amount).toFixed(2)}
                 </Text>
                 <Text style={styles.orderText}>{item.payment_method}</Text>
-                <Text style={styles.orderText}>{item.status_delivery}</Text>
+                {
+                    item.status_delivery == 1
+                    ?
+                    <Text style={[styles.orderText, {color: '#06a4d8', fontWeight: 'bold'}]}>Pending</Text>
+                    :
+                    item.status_delivery == 2 ? 
+                        <Text style={[styles.orderText, {color: '#e6a800', fontWeight: 'bold'}]}>Delivery</Text> 
+                        : 
+                        <Text style={[styles.orderText, {color: 'green', fontWeight: 'bold'}]}>Completed</Text>
+                
+                }
             </View>
             <View style={styles.optionsContainer}>
                 <TouchableOpacity onPress={() => handleViewOrder(item.id)}>
@@ -160,31 +171,36 @@ const UserOrder = ({ navigation }) => {
     );
 
     return (
-        <View style={{ flex: 1, backgroundColor: "white" }}>
-            <HeaderText title="Orders" />
-            {message && (
-                <Text
-                    style={{
-                        color: "red",
-                        textAlign: "center",
-                        fontSize: 16,
-                        backgroundColor: colors.lightGreen,
-                        padding: 10,
-                    }}
-                >
-                    {message}
-                </Text>
-            )}
-            <ActivityIndicator visibility={isFetching} />
-            {!isFetching && (
-                <View style={styles.container}>
-                    <FlatList
-                        data={orders}
-                        keyExtractor={(item) => item.id}
-                        renderItem={(item) => renderItem(item)}
-                    />
-                </View>
-            )}
+        <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: "white" }}>
+                <HeaderText title="Orders" />
+                {!orders.length > 0 && !isFetching && <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}> 
+                    <Text>No item</Text>
+                </View>}
+                {message && (
+                    <Text
+                        style={{
+                            color: "red",
+                            textAlign: "center",
+                            fontSize: 16,
+                            backgroundColor: colors.lightGreen,
+                            padding: 10,
+                        }}
+                    >
+                        {message}
+                    </Text>
+                )}
+                <ActivityIndicator visibility={isFetching} />
+                {!isFetching && (
+                    <View style={styles.container}>
+                        <FlatList
+                            data={orders}
+                            keyExtractor={(item) => item.id}
+                            renderItem={(item) => renderItem(item)}
+                        />
+                    </View>
+                )}
+            </View>
         </View>
     );
 };
@@ -218,6 +234,7 @@ const styles = StyleSheet.create({
     },
     optionsContainer: {
         flexDirection: "row",
+        columnGap: 5,
     },
 });
 

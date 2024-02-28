@@ -119,14 +119,42 @@ export default function AllCategoryScreen({navigation}) {
                     />
                   </View>
                   {/* Right Side */}
-                  <View style={{ flex: 1, paddingTop: 13, alignItems: "center" }}>
+                  <View style={{ flex: 1, paddingTop: 13, alignItems: "center", width: '100%' }}>
                     {shops.length > 0 ? (
-                      <FlatList
-                        numColumns={2}
-                        data={shops}
-                        renderItem={({ item }) => <SubCategoryComponent item={item} onPress={() => navigation.navigate("ShopScreen", item)} />}
-                        columnWrapperStyle={{ gap: 15 }}
-                      />
+                      // <FlatList
+                      //   numColumns={2}
+                      //   data={shops}
+                      //   renderItem={({ item }) => <SubCategoryComponent item={item} onPress={() => navigation.navigate("ShopScreen", item)} />}
+                      //   columnWrapperStyle={{ gap: 15}}
+                      // />
+                      <View style={{ 
+                              width: '100%',
+                              paddingHorizontal: 20,
+                              flexDirection: 'row', 
+                              flexWrap: 'wrap', 
+                              rowGap: 15, 
+                              justifyContent: 'space-between',
+                              // backgroundColor: 'red'
+                      
+                            }}>
+                          {shops.map((item, index) => (
+                              <View style={{ 
+                                  width: '47%', 
+                                  // alignItems: 'center',
+                                  // backgroundColor: 'yellow'
+                                  borderColor: colors.secondary,
+                                  borderWidth: 1,
+                                  borderRadius: 10,
+                                  padding: 5,
+                              }}>
+                                <SubCategoryComponent
+                                    key={index} // make sure to provide a unique key
+                                    item={item}
+                                    onPress={() => navigation.navigate("ShopScreen", item)}
+                                />
+                              </View>
+                          ))}
+                      </View>
                     ) : (
                       <Text>No Shop</Text>
                     )}
@@ -255,18 +283,17 @@ function SubCategoryComponent({ item, onPress }) {
   const title = item.shop_name;
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={{ width: '100%'}}>
       <View
         style={{
-          margin: 3,
-          width: 70,
+          width: "100%",
           alignItems: "center",
           alignSelf: "flex-start",
         }}
       >
         <Image
           style={{
-            width: '100%',
+            width: 70,
             aspectRatio: 1,
             objectFit: "contain",
             borderRadius: 100,
@@ -283,6 +310,8 @@ function SubCategoryComponent({ item, onPress }) {
             textAlign: "center",
             fontSize: 10,
             color: colors.medium,
+            // width: "100%",
+            // backgroundColor: 'red'
           }}
         >
           {title}

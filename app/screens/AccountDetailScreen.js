@@ -14,11 +14,13 @@ import * as ImagePicker from "expo-image-picker";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import { userContext } from "../../App";
+import LoadingOverlay from "../components/LoadingOverlay";
 
-const AccountDetailScreen = ({navigation}) => {
+const AccountDetailScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
     const [message, setMessage] = React.useState("");
     const [reload, setReload] = React.useState(false);
+    const [isUpdate, setIsUpdate] = React.useState(false);
     const userInfo = user.user;
     console.log(userInfo);
 
@@ -135,58 +137,67 @@ const AccountDetailScreen = ({navigation}) => {
             return;
         }
 
-        // Implement logic to update user details (e.g., make API call)
-        // console.log("Updating user details...");
-        // console.log("Name:", name);
-        // console.log("Phone Number:", phoneNumber);
-        // console.log("Email:", email);
-        // console.log("Address:", address);
-        // console.log("New Password:", newPassword);
-        // console.log("Confirm Password:", confirmPassword);
-        // console.log("Profile Picture:", profilePicture);
-        var myHeaders = new Headers();
-        myHeaders.append("Accept", "application/json");
-        myHeaders.append("Authorization", "Bearer " + user.token);
 
-        var formdata = new FormData();
-        formdata.append("name", name);
-        formdata.append("phone", phoneNumber);
-        formdata.append("email", email);
-        if(newPassword) {
-            formdata.append("password", newPassword);
-        }
-        formdata.append("address", address);
 
-        var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: formdata,
-        redirect: 'follow'
-        };
+        setIsUpdate(true);
 
-        fetch("https://pgmarket.longsoeng.website/api/updateUserDetail/" + userInfo.id, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            if(result.errors) {
-                console.log('Update Unsuccess!');
-                setMessage('Update Unsuccess');
-                setReload(!reload)
+        setTimeout(() => {
+            var myHeaders = new Headers();
+            myHeaders.append("Accept", "application/json");
+            myHeaders.append("Authorization", "Bearer " + user.token);
+
+            var formdata = new FormData();
+            formdata.append("name", name);
+            formdata.append("phone", phoneNumber);
+            formdata.append("email", email);
+            if (newPassword != "" && newPassword == confirmPassword) {
+                formdata.append("password", newPassword);
             }
-            else {
-                console.log('Update Successfully!');
-                setMessage('Update Successfully');
-                setReload(!reload);
-                // console.log(result.user);
-                setUser(user => {
-                    return {
-                        "token": user.token,
-                        "user": result.user,
+            formdata.append("address", address);
+
+            if (profilePicture) {
+                formdata.append("image", {
+                    uri: profilePicture,
+                    name: "image.jpg",
+                    type: "image/jpeg",
+                });
+            }
+
+            var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: formdata,
+                redirect: "follow",
+            };
+
+            fetch(
+                "https://pgmarket.longsoeng.website/api/updateUserDetail/" +
+                    userInfo.id,
+                requestOptions
+            )
+                .then((response) => response.json())
+                .then((result) => {
+                    if (result.errors) {
+                        console.log("Update Unsuccess!");
+                        setMessage("Update Unsuccess");
+                        setReload(!reload);
+                    } else {
+                        console.log("Update Successfully!");
+                        setMessage("Update Successfully");
+                        setReload(!reload);
+                        // console.log(result.user);
+                        setUser((user) => {
+                            return {
+                                token: user.token,
+                                user: result.user,
+                            };
+                        });
+                        setIsUpdate(false);
                     }
                 })
-
-            }
-        })
-        .catch(error => console.log('error', error));
+                .catch((error) => console.log("error", error))
+                .finally(() => setIsUpdate(false));
+        }, 50);
 
         // Optionally, reset password-related states after updating details
         // setNewPassword("");
@@ -199,6 +210,7 @@ const AccountDetailScreen = ({navigation}) => {
             style={{ flex: 1 }}
         >
             <View style={{ zIndex: 100 }}>
+                <LoadingOverlay visible={isUpdate} />
                 <HeaderText title="Account Detail" />
                 {message && (
                     <Text
@@ -331,7 +343,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         paddingHorizontal: 20,
-        backgroundColor: 'white',
+        backgroundColor: "white",
     },
     innerContainer: {
         justifyContent: "center",
