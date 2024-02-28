@@ -7,7 +7,7 @@ import HomeHeader from "../components/HomeHeader";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-const width = Dimensions.get("screen").width / 2 - 20;
+const width = Dimensions.get("screen").width / 2 - 15;
 
 const fetchData = async (url, page, setter) => {
     try {
@@ -19,22 +19,25 @@ const fetchData = async (url, page, setter) => {
     }
 };
 
-export default function SearchScreen({ route }) {
+export default function SearchScreen({ route, navigation }) {
     const item = route.params;
-    const [isFetching, setIsFetching] = React.useState(true);
+    const [isFetching, setIsFetching] = React.useState(false);
     const [pageLoading, setPageLoading] = React.useState(false);
     const [products, setProducts] = React.useState([]);
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [search, setSearch] = React.useState("");
+    const [searching, setSearching] = React.useState(false);
 
     React.useEffect(() => {
+        
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.longsoeng.website/api/productSearch?search=polo", currentPage, setProducts);
+            await fetchData("https://pgmarket.longsoeng.website/api/productSearch?search=" + search, currentPage, setProducts);
             setIsFetching(false);
             setPageLoading(false);
         };
 
-        fetchDataAsync();
-    }, [currentPage]);
+        search && fetchDataAsync();
+    }, [currentPage, searching]);
 
     const handleLoadMore = () => {
         setPageLoading(true);
@@ -49,9 +52,19 @@ export default function SearchScreen({ route }) {
         }
     };
 
+    const handleSearchSubmit = () => {
+        console.log('Enter key pressed. Search term:', search);
+        if(search){
+            setProducts([]);
+            setCurrentPage(1);
+            setIsFetching(true);
+            setSearching(preValue => !preValue);
+        }
+    };
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.white}}>
-            <ActivityIndicator visibility={isFetching} />
+            
             {/* ==============Search============== */}
             <View
                 style={{
@@ -95,8 +108,12 @@ export default function SearchScreen({ route }) {
                             fontSize: 20,
                             flex: 1,
                         }}
+                        onChangeText={(text)=>setSearch(text)}
+                        onSubmitEditing={handleSearchSubmit}
                     />
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={handleSearchSubmit}
+                    >
                         <Feather
                             name="search"
                             size={30}
@@ -106,14 +123,15 @@ export default function SearchScreen({ route }) {
                 </View>
             </View>
             {/* =============End Search================ */}
+            <ActivityIndicator visibility={isFetching} />
             <ScrollView
                 contentContainerStyle={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    justifyContent: 'space-evenly',
-                    paddingVertical: 25,
-                    rowGap: 15,
-                    // paddingHorizontal: 10,
+                    justifyContent: 'space-between',
+                    paddingVertical: 10,
+                    rowGap: 10,
+                    paddingHorizontal: 10,
                 }}
                 onScroll={handleScroll}
                 scrollEventThrottle={16}

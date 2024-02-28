@@ -13,15 +13,19 @@ import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import BackButton from "../components/BackButton";
+import { selectTextOnFocus } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
 
-const width = Dimensions.get("screen").width / 2 - 20;
+const width = Dimensions.get("screen").width / 2 - 15;
 
 export default function ShopScreen({ navigation, route }) {
     const shop = route.params;
     // console.log(JSON.stringify(shop, null, 2));
 
-    const bannerUrl = "https://pgmarket.online/public/images/shop_banner/" + shop.image_banner;
-    const imageUrl = "https://pgmarket.online/public/images/shop/" + shop.image;
+    const bannerUrl =
+        "https://pgmarket.longsoeng.website/public/images/shop_banner/" +
+        shop.image_banner;
+    const imageUrl =
+        "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;
     const shopName = shop.shop_name;
     const shopAddress = shop.shop_address;
     const shopNumber = shop.shop_phone;
@@ -32,23 +36,44 @@ export default function ShopScreen({ navigation, route }) {
 
     const [isFetching, setIsFetching] = React.useState(true);
     const [products, setProducts] = React.useState([]);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [noMoreProduct, setNoMoreProduct] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
 
     const getData = () => {
-        fetch(`https://pgmarket.online/api/getproducts_byshop/` + shop.id_link_from_users)
+        fetch(
+            `https://pgmarket.longsoeng.website/api/getproducts_byshop/` +
+                shop.id_link_from_users +
+                "?page=" +
+                currentPage
+        )
             .then((rest) => rest.json())
-            .then((data) => {
-                setProducts(data);
+            .then((result) => {
+                // console.log(result);
+                if (!result.data.length > 0) {
+                    setNoMoreProduct(true);
+                }
+                setProducts((preProducts) => [...preProducts, ...result.data]);
             })
             .catch((err) => console.log(err))
-            .finally(() => setIsFetching(false));
+            .finally(() => {
+                setIsFetching(false);
+                setLoading(false);
+            });
     };
     React.useEffect(() => {
         getData();
-    }, []);
+    }, [currentPage]);
     // console.log(JSON.stringify(products, null, 2));
+
+    const handlePageLoad = () => {
+        setLoading(true);
+        setCurrentPage((preValue) => preValue + 1);
+    };
+
     return (
         <View
             style={{
@@ -132,31 +157,71 @@ export default function ShopScreen({ navigation, route }) {
 
                         {/* List Item */}
                         {selected === "Products" ? (
-                            <View style={{ paddingVertical: 15 }}>
-                                {
-                                    products.length > 0 ?
-                                        <FlatList
-                                            numColumns={2}
-                                            data={products}
-                                            scrollEnabled={false}
-                                            showsHorizontalScrollIndicator={false}
-                                            renderItem={({ item }) => (
-                                                <Card item={item} width={width} 
-                                                    title = {item.pro_name}
-                                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
-                                                    description= {item.description}
-                                                    price = {item.price}
-                                                />
-                                            )}
-                                            contentContainerStyle={{
-                                                gap: 10,
-                                            }}
-                                            columnWrapperStyle={{
-                                                justifyContent: "space-evenly",
+                            <View
+                                style={{
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 10,
+                                }}
+                            >
+                                {products.length > 0 ? (
+                                    <FlatList
+                                        numColumns={2}
+                                        data={products}
+                                        scrollEnabled={false}
+                                        keyExtractor={(item) => item.id.toString()}
+                                        showsHorizontalScrollIndicator={false}
+                                        renderItem={({ item }) => (
+                                            <Card
+                                                key={item.id.toString()}
+                                                item={item}
+                                                width={width}
+                                                title={item.pro_name}
+                                                imageUrl={
+                                                    "https://pgmarket.longsoeng.website/public/images/product/" +
+                                                    item.thumbnail
+                                                }
+                                                description={item.description}
+                                                price={item.price}
+                                            />
+                                        )}
+                                        contentContainerStyle={{
+                                            gap: 10,
                                         }}
-                                    /> : 
+                                        columnWrapperStyle={{
+                                            justifyContent: "space-between",
+                                        }}
+                                    />
+                                ) : (
                                     <Text>No Product</Text>
-                                }
+                                )}
+                                <ActivityIndicator visibility={loading} />
+                                {!noMoreProduct && (
+                                    <TouchableOpacity
+                                        style={{
+                                            flexDirection: "column",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            paddingTop: 15,
+                                            paddingBottom: 5,
+                                        }}
+                                        onPress={handlePageLoad}
+                                    >
+                                        <Text
+                                            style={{
+                                                textDecorationLine: "underline",
+                                                fontWeight: "bold",
+                                                color: "tomato",
+                                            }}
+                                        >
+                                            More Products
+                                        </Text>
+                                        <FontAwesome
+                                            name="angle-double-down"
+                                            size={28}
+                                            color="tomato"
+                                        />
+                                    </TouchableOpacity>
+                                )}
                             </View>
                         ) : (
                             <View style={{ padding: 10, gap: 15 }}>
@@ -296,17 +361,14 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
-
 const stripHtmlTags = (htmlString) => {
     // Remove HTML tags, attributes, and entities using regular expressions
-    if(htmlString) {
+    if (htmlString) {
         return htmlString
-        .replace(/<[^>]*>/g, '') // Remove HTML tags
-        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
-        .replace(/&\w+;/g, ''); // Remove HTML entities
-    }else {
+            .replace(/<[^>]*>/g, "") // Remove HTML tags
+            .replace(/(\w+)\s*=\s*("[^"]*")/g, "") // Remove attributes
+            .replace(/&\w+;/g, ""); // Remove HTML entities
+    } else {
         return htmlString;
-    };
-}
+    }
+};

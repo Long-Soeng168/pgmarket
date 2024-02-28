@@ -6,7 +6,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import { favoritesContext } from "../../App";
 import HeaderText from "../components/HeaderText";
 
-const width = Dimensions.get("screen").width / 2 - 25;
+const width = Dimensions.get("screen").width / 2 - 15;
 
 export default function FavoriteScreen() {
     const [favorites, setFavorites] = React.useContext(favoritesContext);
@@ -28,27 +28,30 @@ export default function FavoriteScreen() {
             >
                 <Text>No item</Text>
             </View>}
-            {favorites.length > 0 && <ScrollView>
-                <View style={{ paddingVertical: 25, alignItems: "center" }}>
-                    <FlatList
-                        numColumns={2}
-                        data={favorites}
-                        scrollEnabled={false}
-                        renderItem={({ item }) => (
-                            <Card item={item} width={width} 
-                                title = {item.pro_name}
-                                imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
-                                description= {item.description}
-                                price = {item.price}
-                            />
-                        )}
-                        contentContainerStyle={{
-                            gap: 15,
-                        }}
-                        columnWrapperStyle={{ gap: 15 }}
-                    />
-                </View>
-            </ScrollView>}
+            {favorites.length > 0 && 
+            <ScrollView
+            contentContainerStyle={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                paddingVertical: 10,
+                rowGap: 10,
+                paddingHorizontal: 10,
+            }}
+        >
+            {favorites.map((product, index) => (
+                <Card
+                    key={index}
+                    item={product}
+                    width={width}
+                    title={product.pro_name}
+                    imageUrl={"https://pgmarket.longsoeng.website/public/images/product/thumb/" + product.thumbnail}
+                    description={product.description}
+                    price={product.price}
+                />
+            ))}
+        </ScrollView>
+            }
         </View>
     );
 }

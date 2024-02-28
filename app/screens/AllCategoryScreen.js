@@ -138,7 +138,9 @@ export default function AllCategoryScreen({navigation}) {
                       
                             }}>
                           {shops.map((item, index) => (
-                              <View style={{ 
+                              <View 
+                              key={item.id}
+                              style={{ 
                                   width: '47%', 
                                   // alignItems: 'center',
                                   // backgroundColor: 'yellow'
@@ -148,7 +150,7 @@ export default function AllCategoryScreen({navigation}) {
                                   padding: 5,
                               }}>
                                 <SubCategoryComponent
-                                    key={index} // make sure to provide a unique key
+                                     // make sure to provide a unique key
                                     item={item}
                                     onPress={() => navigation.navigate("ShopScreen", item)}
                                 />

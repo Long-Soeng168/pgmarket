@@ -9,6 +9,8 @@ import {
     Platform,
     Text,
     Image,
+    Dimensions,
+    TouchableOpacity,
 } from "react-native";
 
 import ListHeader from "../components/ListHeader";
@@ -19,6 +21,9 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import HomeHeader from "../components/HomeHeader";
 import colors from "../config/colors";
 import Slider from "../components/Slider";
+import { FontAwesome } from "@expo/vector-icons";
+
+const width = Dimensions.get("screen").width / 2 - 15;
 
 const fetchData = async (url, setter) => {
     try {
@@ -83,11 +88,35 @@ export default function HomeScreen({ navigation }) {
 
         fetchDataAsync();
     }, [bestSellingPage]);
-
+    
     const handleLoadMoreBestSelling = () => {
         bestSellingPage < 3 && setBestSellingPage((prevPage) => prevPage + 1); // Load next page
     };
     // End Get New Product 
+    
+    const [allProducts, setAllProducts] = React.useState([]);
+    const [allProductsPage, setAllProductsPage] = React.useState(1);
+    const [loading, setLoading] = React.useState(false);
+    const [noMoreProduct, setNoMoreProduct] = React.useState(false);
+    React.useEffect(() => {
+            fetch("https://pgmarket.longsoeng.website/api/getallproducts?page=" + allProductsPage,)
+            .then(response => response.json())
+            .then(result => {
+                if(result.data.length < 1) {
+                    setNoMoreProduct(true);
+                    return;
+                }; 
+                setAllProducts(preProducts => [...preProducts, ...result.data]);
+            })
+            .catch(error => console.error(error))
+            .finally(() => setLoading(false));
+        
+    }, [allProductsPage]);
+
+    const handlePageLoad = () => {
+        setLoading(true);
+        setAllProductsPage(preValue => preValue + 1);
+    };
         
         // console.log(JSON.stringify(categories, null, 2));
         // console.log(JSON.stringify(banners, null, 2));
@@ -105,11 +134,11 @@ export default function HomeScreen({ navigation }) {
                         {/* Categories */}
                         <Text
                             style={{
-                                marginLeft: 10,
+                                marginLeft: 15,
                                 marginBottom: -5,
                                 marginTop: 15,
-                                fontSize: 14,
-                                fontWeight: "500",
+                                fontSize: 15,
+                                fontWeight: "bold",
                                 color: 'tomato'
                             }}
                         >
@@ -117,6 +146,7 @@ export default function HomeScreen({ navigation }) {
                         </Text>
                         <FlatList
                             horizontal
+                            keyExtractor={(item) => item.id.toString()}
                             showsHorizontalScrollIndicator={false}
                             data={categories}
                             renderItem={({ item }) => (
@@ -139,6 +169,7 @@ export default function HomeScreen({ navigation }) {
                                 <FlatList
                                     data={newProducts}
                                     horizontal
+                                    keyExtractor={(item) => item.id.toString()}
                                     showsHorizontalScrollIndicator={false}
                                     renderItem={({ item }) => (
                                         <Card item={item} 
@@ -160,42 +191,139 @@ export default function HomeScreen({ navigation }) {
                             {/* Banner 1 */}
                             {/* <BannerComponent /> */}
                              
-                            <Slider 
-                                addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 13/3 }}  
-                                images={banners} 
-                                endPoint="https://pgmarket.longsoeng.website/public/images/banner/" 
-                            />
-                            
-                            {/* Best Selling */}
-                            <View>
-                                <ListHeader
-                                    title="Best Selling"
-                                    onPress={() => {
-                                        navigation.navigate("SeeMoreScreen", "getbestselling");
-                                    }}
-                                />
-                                <FlatList
-                                    data={bestSellingProducts}
-                                    horizontal
-                                    showsHorizontalScrollIndicator={false}
-                                    renderItem={({ item }) => (
-                                        <Card item={item} 
-                                            title = {item.pro_name}
-                                            imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
-                                            description= {item.description}
-                                            price = {item.price}
-                                        />
-                                    )}
-                                    contentContainerStyle={{
-                                        gap: 10,
-                                        paddingHorizontal: 10,
-                                    }}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    onEndReached={handleLoadMoreBestSelling}
-                                    onEndReachedThreshold={0.1}
+                            <View style={{ marginBottom: 15 }}>
+                                <Slider
+                                    addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 13/3}}
+                                    images={banners}
+                                    endPoint="https://pgmarket.longsoeng.website/public/images/banner/"
                                 />
                             </View>
+                            
+                            {/* Best Selling */}
+                            {bestSellingProducts.length > 0 
+                                &&
+                                <View  style={{ marginBottom: 20 }}>
+                                    <ListHeader
+                                        title="Best Selling"
+                                        onPress={() => {
+                                            navigation.navigate("SeeMoreScreen", "getbestselling");
+                                        }}
+                                    />
+                                    <FlatList
+                                        data={bestSellingProducts}
+                                        horizontal
+                                        keyExtractor={(item) => item.id.toString()}
+                                        showsHorizontalScrollIndicator={false}
+                                        renderItem={({ item }) => (
+                                            <Card item={item} 
+                                                title = {item.pro_name}
+                                                imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
+                                                description= {item.description}
+                                                price = {item.price}
+                                            />
+                                        )}
+                                        contentContainerStyle={{
+                                            gap: 10,
+                                            paddingHorizontal: 10,
+                                        }}
+                                        keyExtractor={(item, index) => index.toString()}
+                                        onEndReached={handleLoadMoreBestSelling}
+                                        onEndReachedThreshold={0.1}
+                                    />
+                                </View>}
                             {/* Banner 2 */}
+
+                            {/* All Product */}
+                            
+                            {allProducts.length > 0 && (
+                                    <>
+                                        <View
+                                            style={{ 
+                                                borderBottomColor: 'tomato',
+                                                borderBottomWidth: 2,
+                                                marginTop: 20,
+                                                marginBottom: 10,
+                                                marginHorizontal: 15,
+                                                justifyContent: 'flex-start',
+                                                alignItems: 'flex-start',
+                                            }}
+                                            >
+                                            <Text
+                                            style={{
+                                                fontSize: 14,
+                                                fontWeight: "bold",
+                                                color: 'white',
+                                                backgroundColor: 'tomato',
+                                                paddingHorizontal: 25,
+                                                paddingVertical: 5,
+                                                marginBottom: -2,
+                                                borderBottomRightRadius: 100,
+                                                borderTopLeftRadius: 100,
+                                            }}
+                                                                            >
+                                            All Products
+                                            </Text>
+                                        </View>
+                                        <View style={{ paddingHorizontal: 10 }}>
+                                            <FlatList
+                                                numColumns={2}
+                                                data={allProducts}
+                                                scrollEnabled={false}
+                                                showsHorizontalScrollIndicator={false}
+                                                keyExtractor={(item) => item.id.toString()}
+                                                renderItem={({ item }) => (
+                                                    <Card
+                                                        key={item.id.toString()}
+                                                        item={item}
+                                                        width={width}
+                                                        title={item.pro_name}
+                                                        imageUrl={
+                                                            "https://pgmarket.longsoeng.website/public/images/product/thumb/" +
+                                                            item.thumbnail
+                                                        }
+                                                        description={item.description}
+                                                        price={item.price}
+                                                    />
+                                                )}
+                                                contentContainerStyle={{
+                                                    gap: 10,
+                                                }}
+                                                columnWrapperStyle={{
+                                                    justifyContent: "space-between",
+                                                }}
+                                            />
+                                        <ActivityIndicator visibility={loading} />
+                                        {!noMoreProduct && (
+                                            <TouchableOpacity
+                                                style={{
+                                                    flexDirection: "column",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    paddingTop: 15,
+                                                    paddingBottom: 5,
+                                                }}
+                                                onPress={handlePageLoad}
+                                            >
+                                                <Text
+                                                    style={{
+                                                        textDecorationLine: "underline",
+                                                        fontWeight: "bold",
+                                                        color: "tomato",
+                                                    }}
+                                                >
+                                                    More Products
+                                                </Text>
+                                                <FontAwesome
+                                                    name="angle-double-down"
+                                                    size={28}
+                                                    color="tomato"
+                                                />
+                                            </TouchableOpacity>
+                                        )}
+                                        </View>
+                                    </>
+                                )
+                                }
                         </View>
                     </View>
                     

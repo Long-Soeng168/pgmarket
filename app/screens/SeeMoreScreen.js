@@ -5,7 +5,7 @@ import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import HomeHeader from "../components/HomeHeader";
 
-const width = Dimensions.get("screen").width / 2 - 20;
+const width = Dimensions.get("screen").width / 2 - 15;
 
 const fetchData = async (url, page, setter) => {
     try {
@@ -54,10 +54,10 @@ export default function SeeMoreScreen({ route }) {
                 contentContainerStyle={{
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    justifyContent: 'space-evenly',
-                    paddingVertical: 25,
-                    rowGap: 15,
-                    // paddingHorizontal: 10,
+                    justifyContent: 'space-between',
+                    paddingVertical: 10,
+                    rowGap: 10,
+                    paddingHorizontal: 10,
                 }}
                 onScroll={handleScroll}
                 scrollEventThrottle={16}

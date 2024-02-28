@@ -8,6 +8,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     Image,
+    ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -137,8 +138,6 @@ const AccountDetailScreen = ({ navigation }) => {
             return;
         }
 
-
-
         setIsUpdate(true);
 
         setTimeout(() => {
@@ -227,112 +226,176 @@ const AccountDetailScreen = ({ navigation }) => {
                 )}
             </View>
             <View style={styles.container}>
-                <View style={styles.innerContainer}>
-                    {profilePicture ? (
-                        <TouchableOpacity onPress={pickImage}>
-                            <Image
-                                style={styles.profilePicture}
-                                source={{ uri: profilePicture }}
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.innerContainer}>
+                        {profilePicture ? (
+                            <TouchableOpacity onPress={pickImage}>
+                                <Image
+                                    style={styles.profilePicture}
+                                    source={{ uri: profilePicture }}
+                                />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                style={styles.uploadButton}
+                                onPress={pickImage}
+                            >
+                                <Ionicons
+                                    name="camera"
+                                    size={28}
+                                    color="white"
+                                />
+                            </TouchableOpacity>
+                        )}
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Name
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Name"
+                                value={name}
+                                onChangeText={(text) => setName(text)}
                             />
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity
-                            style={styles.uploadButton}
-                            onPress={pickImage}
-                        >
-                            <Ionicons name="camera" size={28} color="white" />
-                        </TouchableOpacity>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Name"
-                        value={name}
-                        onChangeText={(text) => setName(text)}
-                    />
-                    {nameError && (
-                        <Text style={styles.errorText}>{nameError}</Text>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Phone Number"
-                        keyboardType="phone-pad"
-                        value={phoneNumber}
-                        onChangeText={(text) => setPhoneNumber(text)}
-                    />
-                    {phoneNumberError && (
-                        <Text style={styles.errorText}>{phoneNumberError}</Text>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
-                    />
-                    {emailError && (
-                        <Text style={styles.errorText}>{emailError}</Text>
-                    )}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Address"
-                        value={address}
-                        onChangeText={(text) => setAddress(text)}
-                    />
-                    {addressError && (
-                        <Text style={styles.errorText}>{addressError}</Text>
-                    )}
-                    <View style={styles.passwordContainer}>
-                        <TextInput
-                            style={styles.passwordInput}
-                            placeholder="New Password"
-                            secureTextEntry={!passwordVisible}
-                            value={newPassword}
-                            onChangeText={(text) => setNewPassword(text)}
-                        />
-                        <TouchableOpacity
-                            style={styles.eyeIcon}
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        >
-                            <Ionicons
-                                name={passwordVisible ? "eye" : "eye-off"}
-                                size={24}
-                                color="gray"
+                        </View>
+                        {nameError && (
+                            <Text style={styles.errorText}>{nameError}</Text>
+                        )}
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Phone Number
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Phone Number"
+                                keyboardType="phone-pad"
+                                value={phoneNumber}
+                                onChangeText={(text) => setPhoneNumber(text)}
                             />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.passwordContainer}>
-                        <TextInput
-                            style={styles.passwordInput}
-                            placeholder="Confirm Password"
-                            secureTextEntry={!passwordVisible}
-                            value={confirmPassword}
-                            onChangeText={(text) => setConfirmPassword(text)}
-                        />
-                        <TouchableOpacity
-                            style={styles.eyeIcon}
-                            onPress={() => setPasswordVisible(!passwordVisible)}
-                        >
-                            <Ionicons
-                                name={passwordVisible ? "eye" : "eye-off"}
-                                size={24}
-                                color="gray"
+                        </View>
+                        {phoneNumberError && (
+                            <Text style={styles.errorText}>
+                                {phoneNumberError}
+                            </Text>
+                        )}
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Email
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                value={email}
+                                onChangeText={(text) => setEmail(text)}
                             />
-                        </TouchableOpacity>
-                    </View>
-                    {passwordMatchError && (
-                        <Text style={styles.errorText}>
-                            {passwordMatchError}
-                        </Text>
-                    )}
+                        </View>
+                        {emailError && (
+                            <Text style={styles.errorText}>{emailError}</Text>
+                        )}
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Address
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Address"
+                                value={address}
+                                onChangeText={(text) => setAddress(text)}
+                            />
+                        </View>
+                        {addressError && (
+                            <Text style={styles.errorText}>{addressError}</Text>
+                        )}
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Password
+                            </Text>
+                            <View style={styles.passwordContainer}>
+                                <TextInput
+                                    style={styles.passwordInput}
+                                    placeholder="New Password"
+                                    secureTextEntry={!passwordVisible}
+                                    value={newPassword}
+                                    onChangeText={(text) =>
+                                        setNewPassword(text)
+                                    }
+                                />
+                                <TouchableOpacity
+                                    style={styles.eyeIcon}
+                                    onPress={() =>
+                                        setPasswordVisible(!passwordVisible)
+                                    }
+                                >
+                                    <Ionicons
+                                        name={
+                                            passwordVisible ? "eye" : "eye-off"
+                                        }
+                                        size={24}
+                                        color="gray"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
 
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={updateDetails}
-                    >
-                        <Text style={styles.buttonText}>Update Details</Text>
-                    </TouchableOpacity>
-                </View>
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Confirm Password
+                            </Text>
+                            <View style={styles.passwordContainer}>
+                                <TextInput
+                                    style={styles.passwordInput}
+                                    placeholder="Confirm Password"
+                                    secureTextEntry={!passwordVisible}
+                                    value={confirmPassword}
+                                    onChangeText={(text) =>
+                                        setConfirmPassword(text)
+                                    }
+                                />
+                                <TouchableOpacity
+                                    style={styles.eyeIcon}
+                                    onPress={() =>
+                                        setPasswordVisible(!passwordVisible)
+                                    }
+                                >
+                                    <Ionicons
+                                        name={
+                                            passwordVisible ? "eye" : "eye-off"
+                                        }
+                                        size={24}
+                                        color="gray"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        {passwordMatchError && (
+                            <Text style={styles.errorText}>
+                                {passwordMatchError}
+                            </Text>
+                        )}
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={updateDetails}
+                        >
+                            <Text style={styles.buttonText}>
+                                Update Details
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
             </View>
         </KeyboardAvoidingView>
     );
@@ -365,11 +428,11 @@ const styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        height: 45,
+        height: 50,
         borderColor: "gray",
         borderWidth: 1,
         // marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 10,
         paddingHorizontal: 10,
         fontSize: 16, // Adjust the font size as needed
         borderRadius: 5,
@@ -379,14 +442,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         // marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 10,
         borderColor: "gray",
         borderWidth: 1,
         borderRadius: 5,
     },
     passwordInput: {
         flex: 1,
-        height: 45,
+        height: 48,
         paddingHorizontal: 10,
     },
     eyeIcon: {
