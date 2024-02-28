@@ -29,6 +29,7 @@ import LineSeparator from "../components/LineSeparator";
 import ProductImages from "../components/ProductImages";
 import LoadingOverlay from "../components/LoadingOverlay";
 import ShopCardComponent from "../components/ShopCardComponent";
+import cartStorage from "../localStorage/cartStorage";
 
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
