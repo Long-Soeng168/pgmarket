@@ -7,14 +7,14 @@ import { Modal } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
 import { useNavigation } from "@react-navigation/native";
 
-import Card from "../components/Card";
-import colors from "../config/colors";
-import ActivityIndicator from "../components/ActivityIndicator";
+import Card from "../../components/Card";
+import colors from "../../config/colors";
+import ActivityIndicator from "../../components/ActivityIndicator";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
-import BackButton from "../components/BackButton";
-import { userContext } from "../../App";
+import BackButton from "../../components/BackButton";
+import { userContext } from "../../../App";
 
 const width = Dimensions.get("screen").width / 2 - 20;
 
@@ -232,7 +232,7 @@ export default function ShopProfile({ navigation, route }) {
                                         onPress={() => navigation.navigate('UpdateBankAccount')}
                                     >
                                         <Text style={ styles.AddButtonText }>
-                                            Update Bank
+                                            Shop Payments
                                         </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={ [styles.AddButton, {backgroundColor: "tomato"}] }

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import colors from '../config/colors'; 
-import storage from '../localStorage/storage';
-import { userContext } from '../../App';
-import HeaderText from '../components/HeaderText';
+import colors from '../../config/colors'; 
+import storage from '../../localStorage/storage';
+import { userContext } from '../../../App';
+import HeaderText from '../../components/HeaderText';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -156,7 +156,7 @@ const RegisterScreen = () => {
               objectFit: "contain",
               margin: 25,
             }}
-            source={require("../assets/images/pgmarketLogo.png")}
+            source={require("../../assets/images/pgmarketLogo.png")}
           />
           <Text style={styles.title}>Register</Text>
           <View style={{ width: '100%',  }}>

@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import colors from "../config/colors";
-import { userContext } from "../../App";
-import storage from "../localStorage/storage";
+import { Entypo } from '@expo/vector-icons';
+
+import colors from "../../config/colors";
+import { userContext } from "../../../App";
+import storage from "../../localStorage/storage";
 
 const ProfileScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
@@ -68,7 +70,7 @@ const ProfileScreen = ({ navigation }) => {
                             objectFit: "contain",
                             margin: 25,
                         }}
-                        source={require("../assets/images/user.png")}
+                        source={require("../../assets/images/user.png")}
                     />
                 ) : (
                     <Image
@@ -116,7 +118,9 @@ const ProfileScreen = ({ navigation }) => {
                                 style={styles.menuItem}
                                 onPress={onGoToShop}
                             >
-                                <Icon name="th-large" size={20} color="#555" />
+                                {/* <Icon name="shop" size={20} color="#555" /> */}
+                                <Entypo name="shop" size={24} color="#555" />
+
                                 <Text style={styles.menuItemText}>
                                     Your Shop
                                 </Text>

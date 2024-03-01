@@ -13,9 +13,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
-import colors from "../config/colors";
-import { userContext } from "../../App";
-import storage from "../localStorage/storage";
+import colors from "../../config/colors";
+import { userContext } from "../../../App";
+import storage from "../../localStorage/storage";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -109,7 +109,7 @@ const LoginScreen = () => {
                         objectFit: "contain",
                         margin: 25,
                     }}
-                    source={require("../assets/images/pgmarketLogo.png")}
+                    source={require("../../assets/images/pgmarketLogo.png")}
                 />
                 <Text style={styles.title}>Login</Text>
                 <View style={{ width: "100%" }}>

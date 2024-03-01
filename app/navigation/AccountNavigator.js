@@ -1,16 +1,17 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AccountScreen from "../screens/AccountScreen";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import LoginScreen from "../screens/account/LoginScreen";
+import RegisterScreen from "../screens/account/RegisterScreen";
+import ProfileScreen from "../screens/account/ProfileScreen";
+import ShopProfile from "../screens/account/ShopProfile";
+import UpdateBankAccount from "../screens/account/UpdateBankAccount";
+
 import DealerOrdersScreen from "../screens/DealerOrdersScreen";
 import AccountDetailScreen from "../screens/AccountDetailScreen";
-import ShopProfile from "../screens/ShopProfile";
 import AddProductScreen from "../screens/AddProductScreen";
 import OrderDetailScreen from "../screens/OrderDetailScreen";
 import UpdateShopDetail from "../screens/UpdateShopDetail";
-import UpdateBankAccount from "../screens/UpdateBankAccount";
 import ShopProductDetail from "../screens/ShopProductDetail";
 import ProductImagesScreen from "../screens/ProductImagesScreen";
 import UpdateProductScreen from "../screens/UpdateProductScreen";
