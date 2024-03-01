@@ -31,31 +31,7 @@ const fetchData = async (url, setter) => {
 export default function ShopProfile({ navigation, route }) {
     // const shop = route.params;
 
-    const [user, setUser] = React.useContext(userContext); 
-
-    // const shop = {
-    //     "id": 12,
-    //     "id_link_from_users": 20, 
-    //     "shopcategory_id": 26,
-    //     "shop_name": "IDO Technology",
-    //     "shop_email": "ido@gmail.com",
-    //     "shop_address": "Phnom Penh",
-    //     "shop_phone": "010775589",
-    //     "image": "1688884776-IDO Technology.jpg",
-    //     "image_banner": "1694533821.jpg",
-    //     "bank_name": "ABA Bank",
-    //     "bank_id": "Mao Bora",
-    //     "bank_swift_code": "000210919",
-    //     "payment_link_for_url": "https://pay.ababank.com/Xvy23onjzjtB2dkm8",
-    //     "qr_code": "1702955813-IDO Technology.jpg",
-    //     "bank_image": "1703473786-IDO Technology.jpeg",
-    //     "description": "<p>We are selling all type of electronic device.</p>",
-    //     "cash_ondelivery": 1,
-    //     "status_delete": 1,
-    //     "created_at": "2023-06-16T10:00:32.000000Z",
-    //     "updated_at": "2024-01-17T04:25:02.000000Z"
-    // };
-    // console.log(JSON.stringify(shop, null, 2));
+    const [user, setUser] = React.useContext(userContext);  
     const [selected, setSelected] = React.useState("Products");
 
     const [products, setProducts] = React.useState([]);
@@ -64,12 +40,44 @@ export default function ShopProfile({ navigation, route }) {
     const [images, setImages] = React.useState([]);
 
     const [isFetching, setIsFetching] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
+    const [noMoreProduct, setNoMoreProduct] = React.useState(false);
+    const [currentPage, setCurrentPage] = React.useState(1);
     const [shop, setShop] = React.useState([]);
+
+    const handlePageLoad = () => {
+        setLoading(true);
+        setCurrentPage((preValue) => preValue + 1);
+    };
+
+    const getData = () => {
+        fetch(
+            `https://pgmarket.longsoeng.website/api/getproducts_byshop/` +
+                user.user.id +
+                "?page=" +
+                currentPage
+        )
+            .then((rest) => rest.json())
+            .then((result) => {
+                // console.log(result);
+                if (!result.data.length > 0) {
+                    setNoMoreProduct(true);
+                }
+                setProducts((preProducts) => [...preProducts, ...result.data]);
+            })
+            .catch((err) => console.log(err))
+            .finally(() => {
+                setIsFetching(false);
+                setLoading(false);
+            });
+    };
+    React.useEffect(() => {
+        getData();
+    }, [currentPage]);
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData("https://pgmarket.longsoeng.website/api/shopview/" + user.user.id, setShop);
-            await fetchData("https://pgmarket.longsoeng.website/api/shopproducts/" + user.user.id, setProducts);
             setIsFetching(false);
         };
 
@@ -177,31 +185,62 @@ export default function ShopProfile({ navigation, route }) {
                                 </TouchableOpacity>
                                 {
                                     products.length > 0 ?
-                                        <FlatList
-                                            numColumns={2}
-                                            data={products}
-                                            scrollEnabled={false}
-                                            showsHorizontalScrollIndicator={false}
-                                            renderItem={({ item }) => (
-                                                <TouchableOpacity
-                                                key={item.pro_id}
-                                                onPress={() => navigation.push("ShopProductDetail", item)}
-                                                >
-                                                    <CardProduct item={item} width={width} 
-                                                        title = {item.pro_name}
-                                                        imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
-                                                        description= {item.description}
-                                                        price = {item.price}
-                                                        />
-                                                </TouchableOpacity>
-                                            )}
-                                            contentContainerStyle={{
-                                                gap: 10,
+                                        <View>
+                                            <FlatList
+                                                numColumns={2}
+                                                data={products}
+                                                scrollEnabled={false}
+                                                showsHorizontalScrollIndicator={false}
+                                                renderItem={({ item }) => (
+                                                    <TouchableOpacity
+                                                    key={item.pro_id}
+                                                    onPress={() => navigation.push("ShopProductDetail", item)}
+                                                    >
+                                                        <CardProduct item={item} width={width}
+                                                            title = {item.pro_name}
+                                                            imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
+                                                            description= {item.description}
+                                                            price = {item.price}
+                                                            />
+                                                    </TouchableOpacity>
+                                                )}
+                                                contentContainerStyle={{
+                                                    gap: 10,
+                                                }}
+                                                columnWrapperStyle={{
+                                                    justifyContent: "space-evenly",
                                             }}
-                                            columnWrapperStyle={{
-                                                justifyContent: "space-evenly",
-                                        }}
-                                    /> : 
+                                                                                />
+                                                                                <ActivityIndicator visibility={loading} />
+                                                                            {!noMoreProduct && (
+                                                                                <TouchableOpacity
+                                            style={{
+                                                flexDirection: "column",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                paddingTop: 15,
+                                                paddingBottom: 5,
+                                            }}
+                                            onPress={handlePageLoad}
+                                                                                >
+                                            <Text
+                                                style={{
+                                                    textDecorationLine: "underline",
+                                                    fontWeight: "bold",
+                                                    color: "tomato",
+                                                }}
+                                            >
+                                                More Products
+                                            </Text>
+                                            <FontAwesome
+                                                name="angle-double-down"
+                                                size={28}
+                                                color="tomato"
+                                            />
+                                                                                </TouchableOpacity>
+                                                                            )}
+                                        </View>
+                                     : 
                                     <Text>No Product</Text>
                                 }
                             </View>
