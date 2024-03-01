@@ -18,6 +18,9 @@ export default function CartItem({ item, title, buyerNote, imageUrl, price, colo
 
     const [cartItems, setCartItems] = React.useContext(cartContext);
 
+    let proPrice = parseFloat(item.price).toFixed(2);
+    let discountPrice = item.discount_data ? parseFloat(item.discount_data).toFixed(2) : 0;
+
     const removeFromCart = () => {
         setCartItems((preCartItems) =>
             preCartItems.filter((preCartItem) => preCartItem.id !== item.id)
@@ -76,7 +79,12 @@ export default function CartItem({ item, title, buyerNote, imageUrl, price, colo
                             Note: {buyerNoteNoHtml}
                         </Text>
                         <Text numberOfLines={1} style={styles.pricePerUnit}>
-                            $ {parseInt(price).toFixed(2)} 
+                            <Text
+                                style={{ 
+                                    textDecorationLine: discountPrice > 0 ? 'line-through' : 'none',
+                                 }}
+                            >$ {proPrice}</Text>  
+                            {discountPrice > 0 && <Text> $ {(proPrice - discountPrice).toFixed(2)}  </Text>} 
                             {color && " (Color: Red)"} {size && "(Size: XL)"}
                         </Text>
                     </View>
@@ -89,7 +97,7 @@ export default function CartItem({ item, title, buyerNote, imageUrl, price, colo
                         </View>
                         {/* End Quantity */}
                         <Text numberOfLines={1} style={styles.totalPrice}>
-                            $ {(item.quantity * (item.price * 100)) / 100}
+                            $ {(item.quantity * (proPrice - discountPrice)).toFixed(2)}
                         </Text>
                     </View>
                 </View>

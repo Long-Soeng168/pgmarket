@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 
-const width = Dimensions.get("screen").width / 2 - 20;
+const width = Dimensions.get("screen").width / 2 - 15;
 
 const fetchData = async (url, setter) => {
     try {
@@ -25,7 +25,7 @@ export default function ProductByBrandScreen({ route }) {
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.online/api/getproducts_bybrand/" + item, setProducts); 
+            await fetchData("https://pgmarket.longsoeng.website/api/getproducts_bybrand/" + item, setProducts); 
             setIsFetching(false);
         };
 
@@ -43,7 +43,7 @@ export default function ProductByBrandScreen({ route }) {
                 products.length > 0 
                 ? 
                 <ScrollView>
-                    <View style={{ paddingVertical: 25 }}>
+                    <View style={{ paddingVertical: 10, paddingHorizontal: 10 }}>
                         <FlatList
                             numColumns={2}
                             data={products}
@@ -52,7 +52,7 @@ export default function ProductByBrandScreen({ route }) {
                             renderItem={({ item }) => (
                                 <Card item={item} width={width} 
                                     title = {item.pro_name}
-                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
+                                    imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
                                     description= {item.description}
                                     price = {item.price}
                                 />
@@ -61,7 +61,7 @@ export default function ProductByBrandScreen({ route }) {
                                 gap: 10,
                             }}
                             columnWrapperStyle={{
-                                justifyContent: "space-evenly",
+                                justifyContent: "space-between",
                             }}
                         />
                     </View>

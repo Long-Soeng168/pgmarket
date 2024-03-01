@@ -32,9 +32,9 @@ export default function AllCategoryScreen({navigation}) {
 
   useEffect(() => {
     const fetchDataAsync = async () => {
-      await fetchData("https://pgmarket.online/api/toprecommendshops", setShopsCate);
-      await fetchData(`https://pgmarket.online/api/getbrands`, setBrands);
-      await fetchData(`https://pgmarket.online/api/getallshops`, setAllShops);
+      await fetchData("https://pgmarket.longsoeng.website/api/toprecommendshops", setShopsCate);
+      await fetchData(`https://pgmarket.longsoeng.website/api/getbrands`, setBrands);
+      await fetchData(`https://pgmarket.longsoeng.website/api/getallshops`, setAllShops);
     };
     fetchDataAsync();
   }, []);
@@ -42,7 +42,7 @@ export default function AllCategoryScreen({navigation}) {
   useEffect(() => {
     if (categorySelected) {
       // const fetchDataAsync = async () => {
-      //   await fetchData(`https://pgmarket.online/api/getshops_bycategoryshop/${categorySelected.id}`, setShops); 
+      //   await fetchData(`https://pgmarket.longsoeng.website/api/getshops_bycategoryshop/${categorySelected.id}`, setShops); 
       // };
       let data = allShops.filter((shop) => shop.shopcategory_id == categorySelected.id);
       setShops(data);
@@ -233,7 +233,7 @@ function ShopSelection({ title, icon, selected, onPress }) {
 
 // Category Component
 function CategoryComponent({ item, categorySelected, handleCategoryIdSelect }) {
-  const imageUrl = `https://pgmarket.online/public/images/shopcategory/${item.image}`;
+  const imageUrl = `https://pgmarket.longsoeng.website/public/images/shopcategory/${item.image}`;
   const title = item.name;
 
   const isSelected = categorySelected && categorySelected.id === item.id;
@@ -261,7 +261,7 @@ function CategoryComponent({ item, categorySelected, handleCategoryIdSelect }) {
         <Text
           numberOfLines={3}
           style={{
-            backgroundColor: isSelected ? "lightpink" : "transparent",
+            backgroundColor: isSelected ? colors.secondary : "transparent",
             paddingHorizontal: 5,
             paddingBottom: 4,
             borderRadius: 5,
@@ -281,7 +281,7 @@ function CategoryComponent({ item, categorySelected, handleCategoryIdSelect }) {
 
 // Sub Category
 function SubCategoryComponent({ item, onPress }) {
-  const imageUrl = `https://pgmarket.online/public/images/shop/${item.image}`;
+  const imageUrl = `https://pgmarket.longsoeng.website/public/images/shop/${item.image}`;
   const title = item.shop_name;
 
   return (
@@ -326,7 +326,7 @@ function SubCategoryComponent({ item, onPress }) {
 
 // Brand Component
 function BrandComponent({ item, onPress }) {
-  const imageUrl = `https://pgmarket.online/public/images/brand/${item.image}`;
+  const imageUrl = `https://pgmarket.longsoeng.website/public/images/brand/${item.image}`;
   const title = item.name;
 
   return (

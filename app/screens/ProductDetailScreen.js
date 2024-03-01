@@ -33,7 +33,8 @@ import cartStorage from "../localStorage/cartStorage";
 
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
-    // console.log(item);
+    console.log(JSON.stringify(item, null, 2));
+
     const [selectedColor, setSelectedColor] = React.useState("");
     const [selectedSize, setSelectedSize] = React.useState("");
     const [buyerNote, setBuyerNote] = React.useState("");
@@ -61,6 +62,7 @@ export default function ProductDetailScreen({ route, navigation }) {
     const title = item.pro_name;
     const descriptionNoHtml = stripHtmlTags(item.description);
     const price = parseFloat(item.price).toFixed(2);
+    const discount = parseFloat(item.discount);
 
     const [isFetching, setIsFetching] = React.useState(true);
     const [loading, setLoading] = React.useState(true);
@@ -71,6 +73,8 @@ export default function ProductDetailScreen({ route, navigation }) {
     const [productSizes, setProductSizes] = React.useState([]);
     const [productImages, setProductImages] = React.useState([]);
     const [shopInfo, setShopInfo] = React.useState({});
+    const [isDiscount, setIsDiscount] = React.useState(false);
+
     // console.log(JSON.stringify(shopInfo, null, 2));
     // const [relatedProducts, setRelatedProducts] = React.useState([]);
 
@@ -80,6 +84,35 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
+
+    // =======================Check for discount Available========================
+    React.useEffect(() => {
+        if (item.discount_date_start && item.discount_date_end) {
+            const currentDate = new Date();
+            const startString = item.discount_date_start;
+            const endString = item.discount_date_end;
+
+            // Parse date strings into year, month, and day components
+            const [year1, month1, day1] = startString.split("/").map(Number);
+            const [year2, month2, day2] = endString.split("/").map(Number);
+
+            // Construct Date objects
+            const startDate = new Date(year1, month1 - 1, day1); // Subtract 1 from month because month indexes start from 0
+            const endDate = new Date(year2, month2 - 1, day2);
+            console.log(currentDate, startDate, endDate);
+            if (currentDate >= startDate && currentDate <= endDate) {
+                // console.log('Current date is in middle');
+                setIsDiscount(true);
+            } else {
+                // console.log('Current date is not in middle');
+                setIsDiscount(false);
+            }
+        } else {
+            // console.log('no discount');
+            setIsDiscount(false);
+        }
+    }, []);
+    // =======================Check for discount Available========================
 
     const getrelatedproducts = () => {
         fetch(
@@ -132,7 +165,6 @@ export default function ProductDetailScreen({ route, navigation }) {
     };
 
     const removeFromCart = () => {
-
         setCartItems((preCartItems) =>
             preCartItems.filter((preCartItem) => preCartItem.id !== item.id)
         );
@@ -141,8 +173,8 @@ export default function ProductDetailScreen({ route, navigation }) {
     const addToCart = () => {
         // console.log(JSON.stringify("preShopId" + cartItems[0].shop_id, null, 2));
         // console.log(JSON.stringify("newShopId" + item.shop_id, null, 2));
-        if(cartItems.length > 0) {
-            if(cartItems[0].shop_id === item.shop_id) {
+        if (cartItems.length > 0) {
+            if (cartItems[0].shop_id === item.shop_id) {
                 setCartItems((preCartItems) => [
                     ...preCartItems,
                     {
@@ -153,21 +185,21 @@ export default function ProductDetailScreen({ route, navigation }) {
                         note: buyerNote,
                     },
                 ]);
-            }else {
+            } else {
                 Alert.alert(
-                    'Message',
-                    'Difference shop cannot add to cart!',
+                    "Message",
+                    "Difference shop cannot add to cart!",
                     [
-                      {
-                        text: 'Close',
-                        onPress: () => console.log('Close button pressed'),
-                        style: 'cancel',
-                      },
+                        {
+                            text: "Close",
+                            onPress: () => console.log("Close button pressed"),
+                            style: "cancel",
+                        },
                     ],
                     { cancelable: false }
-                  );
+                );
             }
-        }else {
+        } else {
             setCartItems((preCartItems) => [
                 ...preCartItems,
                 {
@@ -221,40 +253,79 @@ export default function ProductDetailScreen({ route, navigation }) {
             <View style={{ backgroundColor: colors.white }}>
                 <View style={{ padding: 10 }}>
                     <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.price}>$ {price}</Text>
-                    <ProductColors
-                        productColors={productColors}
-                        selectedColor={selectedColor}
-                        handleColorSelect={handleColorSelect}
-                    />
-                    <ProductSizes
-                        productSizes={productSizes}
-                        selectedSize={selectedSize}
-                        handleSizeSelect={handleSizeSelect}
-                    />
-                    <View
-                        style={{
-                            marginBottom: 10,
-                        }}
-                    >
-                        <Text>Buyer Note</Text>
-                        <TextInput
-                            style={{
-                                marginTop: 5,
-                                backgroundColor: "#f0f0f0",
-                                paddingHorizontal: 15,
-                                paddingVertical: 12,
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                        <Text
+                            style={[
+                                styles.price,
+                                {
+                                    textDecorationLine: isDiscount
+                                        ? "line-through"
+                                        : "none",
+                                    color: isDiscount ? "gray" : "red",
+                                },
+                            ]}
+                        >
+                            {" "}
+                            $ {price}{" "}
+                        </Text>
+                        {isDiscount && (
+                            <Text style={styles.price}>
+                                {" "}
+                                $ {(price - (price * discount) / 100).toFixed(2)}
+                            </Text>
+                        )}
+                    </Text>
+                    {isDiscount && (
+                        <View style={{ alignItems: 'flex-start' }}>
+                            <Text style={{
                                 fontSize: 16,
-                                color: "#333",
-                                textAlignVertical: "top",
-                                height: 68,
-                            }}
-                            maxLength={250}
-                            placeholder="Buyer note ..."
-                            onChangeText={(text) => handleTextBuyerNote(text)}
-                            placeholderTextColor="#999"
-                            multiline
+                                marginTop: 10,
+                                marginBottom: 20,
+                                backgroundColor: colors.secondary,
+                                padding: 5,
+                            }}>
+                                {discount || 0}% off
+                                {/* ({productInfo.discount_date_start} -{" "}
+                                {productInfo.discount_date_end}) */}
+                            </Text>
+                        </View>
+                    )}
+
+                    <View style={{ marginTop: 10 }}>
+                        <ProductColors
+                            productColors={productColors}
+                            selectedColor={selectedColor}
+                            handleColorSelect={handleColorSelect}
                         />
+                        <ProductSizes
+                            productSizes={productSizes}
+                            selectedSize={selectedSize}
+                            handleSizeSelect={handleSizeSelect}
+                        />
+                        <View
+                            style={{
+                                marginBottom: 10,
+                            }}
+                        >
+                            <Text>Buyer Note</Text>
+                            <TextInput
+                                style={{
+                                    marginTop: 5,
+                                    backgroundColor: "#f0f0f0",
+                                    paddingHorizontal: 15,
+                                    paddingVertical: 12,
+                                    fontSize: 16,
+                                    color: "#333",
+                                    textAlignVertical: "top",
+                                    height: 68,
+                                }}
+                                maxLength={250}
+                                placeholder="Buyer note ..."
+                                onChangeText={(text) => handleTextBuyerNote(text)}
+                                placeholderTextColor="#999"
+                                multiline
+                            />
+                        </View>
                     </View>
                     {/* Add and Remove from Cart */}
                     {cartItems.some((cartItem) => cartItem.id === item.id) ? (
@@ -273,16 +344,19 @@ export default function ProductDetailScreen({ route, navigation }) {
                     {/* End Add and Remove from Cart */}
 
                     <TouchableOpacity
-                        onPress={()=>{
-                            navigation.navigate('ShopScreen', shopInfo);
+                        onPress={() => {
+                            navigation.navigate("ShopScreen", shopInfo);
                         }}
                     >
-                        <ShopCardComponent 
-                            imageURL={"https://pgmarket.longsoeng.website/public/images/shop/" + shopInfo.image}
+                        <ShopCardComponent
+                            imageURL={
+                                "https://pgmarket.longsoeng.website/public/images/shop/" +
+                                shopInfo.image
+                            }
                             title={shopInfo.shop_name}
                             contact={shopInfo.shop_phone}
                             description={shopInfo.shop_address}
-                            />
+                        />
                     </TouchableOpacity>
 
                     <View style={{ marginTop: 15, alignItems: "flex-start" }}>

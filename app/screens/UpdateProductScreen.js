@@ -63,10 +63,10 @@ const ImageUploadButton = ({ onPress, image }) => (
 const AddProductScreen = ({ navigation, route }) => {
     const product = route.params;
     const productInfo = product.product;
-    console.log(productInfo);
+    // console.log(productInfo);
     const productColors = product.colors;
     const productSizes = product.sizes;
-    console.log(JSON.stringify(product, null, 2));
+    // console.log(JSON.stringify(product, null, 2));
 
 
     const [user, setUser] = React.useContext(userContext);
@@ -75,7 +75,7 @@ const AddProductScreen = ({ navigation, route }) => {
     const [mainCategory, setMainCategory] = useState(productInfo.main_cate_id);
     const [category, setCategory] = useState(productInfo.cate_id);
     const [subCategory, setSubCategory] = useState(productInfo.sub_cate_id);
-    const [brand, setBrand] = useState("");
+    const [brand, setBrand] = useState(productInfo.brand_id);
     const [productName, setProductName] = useState(productInfo.pro_name);
     const [unitPrice, setUnitPrice] = useState(productInfo.price);
     const [discount, setDiscount] = useState(productInfo.discount || 0);
@@ -104,6 +104,7 @@ const AddProductScreen = ({ navigation, route }) => {
     const [filterSubCate, setFilterSubCate] = useState([]);
     const [allColors, setAllColors] = useState([]);
     const [allSizes, setAllSizes] = useState([]);
+    const [allBrands, setAllBrands] = useState([]);
 
     // React.useEffect(() => {
     //     if(mainCategory){
@@ -158,6 +159,14 @@ const AddProductScreen = ({ navigation, route }) => {
             })
             .catch((error) => console.error(error));
 
+        fetch("https://pgmarket.longsoeng.website/api/getbrands")
+        .then((response) => response.json())
+        .then((result) => {
+            setAllBrands(result);
+            // console.log(JSON.stringify(result, null, 2));
+        })
+        .catch((error) => console.error(error));
+
         fetch("https://pgmarket.longsoeng.website/api/getsizes")
             .then((response) => response.json())
             .then((result) => {
@@ -197,6 +206,7 @@ const AddProductScreen = ({ navigation, route }) => {
     // const [selectedMain, setSelectedMain] = useState([]);
     const [isFocusCate, setIsFocusCate] = useState(false);
     const [isFocusSubCate, setIsFocusSubCate] = useState(false);
+    const [isFocusBrand, setIsFocusBrand] = useState(false);
 
     const renderLabelMain = () => {
         if (mainCategory || isFocusMain) {
@@ -225,6 +235,18 @@ const AddProductScreen = ({ navigation, route }) => {
                     style={[styles.label, isFocusSubCate && { color: "blue" }]}
                 >
                     Sub Category
+                </Text>
+            );
+        }
+        return null;
+    };
+    const renderLabelBrand = () => {
+        if (brand || isFocusBrand) {
+            return (
+                <Text
+                    style={[styles.label, isFocusBrand && { color: "blue" }]}
+                >
+                    Brand
                 </Text>
             );
         }
@@ -338,6 +360,7 @@ const AddProductScreen = ({ navigation, route }) => {
         if(videoUrl !== "") formdata.append("video_url", videoUrl);
         if(description !== "") formdata.append("description", description);
         if(shipping !== "") formdata.append("shipping", shipping);
+        if(brand !== "") formdata.append("brand_id", brand);
         if(selectedColors.length > 0) formdata.append("colors", JSON.stringify(selectedColors));
         if(selectedSizes.length > 0) formdata.append("sizes", JSON.stringify(selectedSizes));
         image && formdata.append("thumbnail", {
@@ -577,6 +600,46 @@ const AddProductScreen = ({ navigation, route }) => {
                             Category required
                         </Text>
                     )}
+
+<View style={styles.dropdownContainer}>
+                            {renderLabelBrand()}
+                            <Dropdown
+                                style={[
+                                    styles.dropdown,
+                                    isFocusBrand && { borderColor: "blue" },
+                                ]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                iconStyle={styles.iconStyle}
+                                data={allBrands}
+                                search
+                                maxHeight={300}
+                                labelField="name"
+                                valueField="id"
+                                placeholder={
+                                    !isFocusBrand ? "Select Brand" : "..."
+                                }
+                                searchPlaceholder="Search..."
+                                value={brand}
+                                onFocus={() => setIsFocusBrand(true)}
+                                onBlur={() => setIsFocusBrand(false)}
+                                onChange={(item) => {
+                                    // setValue(item.id);
+                                    setBrand(item.id);
+                                    console.log(item.id);
+                                    setIsFocusBrand(false);
+                                }}
+                                renderLeftIcon={() => (
+                                    <AntDesign
+                                        style={styles.icon}
+                                        color={isFocusBrand ? "blue" : "black"}
+                                        name="star"
+                                        size={20}
+                                    />
+                                )}
+                            />
+                        </View>
 
                     <View style={styles.dropdownContainer}>
                         <MultiSelect

@@ -15,9 +15,14 @@ export default function CartScreen({navigation}) {
 
     let totalPrice = 0;
     cartItems.forEach((cartItem) => {
-        totalPrice =
-            (totalPrice * 100 + cartItem.quantity * (cartItem.price * 100)) /
-            100;
+        
+            let discountPrice = cartItem.discount_data ? parseFloat(cartItem.discount_data).toFixed(2) : 0;
+            let price = cartItem.price - discountPrice;
+
+            totalPrice =
+                (totalPrice * 100 + cartItem.quantity * (price * 100)) /
+                100;
+ 
     });
     console.log(totalPrice);
 
@@ -94,7 +99,7 @@ export default function CartScreen({navigation}) {
                             fontWeight: "500",
                         }}
                     >
-                        $ {totalPrice}
+                        $ {totalPrice.toFixed(2)}
                     </Text>
                 </View>
                 <TouchableOpacity

@@ -291,15 +291,28 @@ const UpdateShopDetail = ({navigation}) => {
                             <Ionicons name="camera" size={28} color="white" />
                         </TouchableOpacity>
                     )}
+                    <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Name
+                            </Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Name"
                         value={name}
                         onChangeText={(text) => setName(text)}
                     />
+                    </View>
                     {nameError && (
                         <Text style={styles.errorText}>{nameError}</Text>
                     )}
+                    <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Phone Number
+                            </Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Phone Number"
@@ -307,9 +320,16 @@ const UpdateShopDetail = ({navigation}) => {
                         value={phoneNumber}
                         onChangeText={(text) => setPhoneNumber(text)}
                     />
+                    </View>
                     {phoneNumberError && (
                         <Text style={styles.errorText}>{phoneNumberError}</Text>
                     )}
+                    <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Email
+                            </Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Email"
@@ -318,18 +338,32 @@ const UpdateShopDetail = ({navigation}) => {
                         value={email}
                         onChangeText={(text) => setEmail(text)}
                     />
+                    </View>
                     {emailError && (
                         <Text style={styles.errorText}>{emailError}</Text>
                     )}
+                    <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Address
+                            </Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Address"
                         value={address}
                         onChangeText={(text) => setAddress(text)}
                     />
+                    </View>
                     {addressError && (
                         <Text style={styles.errorText}>{addressError}</Text>
                         )}
+                        <View style={{ width: "100%" }}>
+                            <Text
+                                style={{ fontWeight: "bold", marginBottom: 3 }}
+                            >
+                                Description
+                            </Text>
                     <TextInput
                         multiline
                         numberOfLines={10} 
@@ -338,6 +372,7 @@ const UpdateShopDetail = ({navigation}) => {
                         value={description}
                         onChangeText={(text) => setDescription(text)}
                     />
+                    </View>
 
                 </View>
                     <TouchableOpacity
@@ -392,11 +427,11 @@ const styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        height: 45,
+        height: 50,
         borderColor: "gray",
         borderWidth: 1,
-        // marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 10,
+        // marginTop: 20,
         paddingHorizontal: 10,
         fontSize: 16, // Adjust the font size as needed
         borderRadius: 5,

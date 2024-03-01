@@ -16,7 +16,7 @@ import { StyleSheet } from "react-native";
 import BackButton from "../../components/BackButton";
 import { userContext } from "../../../App";
 
-const width = Dimensions.get("screen").width / 2 - 20;
+const width = Dimensions.get("screen").width / 2 - 15;
 
 const fetchData = async (url, setter) => {
     try {
@@ -31,7 +31,7 @@ const fetchData = async (url, setter) => {
 export default function ShopProfile({ navigation, route }) {
     // const shop = route.params;
 
-    const [user, setUser] = React.useContext(userContext);  
+    const [user, setUser] = React.useContext(userContext);
     const [selected, setSelected] = React.useState("Products");
 
     const [products, setProducts] = React.useState([]);
@@ -77,7 +77,11 @@ export default function ShopProfile({ navigation, route }) {
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.longsoeng.website/api/shopview/" + user.user.id, setShop);
+            await fetchData(
+                "https://pgmarket.longsoeng.website/api/shopview/" +
+                    user.user.id,
+                setShop
+            );
             setIsFetching(false);
         };
 
@@ -85,8 +89,13 @@ export default function ShopProfile({ navigation, route }) {
     }, []);
     // console.log(JSON.stringify(shop, null, 2));
 
-    const bannerUrl = shop && "https://pgmarket.longsoeng.website/public/images/shop_banner/" + shop.image_banner;
-    const imageUrl = shop && "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;
+    const bannerUrl =
+        shop &&
+        "https://pgmarket.longsoeng.website/public/images/shop_banner/" +
+            shop.image_banner;
+    const imageUrl =
+        shop &&
+        "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;
     const shopName = shop && shop.shop_name;
     const shopAddress = shop && shop.shop_address;
     const shopNumber = shop && shop.shop_phone;
@@ -157,7 +166,6 @@ export default function ShopProfile({ navigation, route }) {
                                 </View>
                             </View>
                         </View>
-                        
 
                         {/* Selection */}
                         <View style={styles.selectionContainer}>
@@ -168,7 +176,7 @@ export default function ShopProfile({ navigation, route }) {
                                 onPress={() => setSelected("Products")}
                             />
                             <ShopSelection
-                                title="About"
+                                title="Detail"
                                 icon="bars"
                                 selected={selected}
                                 onPress={() => setSelected("About")}
@@ -178,71 +186,92 @@ export default function ShopProfile({ navigation, route }) {
                         {/* List Item */}
                         {selected === "Products" ? (
                             <View style={{ paddingVertical: 15 }}>
-                                <TouchableOpacity style={ styles.AddButton } onPress={() => navigation.navigate('AddProductScreen')}>
-                                    <Text style={ styles.AddButtonText }>
+                                <TouchableOpacity
+                                    style={styles.AddButton}
+                                    onPress={() =>
+                                        navigation.navigate("AddProductScreen")
+                                    }
+                                >
+                                    <Text style={styles.AddButtonText}>
                                         Add Product
                                     </Text>
                                 </TouchableOpacity>
-                                {
-                                    products.length > 0 ?
-                                        <View>
-                                            <FlatList
-                                                numColumns={2}
-                                                data={products}
-                                                scrollEnabled={false}
-                                                showsHorizontalScrollIndicator={false}
-                                                renderItem={({ item }) => (
-                                                    <TouchableOpacity
+                                {products.length > 0 ? (
+                                    <View style={{ paddingHorizontal: 10 }}>
+                                        <FlatList
+                                            numColumns={2}
+                                            data={products}
+                                            scrollEnabled={false}
+                                            showsHorizontalScrollIndicator={
+                                                false
+                                            }
+                                            renderItem={({ item }) => (
+                                                <TouchableOpacity
                                                     key={item.pro_id}
-                                                    onPress={() => navigation.push("ShopProductDetail", item)}
-                                                    >
-                                                        <CardProduct item={item} width={width}
-                                                            title = {item.pro_name}
-                                                            imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
-                                                            description= {item.description}
-                                                            price = {item.price}
-                                                            />
-                                                    </TouchableOpacity>
-                                                )}
-                                                contentContainerStyle={{
-                                                    gap: 10,
-                                                }}
-                                                columnWrapperStyle={{
-                                                    justifyContent: "space-evenly",
+                                                    onPress={() =>
+                                                        navigation.push(
+                                                            "ShopProductDetail",
+                                                            item
+                                                        )
+                                                    }
+                                                >
+                                                    <CardProduct
+                                                        item={item}
+                                                        width={width}
+                                                        title={item.pro_name}
+                                                        imageUrl={
+                                                            "https://pgmarket.longsoeng.website/public/images/product/thumb/" +
+                                                            item.thumbnail
+                                                        }
+                                                        description={
+                                                            item.description
+                                                        }
+                                                        price={item.price}
+                                                    />
+                                                </TouchableOpacity>
+                                            )}
+                                            contentContainerStyle={{
+                                                gap: 10,
                                             }}
-                                                                                />
-                                                                                <ActivityIndicator visibility={loading} />
-                                                                            {!noMoreProduct && (
-                                                                                <TouchableOpacity
-                                            style={{
-                                                flexDirection: "column",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                paddingTop: 15,
-                                                paddingBottom: 5,
+                                            columnWrapperStyle={{
+                                                justifyContent: "space-between",
                                             }}
-                                            onPress={handlePageLoad}
-                                                                                >
-                                            <Text
+                                        />
+                                        <ActivityIndicator
+                                            visibility={loading}
+                                        />
+                                        {!noMoreProduct && (
+                                            <TouchableOpacity
                                                 style={{
-                                                    textDecorationLine: "underline",
-                                                    fontWeight: "bold",
-                                                    color: "tomato",
+                                                    flexDirection: "column",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    paddingTop: 15,
+                                                    paddingBottom: 5,
                                                 }}
+                                                onPress={handlePageLoad}
                                             >
-                                                More Products
-                                            </Text>
-                                            <FontAwesome
-                                                name="angle-double-down"
-                                                size={28}
-                                                color="tomato"
-                                            />
-                                                                                </TouchableOpacity>
-                                                                            )}
-                                        </View>
-                                     : 
+                                                <Text
+                                                    style={{
+                                                        textDecorationLine:
+                                                            "underline",
+                                                        fontWeight: "bold",
+                                                        color: "tomato",
+                                                    }}
+                                                >
+                                                    More Products
+                                                </Text>
+                                                <FontAwesome
+                                                    name="angle-double-down"
+                                                    size={28}
+                                                    color="tomato"
+                                                />
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
+                                ) : (
                                     <Text>No Product</Text>
-                                }
+                                )}
                             </View>
                         ) : (
                             <View style={{ padding: 10, gap: 15 }}>
@@ -266,22 +295,37 @@ export default function ShopProfile({ navigation, route }) {
                                     detail={shopDescription}
                                     icon="navicon"
                                 />
-                                <View style={{ flexDirection: 'row', gap: 10 }}>
-                                <TouchableOpacity style={ [styles.AddButton, {backgroundColor: colors.medium}] }
-                                        onPress={() => navigation.navigate('UpdateBankAccount')}
+                                <View style={{ flexDirection: "row", gap: 10 }}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.AddButton,
+                                            { backgroundColor: colors.medium },
+                                        ]}
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                "UpdateBankAccount"
+                                            )
+                                        }
                                     >
-                                        <Text style={ styles.AddButtonText }>
+                                        <Text style={styles.AddButtonText}>
                                             Shop Payments
                                         </Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={ [styles.AddButton, {backgroundColor: "tomato"}] }
-                                        onPress={() => navigation.navigate('UpdateShopDetail')}
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.AddButton,
+                                            { backgroundColor: "tomato" },
+                                        ]}
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                "UpdateShopDetail"
+                                            )
+                                        }
                                     >
-                                        <Text style={ styles.AddButtonText }>
+                                        <Text style={styles.AddButtonText}>
                                             Update Details
                                         </Text>
                                     </TouchableOpacity>
-                                    
                                 </View>
                             </View>
                         )}
@@ -368,7 +412,14 @@ function AboutItem({ title, detail, icon }) {
     );
 }
 
-const CardProduct = ({ item, width = 170, title, description, imageUrl, price }) => {
+const CardProduct = ({
+    item,
+    width = 170,
+    title,
+    description,
+    imageUrl,
+    price,
+}) => {
     const navigation = useNavigation();
 
     const descriptionNoHtml = stripHtmlTags(description);
@@ -392,8 +443,8 @@ const CardProduct = ({ item, width = 170, title, description, imageUrl, price })
                 </Text>
             </View>
         </View>
-    )
-}
+    );
+};
 
 // Style Sheet
 const styles = StyleSheet.create({
@@ -432,14 +483,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         marginBottom: 16,
         // marginTop: 16,
-        alignItems: 'center',
-      },
+        alignItems: "center",
+    },
     AddButtonText: {
-        color: '#fff',
+        color: "#fff",
         fontSize: 16,
-        fontWeight: 'bold',
-      },
-      image: {
+        fontWeight: "bold",
+    },
+    image: {
         backgroundColor: colors.white,
         aspectRatio: 1,
         borderRadius: 10,
@@ -462,17 +513,14 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
-
 const stripHtmlTags = (htmlString) => {
     // Remove HTML tags, attributes, and entities using regular expressions
-    if(htmlString) {
+    if (htmlString) {
         return htmlString
-        .replace(/<[^>]*>/g, '') // Remove HTML tags
-        .replace(/(\w+)\s*=\s*("[^"]*")/g, '') // Remove attributes
-        .replace(/&\w+;/g, ''); // Remove HTML entities
-    }else {
+            .replace(/<[^>]*>/g, "") // Remove HTML tags
+            .replace(/(\w+)\s*=\s*("[^"]*")/g, "") // Remove attributes
+            .replace(/&\w+;/g, ""); // Remove HTML entities
+    } else {
         return htmlString;
-    };
-}
+    }
+};

@@ -40,6 +40,7 @@ export default function ShopProductDetail({ route, navigation }) {
     const productMainCategory = product ? product.mainCategory : null;
     const productCategory = product ? product.category : null;
     const productSubCategory = product ? product.subCategory : null;
+    const productBrand = product ? product.brand : null;
     
     const [modalVisible, setModalVisible] = React.useState(false);
     const [images, setImages] = React.useState([]);
@@ -57,15 +58,14 @@ export default function ShopProductDetail({ route, navigation }) {
         var mainCategory = productInfo.main_cate_id;
         var category = productInfo.cate_id;
         var subCategory = productInfo.sub_cate_id;
-        var videoUrl = productInfo.video_url;
-
+        var videoUrl = productInfo.video_url; 
     }
 
     React.useEffect(() => {
         fetch("https://pgmarket.longsoeng.website/api/getproduct/" + item.id)
             .then((response) => response.json())
             .then((result) => {
-                // console.log(JSON.stringify(result, null, 2));
+                console.log(JSON.stringify(result, null, 2));
                 setProduct(result);
 
                 setLoading(false);
@@ -162,7 +162,7 @@ export default function ShopProductDetail({ route, navigation }) {
             <View style={{ marginHorizontal: 10 }}>
                 <Button
                     
-                    title="Add Images"
+                    title="Images"
                     bgColor={colors.medium}
                     onPress={addImages}
                 />
@@ -178,6 +178,7 @@ export default function ShopProductDetail({ route, navigation }) {
                         label="Discount Date"
                         value={discount_date_start + ' - ' + discount_date_end}
                     />
+                    <LabelValue label="Brand" value={productBrand ? productBrand.name : 'N/A'} />
                     <LabelValue label="Shipping" value={shipping ? shipping : 'Free Delivery'} />
                     <LabelValue label="Main Category" value={productMainCategory && productMainCategory.name_en} />
                     <LabelValue label="Category" value={productCategory && productCategory.name_en} /> 

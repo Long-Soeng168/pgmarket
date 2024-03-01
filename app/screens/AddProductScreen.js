@@ -96,6 +96,7 @@ const AddProductScreen = ({ navigation }) => {
     const [filterSubCate, setFilterSubCate] = useState([]);
     const [allColors, setAllColors] = useState([]);
     const [allSizes, setAllSizes] = useState([]);
+    const [allBrands, setAllBrands] = useState([]);
 
     // React.useEffect(() => {
     //     if(mainCategory){
@@ -134,7 +135,14 @@ const AddProductScreen = ({ navigation }) => {
             .then((response) => response.json())
             .then((result) => {
                 setAllColors(result);
-                console.log(JSON.stringify(result, null, 2));
+                // console.log(JSON.stringify(result, null, 2));
+            })
+            .catch((error) => console.error(error));
+        fetch("https://pgmarket.longsoeng.website/api/getbrands")
+            .then((response) => response.json())
+            .then((result) => {
+                setAllBrands(result);
+                // console.log(JSON.stringify(result, null, 2));
             })
             .catch((error) => console.error(error));
 
@@ -142,7 +150,7 @@ const AddProductScreen = ({ navigation }) => {
             .then((response) => response.json())
             .then((result) => {
                 setAllSizes(result);
-                console.log(JSON.stringify(result, null, 2));
+                // console.log(JSON.stringify(result, null, 2));
             })
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
@@ -178,6 +186,7 @@ const AddProductScreen = ({ navigation }) => {
     // const [selectedMain, setSelectedMain] = useState([]);
     const [isFocusCate, setIsFocusCate] = useState(false);
     const [isFocusSubCate, setIsFocusSubCate] = useState(false);
+    const [isFocusBrand, setIsFocusBrand] = useState(false);
 
     const renderLabelMain = () => {
         if (mainCategory || isFocusMain) {
@@ -206,6 +215,19 @@ const AddProductScreen = ({ navigation }) => {
                     style={[styles.label, isFocusSubCate && { color: "blue" }]}
                 >
                     Sub Category
+                </Text>
+            );
+        }
+        return null;
+    };
+
+    const renderLabelBrand = () => {
+        if (brand || isFocusBrand) {
+            return (
+                <Text
+                    style={[styles.label, isFocusBrand && { color: "blue" }]}
+                >
+                    Brand
                 </Text>
             );
         }
@@ -320,6 +342,7 @@ const AddProductScreen = ({ navigation }) => {
         if(videoUrl !== "") formdata.append("video_url", videoUrl);
         if(description !== "") formdata.append("description", description);
         if(shipping !== "") formdata.append("shipping", shipping);
+        if(brand !== "") formdata.append("brand_id", brand);
         if(selectedColors.length > 0) formdata.append("colors", JSON.stringify(selectedColors));
         if(selectedSizes.length > 0) formdata.append("sizes", JSON.stringify(selectedSizes));
         formdata.append("thumbnail", {
@@ -561,6 +584,46 @@ const AddProductScreen = ({ navigation }) => {
                             Category required
                         </Text>
                     )}
+
+                        <View style={styles.dropdownContainer}>
+                            {renderLabelBrand()}
+                            <Dropdown
+                                style={[
+                                    styles.dropdown,
+                                    isFocusBrand && { borderColor: "blue" },
+                                ]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                inputSearchStyle={styles.inputSearchStyle}
+                                iconStyle={styles.iconStyle}
+                                data={allBrands}
+                                search
+                                maxHeight={300}
+                                labelField="name"
+                                valueField="id"
+                                placeholder={
+                                    !isFocusBrand ? "Select Brand" : "..."
+                                }
+                                searchPlaceholder="Search..."
+                                value={brand}
+                                onFocus={() => setIsFocusBrand(true)}
+                                onBlur={() => setIsFocusBrand(false)}
+                                onChange={(item) => {
+                                    // setValue(item.id);
+                                    setBrand(item.id);
+                                    console.log(item.id);
+                                    setIsFocusBrand(false);
+                                }}
+                                renderLeftIcon={() => (
+                                    <AntDesign
+                                        style={styles.icon}
+                                        color={isFocusBrand ? "blue" : "black"}
+                                        name="star"
+                                        size={20}
+                                    />
+                                )}
+                            />
+                        </View>
 
                     <View style={styles.dropdownContainer}>
                         <MultiSelect

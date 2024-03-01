@@ -165,7 +165,9 @@ const CheckoutProcess = ({ navigation }) => {
 
     const handleSelectBank = (bank, link) => {
         setSelectedBank(bank);
-        Linking.openURL(link);
+        setTimeout(() => {
+            Linking.openURL(link);
+        }, 20);
     };
 
     const RenderBankItem = ({ item }) => {

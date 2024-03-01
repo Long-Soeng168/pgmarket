@@ -32,7 +32,7 @@ const OrderDetailScreen = ({ route }) => {
             fetch("https://pgmarket.longsoeng.website/api/invoiceDetail/" + orderId, requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    // console.log(JSON.stringify(result, null, 2))
+                    console.log(JSON.stringify(result, null, 2))
                     setProducts(result.products);
                     setInvoice(result.invoice);
                     setShop(result.shop);
@@ -85,6 +85,7 @@ const OrderDetailScreen = ({ route }) => {
                             title={item.product_name}
                             imageUrl={item.thumbnail}
                             price={item.price}
+                            discount={item.discount}
                             note={item.input_description}
                             size={item.size}
                             color={item.color}
@@ -111,7 +112,9 @@ const OrderDetailScreen = ({ route }) => {
   );
 };
 
-const ItemComponents = ({ qty, title, imageUrl, price, note, size, color }) => {
+const ItemComponents = ({ qty, title, imageUrl, price, note, size, color, discount }) => {
+    let totalDiscountPrice = qty * (price - discount / 100 * price);
+    let totolPrice = qty * price - totalDiscountPrice;
     return (
         <View style={styles.productContainer}>
             {/* Remove Button */}
@@ -142,10 +145,11 @@ const ItemComponents = ({ qty, title, imageUrl, price, note, size, color }) => {
                 <View style={styles.priceContainer}>
                     <Text numberOfLines={1} style={styles.pricePerUnit}>
                         $ {parseFloat(price).toFixed(2)}
+                        {discount > 0 && " (" + discount + "% off)" }
                     </Text>
                     <Text style={styles.Qty}>X {qty}</Text>
                     <Text numberOfLines={1} style={styles.totalPrice}>
-                        $ {(qty * (price * 100)) / 100}
+                        $ {totalDiscountPrice.toFixed(2)}
                     </Text>
                 </View>
             </View>
@@ -271,7 +275,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         objectFit: "cover", 
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: colors.secondary,
         
     },
     rightSideContainer: {
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
     priceContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 5,
+        // padding: 5,
     },
 
     headerText: {
