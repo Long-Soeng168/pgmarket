@@ -1,7 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 
 const ProductColors = ({ productColors, handleColorSelect, selectedColor }) => {
+
+    const [t, i18n] = useTranslation('global');
+    
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={[styles.colorOption,
@@ -46,7 +50,7 @@ const ProductColors = ({ productColors, handleColorSelect, selectedColor }) => {
         <>
             {productColors.length > 0 && (
                 <View style={styles.container}>
-                    <Text style={styles.chooseColorText}>Choose Color</Text>
+                    <Text style={styles.chooseColorText}>{ t('chooseColor') }</Text>
                     <View style={styles.colorOptionsContainer}>
                         <FlatList
                             showsHorizontalScrollIndicator={false}

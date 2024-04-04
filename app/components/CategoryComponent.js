@@ -1,16 +1,17 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 export default function CategoryComponent({ item }) {
     const navigation = useNavigation();
     const imageUrl = 'https://pgmarket.online/public/images/shopcategory/' + item.image;
-    const title = item.name;
+    const [t, i18n] = useTranslation('global');
+    const title = i18n.language == 'en' ? item.name : item.name_kh;
     // console.log(JSON.stringify(imageUrl, null, 2));
-
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate("ShopCategoryScreen", item)}
+            onPress={() => navigation.navigate("ShopCategoryScreen", title)}
         >
             <View
                 style={{

@@ -5,6 +5,7 @@ import colors from "../config/colors";
 import HomeHeader from "../components/HomeHeader";
 import { FullWindowOverlay } from "react-native-screens";
 import ActivityIndicator from "../components/ActivityIndicator";
+import { useTranslation } from "react-i18next";
 
 const fetchData = async (url, setter) => {
   try {
@@ -22,6 +23,7 @@ export default function AllCategoryScreen({navigation}) {
   const [shops, setShops] = useState([]);
   const [brands, setBrands] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
+  const [t, i18n] = useTranslation('global');
 
   const [selected, setSelected] = useState("Shops");
   const [categorySelected, setCategorySelected] = useState();
@@ -75,12 +77,14 @@ export default function AllCategoryScreen({navigation}) {
             }}
           >
             <ShopSelection
+              name={t('shops')}
               title="Shops"
               icon="apps"
               selected={selected}
               onPress={() => setSelected("Shops")}
             />
             <ShopSelection
+              name={t('brands')}
               title="Brands"
               icon="progress-star"
               selected={selected}
@@ -158,7 +162,7 @@ export default function AllCategoryScreen({navigation}) {
                           ))}
                       </View>
                     ) : (
-                      <Text>No Shop</Text>
+                      <Text>{t('noShop')}</Text>
                     )}
                   </View>
                 </View>
@@ -195,7 +199,7 @@ export default function AllCategoryScreen({navigation}) {
 }
 
 // Selection Component
-function ShopSelection({ title, icon, selected, onPress }) {
+function ShopSelection({ title, icon, selected, onPress, name }) {
   const isSelected = title === selected;
   return (
     <TouchableOpacity
@@ -225,7 +229,7 @@ function ShopSelection({ title, icon, selected, onPress }) {
           color: isSelected ? colors.dark : colors.medium,
         }}
       >
-        {title}
+        {name}
       </Text>
     </TouchableOpacity>
   );
@@ -234,7 +238,8 @@ function ShopSelection({ title, icon, selected, onPress }) {
 // Category Component
 function CategoryComponent({ item, categorySelected, handleCategoryIdSelect }) {
   const imageUrl = `https://pgmarket.longsoeng.website/public/images/shopcategory/${item.image}`;
-  const title = item.name;
+  const [t, i18n] = useTranslation('global');
+    const title = i18n.language == 'en' ? item.name : item.name_kh;
 
   const isSelected = categorySelected && categorySelected.id === item.id;
 
@@ -327,7 +332,8 @@ function SubCategoryComponent({ item, onPress }) {
 // Brand Component
 function BrandComponent({ item, onPress }) {
   const imageUrl = `https://pgmarket.longsoeng.website/public/images/brand/${item.image}`;
-  const title = item.name;
+  const [t, i18n] = useTranslation('global');
+    const title = i18n.language == 'en' ? item.name : item.name_kh;
 
   return (
     <TouchableOpacity onPress={onPress}>

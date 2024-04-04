@@ -3,10 +3,11 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../config/colors";
+import { useTranslation } from "react-i18next";
 
 export default function HeaderText({ title, showBackBtn = true }) {
   const navigation = useNavigation();
-
+  const [t, i18n] = useTranslation('global');
   return (
     <View
       style={{
@@ -23,7 +24,7 @@ export default function HeaderText({ title, showBackBtn = true }) {
         )}
       
       <Text style={{ flex: 1, fontSize: 20, fontWeight: "500", color: colors.white, textAlign: 'center' }}>
-        {title}
+        {t(title)}
       </Text>
       {showBackBtn && (
             <View style={{ opacity: 0 }}>

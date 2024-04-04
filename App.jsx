@@ -12,6 +12,25 @@ import storage from "./app/localStorage/storage";
 import cartStorage from "./app/localStorage/cartStorage";
 import favoriteStorage from "./app/localStorage/favoriteStorage";
 
+import global_en from "./app/translations/en/global.json";
+import global_kh from "./app/translations/kh/global.json";
+import i18next from "i18next";
+import { I18nextProvider } from "react-i18next";
+
+i18next.init({
+    compatibilityJSON: 'v3',
+    interpolation: {escapeValue: false},
+    lng: "en",
+    resources: {
+        en: {
+            global: global_en,
+        },
+        kh: {
+            global: global_kh,
+        },
+    }
+})
+
 export const favoritesContext = React.createContext();
 export const cartContext = React.createContext();
 export const userContext = React.createContext();
@@ -85,11 +104,13 @@ export default function App() {
         <favoritesContext.Provider value={[favorites, setFavorites]}>
             <cartContext.Provider value={[cartItems, setCartItems]}>
                 <userContext.Provider value={[user, setUser]} >
-                    <NavigationContainer>
-                        <SafeAreaView style={{ flex: 1 }}>
-                            <TabNavigator />
-                        </SafeAreaView>
-                    </NavigationContainer>
+                    <I18nextProvider i18n={i18next}>
+                        <NavigationContainer>
+                            <SafeAreaView style={{ flex: 1 }}>
+                                <TabNavigator />
+                            </SafeAreaView>
+                        </NavigationContainer>
+                    </I18nextProvider>
                 </userContext.Provider>
             </cartContext.Provider>
         </favoritesContext.Provider>

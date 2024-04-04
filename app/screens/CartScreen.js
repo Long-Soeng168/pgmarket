@@ -7,11 +7,14 @@ import { cartContext, userContext } from "../../App";
 import colors from "../config/colors";
 import CartItem from "../components/CartItem";
 import HeaderText from "../components/HeaderText";
+import { useTranslation } from "react-i18next";
 
 export default function CartScreen({navigation}) {
     const [cartItems, setCartItems] = React.useContext(cartContext);
     console.log(JSON.stringify(cartItems, null, 2));
     const [user, setUser] = React.useContext(userContext);
+    
+    const [t, i18n] = useTranslation('global');
 
     let totalPrice = 0;
     cartItems.forEach((cartItem) => {
@@ -42,7 +45,7 @@ export default function CartScreen({navigation}) {
 
     return (
         <View style={{ backgroundColor: colors.white, flex: 1 }}>
-            <HeaderText title="Cart" showBackBtn={false}/>
+            <HeaderText title="cart" showBackBtn={false}/>
             {cartItems.length < 1 
               &&
               <View
@@ -53,7 +56,7 @@ export default function CartScreen({navigation}) {
                     height: '100%'
                  }}
               >
-                  <Text>No Item</Text> 
+                  <Text>{ t('noItem') }</Text> 
               </View> 
             }
             <FlatList

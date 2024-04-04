@@ -17,7 +17,7 @@ export default function FavoriteScreen() {
                 backgroundColor: colors.white,
             }}
         >
-            <HeaderText title="Favorite" showBackBtn={false}/>
+            <HeaderText title="favorite" showBackBtn={false}/>
             {favorites.length < 1 && 
             <View
                 style={{ 
@@ -26,7 +26,7 @@ export default function FavoriteScreen() {
                     alignItems: 'center',
                  }}
             >
-                <Text>No item</Text>
+                <Text>{ t('noItem') }</Text>
             </View>}
             {favorites.length > 0 && 
             <ScrollView

@@ -22,6 +22,7 @@ import HomeHeader from "../components/HomeHeader";
 import colors from "../config/colors";
 import Slider from "../components/Slider";
 import { FontAwesome } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const width = Dimensions.get("screen").width / 2 - 15;
 
@@ -51,6 +52,12 @@ export default function HomeScreen({ navigation }) {
     
     const [slides, setSlides] = React.useState([]);
     const [banners, setBanners] = React.useState([]);
+
+    const [t, i18n] = useTranslation("global");
+    const handleChangeLanguage = (lang) => {
+        i18n.changeLanguage(lang);
+        
+    };
     
     
     React.useEffect(() => {
@@ -127,7 +134,11 @@ export default function HomeScreen({ navigation }) {
             {!isFetching && (
                 <ScrollView>
                     <View style={[styles.body]}>
-                        <HomeHeader />
+                        <HomeHeader 
+                            showSwitchLanguage= {true}
+                            handleChangeLanguage= {handleChangeLanguage}
+                            language={i18n.language}
+                        />
                         <Slider 
                             addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 16/9 }}
                             images={slides} endPoint="https://pgmarket.longsoeng.website/public/images/slide/" />
@@ -142,11 +153,11 @@ export default function HomeScreen({ navigation }) {
                                 color: 'tomato'
                             }}
                         >
-                            Digital Market
+                            {t('digitalMarket') } 
                         </Text>
                         <FlatList
                             horizontal
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item, index) => index.toString()}
                             showsHorizontalScrollIndicator={false}
                             data={categories}
                             renderItem={({ item }) => (
@@ -161,7 +172,7 @@ export default function HomeScreen({ navigation }) {
                             {/* New Products */}
                             <View style={{ marginBottom: 30 }}>
                                 <ListHeader
-                                    title="New Products"
+                                    title='newProduct'
                                     onPress={() => {
                                         navigation.navigate("SeeMoreScreen", "getnewproducts");
                                     }}
@@ -169,7 +180,7 @@ export default function HomeScreen({ navigation }) {
                                 <FlatList
                                     data={newProducts}
                                     horizontal
-                                    keyExtractor={(item) => item.id.toString()}
+                                    keyExtractor={(item, index) => index.toString()}
                                     showsHorizontalScrollIndicator={false}
                                     renderItem={({ item }) => (
                                         <Card item={item} 
@@ -182,8 +193,7 @@ export default function HomeScreen({ navigation }) {
                                     contentContainerStyle={{
                                         gap: 10,
                                         paddingHorizontal: 10,
-                                    }}
-                                    keyExtractor={(item, index) => index.toString()}
+                                    }} 
                                     onEndReached={handleLoadMoreNewProduct}
                                     onEndReachedThreshold={0.1}
                                 />
@@ -204,7 +214,7 @@ export default function HomeScreen({ navigation }) {
                                 &&
                                 <View  style={{ marginBottom: 20 }}>
                                     <ListHeader
-                                        title="Best Selling"
+                                        title="bestSelling"
                                         onPress={() => {
                                             navigation.navigate("SeeMoreScreen", "getbestselling");
                                         }}
@@ -212,7 +222,6 @@ export default function HomeScreen({ navigation }) {
                                     <FlatList
                                         data={bestSellingProducts}
                                         horizontal
-                                        keyExtractor={(item) => item.id.toString()}
                                         showsHorizontalScrollIndicator={false}
                                         renderItem={({ item }) => (
                                             <Card item={item} 
@@ -261,7 +270,7 @@ export default function HomeScreen({ navigation }) {
                                                 borderTopLeftRadius: 100,
                                             }}
                                                                             >
-                                            All Products
+                                            {t('allProduct') } 
                                             </Text>
                                         </View>
                                         <View style={{ paddingHorizontal: 10 }}>
@@ -270,7 +279,7 @@ export default function HomeScreen({ navigation }) {
                                                 data={allProducts}
                                                 scrollEnabled={false}
                                                 showsHorizontalScrollIndicator={false}
-                                                keyExtractor={(item) => item.id.toString()}
+                                                keyExtractor={(item, index) => index.toString()}
                                                 renderItem={({ item }) => (
                                                     <Card
                                                         key={item.id.toString()}
@@ -311,7 +320,7 @@ export default function HomeScreen({ navigation }) {
                                                         color: "tomato",
                                                     }}
                                                 >
-                                                    More Products
+                                                    {t('moreProducts')}
                                                 </Text>
                                                 <FontAwesome
                                                     name="angle-double-down"

@@ -30,10 +30,13 @@ import ProductImages from "../components/ProductImages";
 import LoadingOverlay from "../components/LoadingOverlay";
 import ShopCardComponent from "../components/ShopCardComponent";
 import cartStorage from "../localStorage/cartStorage";
+import { useTranslation } from "react-i18next";
 
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
     console.log(JSON.stringify(item, null, 2));
+
+    const [t, i18n] = useTranslation('global');
 
     const [selectedColor, setSelectedColor] = React.useState("");
     const [selectedSize, setSelectedSize] = React.useState("");
@@ -307,7 +310,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 marginBottom: 10,
                             }}
                         >
-                            <Text>Buyer Note</Text>
+                            <Text>{ t('buyerNote') }</Text>
                             <TextInput
                                 style={{
                                     marginTop: 5,
@@ -330,13 +333,13 @@ export default function ProductDetailScreen({ route, navigation }) {
                     {/* Add and Remove from Cart */}
                     {cartItems.some((cartItem) => cartItem.id === item.id) ? (
                         <CartButton
-                            title="REMOVE FROM CART"
+                            title="removeFromCart"
                             bgColor={colors.medium}
                             onPress={removeFromCart}
                         />
                     ) : (
                         <CartButton
-                            title="ADD TO CART"
+                            title="addToCart"
                             bgColor={colors.primary}
                             onPress={addToCart}
                         />
@@ -393,7 +396,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 fontWeight: "500",
                             }}
                         >
-                            Product Description
+                            { t('productDescription') }
                         </Text>
                         <Text style={styles.description}>
                             {descriptionNoHtml}
@@ -402,7 +405,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                 </View>
                 <View style={{ marginBottom: 30 }}>
                     <ListHeader
-                        title="Relate Product"
+                        title="relateProducts"
                         onPress={() => {
                             navigation.navigate(
                                 "SeeMoreScreen",
@@ -491,6 +494,7 @@ function FavoriteButton({ color, onPress }) {
 
 //Cart Button component
 function CartButton({ title, onPress, bgColor }) {
+    const [t, i18n] = useTranslation('global');
     return (
         <TouchableOpacity
             activeOpacity={0.8}
@@ -517,7 +521,7 @@ function CartButton({ title, onPress, bgColor }) {
                         fontWeight: "500",
                     }}
                 >
-                    {title}
+                    { t(title) }
                 </Text>
             </View>
         </TouchableOpacity>

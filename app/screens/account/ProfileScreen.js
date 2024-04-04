@@ -6,11 +6,14 @@ import { Entypo } from '@expo/vector-icons';
 import colors from "../../config/colors";
 import { userContext } from "../../../App";
 import storage from "../../localStorage/storage";
+import { useTranslation } from "react-i18next";
 
 const ProfileScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
     // console.log(JSON.stringify(user, null, 2));
     const userInfo = user.user;
+
+    const [t, i18n] = useTranslation('global');
 
     const onViewDetail = () => {
         // Logic for navigating to the detail view
@@ -101,7 +104,7 @@ const ProfileScreen = ({ navigation }) => {
                         onPress={onViewDetail}
                     >
                         <Icon name="eye" size={20} color="#555" />
-                        <Text style={styles.menuItemText}>Account Detail</Text>
+                        <Text style={styles.menuItemText}>{t('accountDetail')}</Text>
                     </TouchableOpacity>
 
                     {/* Show for dealer */}
@@ -112,7 +115,7 @@ const ProfileScreen = ({ navigation }) => {
                                 onPress={onViewOrders}
                             >
                                 <Icon name="list" size={20} color="#555" />
-                                <Text style={styles.menuItemText}>Orders</Text>
+                                <Text style={styles.menuItemText}>{t('order')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.menuItem}
@@ -122,7 +125,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <Entypo name="shop" size={24} color="#555" />
 
                                 <Text style={styles.menuItemText}>
-                                    Your Shop
+                                    {t('yourShop')}
                                 </Text>
                             </TouchableOpacity>
                         </>
@@ -135,7 +138,7 @@ const ProfileScreen = ({ navigation }) => {
                         >
                             <Icon name="list" size={20} color="#555" />
                             <Text style={styles.menuItemText}>
-                                Orders History
+                                {t('orderHistory')}
                             </Text>
                         </TouchableOpacity>
                     )}
@@ -145,7 +148,7 @@ const ProfileScreen = ({ navigation }) => {
                     style={styles.signOutButton}
                     onPress={onSignOut}
                 >
-                    <Text style={styles.signOutButtonText}>Sign Out</Text>
+                    <Text style={styles.signOutButtonText}>{t('logout')}</Text>
                 </TouchableOpacity>
             </View>
         </View>

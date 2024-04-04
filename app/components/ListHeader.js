@@ -1,8 +1,10 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 export default function ListHeader({ title, onPress, showBtn = true }) {
+    const [t, i18n] = useTranslation("global");
     return (
         <View
             style={{
@@ -13,7 +15,7 @@ export default function ListHeader({ title, onPress, showBtn = true }) {
                 
             }}
         >
-            <Text style={{ fontSize: 16, fontWeight: "bold", color: "tomato" }}>{title}</Text>
+            <Text style={{ fontSize: 16, fontWeight: "bold", color: "tomato" }}>{t(title) } </Text>
             {showBtn && <TouchableOpacity
                 onPress={onPress}
                 style={{
@@ -21,7 +23,7 @@ export default function ListHeader({ title, onPress, showBtn = true }) {
                     alignItems: "center",
                 }}
             >
-                <Text style={{fontSize: 14, borderBottomColor: 'tomato', borderBottomWidth: 1 }}>See more</Text>
+                <Text style={{fontSize: 14, borderBottomColor: 'tomato', borderBottomWidth: 1 }}>{t('seeMore') } </Text>
                 <MaterialCommunityIcons
                     style={{ top: 1 }}
                     name="chevron-double-right"
