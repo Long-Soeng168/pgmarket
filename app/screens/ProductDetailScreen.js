@@ -52,10 +52,10 @@ export default function ProductDetailScreen({ route, navigation }) {
     };
 
     // const imageUrl =
-    //     "https://pgmarket.longsoeng.website/public/images/product/" +
+    //     "https://pgmarket.online/public/images/product/" +
     //     item.thumbnail;
     const [imageUrl, setImageUrl] = React.useState(
-        "https://pgmarket.longsoeng.website/public/images/product/" +
+        "https://pgmarket.online/public/images/product/" +
             item.thumbnail
     );
     const handleImageUrlSelect = (url) => {
@@ -119,7 +119,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const getrelatedproducts = () => {
         fetch(
-            "https://pgmarket.longsoeng.website/api/getrelatedproducts/" +
+            "https://pgmarket.online/api/getrelatedproducts/" +
                 item.main_cate_id
         )
             .then((rest) => rest.json())
@@ -132,7 +132,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const getProductFullDetail = () => {
         fetch(
-            "https://pgmarket.longsoeng.website/api/getproductfulldetail/" +
+            "https://pgmarket.online/api/getproductfulldetail/" +
                 item.id
         )
             .then((rest) => rest.json())
@@ -353,7 +353,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                     >
                         <ShopCardComponent
                             imageURL={
-                                "https://pgmarket.longsoeng.website/public/images/shop/" +
+                                "https://pgmarket.online/public/images/shop/" +
                                 shopInfo.image
                             }
                             title={shopInfo.shop_name}
@@ -425,7 +425,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                     item={item}
                                     title={item.pro_name}
                                     imageUrl={
-                                        "https://pgmarket.longsoeng.website/public/images/product/" +
+                                        "https://pgmarket.online/public/images/product/" +
                                         item.thumbnail
                                     }
                                     description={item.description}

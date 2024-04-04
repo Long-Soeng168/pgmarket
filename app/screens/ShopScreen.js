@@ -22,10 +22,10 @@ export default function ShopScreen({ navigation, route }) {
     // console.log(JSON.stringify(shop, null, 2));
 
     const bannerUrl =
-        "https://pgmarket.longsoeng.website/public/images/shop_banner/" +
+        "https://pgmarket.online/public/images/shop_banner/" +
         shop.image_banner;
     const imageUrl =
-        "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;
+        "https://pgmarket.online/public/images/shop/" + shop.image;
     const shopName = shop.shop_name;
     const shopAddress = shop.shop_address;
     const shopNumber = shop.shop_phone;
@@ -45,7 +45,7 @@ export default function ShopScreen({ navigation, route }) {
 
     const getData = () => {
         fetch(
-            `https://pgmarket.longsoeng.website/api/getproducts_byshop/` +
+            `https://pgmarket.online/api/getproducts_byshop/` +
                 shop.id_link_from_users +
                 "?page=" +
                 currentPage
@@ -177,7 +177,7 @@ export default function ShopScreen({ navigation, route }) {
                                                 width={width}
                                                 title={item.pro_name}
                                                 imageUrl={
-                                                    "https://pgmarket.longsoeng.website/public/images/product/" +
+                                                    "https://pgmarket.online/public/images/product/" +
                                                     item.thumbnail
                                                 }
                                                 description={item.description}

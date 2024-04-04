@@ -47,7 +47,7 @@ export default function ShopProductDetail({ route, navigation }) {
 
     if(productInfo) {
         var imageUrl =
-            "https://pgmarket.longsoeng.website/public/images/product/" + productInfo.thumbnail;
+            "https://pgmarket.online/public/images/product/" + productInfo.thumbnail;
         var title = productInfo.pro_name;
         var descriptionNoHtml = stripHtmlTags(productInfo.description);
         var price = parseFloat(productInfo.price).toFixed(2);
@@ -62,7 +62,7 @@ export default function ShopProductDetail({ route, navigation }) {
     }
 
     React.useEffect(() => {
-        fetch("https://pgmarket.longsoeng.website/api/getproduct/" + item.id)
+        fetch("https://pgmarket.online/api/getproduct/" + item.id)
             .then((response) => response.json())
             .then((result) => {
                 console.log(JSON.stringify(result, null, 2));
@@ -103,7 +103,7 @@ export default function ShopProductDetail({ route, navigation }) {
                         };
 
                         fetch(
-                            "https://pgmarket.longsoeng.website/api/destroyProduct/" +
+                            "https://pgmarket.online/api/destroyProduct/" +
                             item.id,
                             requestOptions
                         )

@@ -46,7 +46,7 @@ const CheckoutProcess = ({ navigation }) => {
             };
 
             fetch(
-                "https://pgmarket.longsoeng.website/api/getshopbanks/" + shopId,
+                "https://pgmarket.online/api/getshopbanks/" + shopId,
                 requestOptions
             )
                 .then((response) => response.json())
@@ -99,7 +99,7 @@ const CheckoutProcess = ({ navigation }) => {
         };
 
         fetch(
-            "https://pgmarket.longsoeng.website/api/orderInsert",
+            "https://pgmarket.online/api/orderInsert",
             requestOptions
         )
             .then((response) => response.json())
@@ -260,7 +260,7 @@ const CheckoutProcess = ({ navigation }) => {
             redirect: "follow",
         };
         fetch(
-            "https://pgmarket.longsoeng.website/api/uploadTransaction/" +
+            "https://pgmarket.online/api/uploadTransaction/" +
                 invoiceId,
             requestOptions
         )

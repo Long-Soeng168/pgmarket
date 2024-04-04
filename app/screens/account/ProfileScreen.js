@@ -47,7 +47,7 @@ const ProfileScreen = ({ navigation }) => {
             redirect: "follow",
         };
 
-        fetch("https://pgmarket.longsoeng.website/api/logout", requestOptions)
+        fetch("https://pgmarket.online/api/logout", requestOptions)
             .then((response) => response.text())
             .then((result) => console.log(result))
             .catch((error) => console.log("error", error));
@@ -87,7 +87,7 @@ const ProfileScreen = ({ navigation }) => {
                         }}
                         source={{
                             uri:
-                                "https://pgmarket.longsoeng.website/public/images/users/" +
+                                "https://pgmarket.online/public/images/users/" +
                                 userInfo.image,
                         }}
                     />

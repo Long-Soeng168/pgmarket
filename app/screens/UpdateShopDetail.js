@@ -39,7 +39,7 @@ const UpdateShopDetail = ({navigation}) => {
     const [passwordMatchError, setPasswordMatchError] = useState(null);
 
     React.useEffect(() => {
-        fetch("https://pgmarket.longsoeng.website/api/shopview/" + user.user.id)
+        fetch("https://pgmarket.online/api/shopview/" + user.user.id)
             .then((response) => response.json())
             .then((result) => {
                 console.log(JSON.stringify(result, null, 2));
@@ -197,7 +197,7 @@ const UpdateShopDetail = ({navigation}) => {
             redirect: "follow"
         };
         setLoading(true);
-        fetch("https://pgmarket.longsoeng.website/api/updateShopProfile/" + user.user.id , requestOptions)
+        fetch("https://pgmarket.online/api/updateShopProfile/" + user.user.id , requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log(result);

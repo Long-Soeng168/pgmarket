@@ -23,7 +23,7 @@ const ProductImagesScreen = ({ route, navigation }) => {
 
     React.useEffect(() => {
         fetch(
-            "https://pgmarket.longsoeng.website/api/getproductimages/" + proId
+            "https://pgmarket.online/api/getproductimages/" + proId
         )
             .then((response) => response.json())
             .then((result) => {
@@ -49,7 +49,7 @@ const ProductImagesScreen = ({ route, navigation }) => {
                     text: "Delete",
                     onPress: () => {
                         fetch(
-                            "https://pgmarket.longsoeng.website/api/deleteproductimage/" +
+                            "https://pgmarket.online/api/deleteproductimage/" +
                                 id
                         )
                             .then((response) => response.json())
@@ -126,7 +126,7 @@ const ProductImagesScreen = ({ route, navigation }) => {
             });
 
             fetch(
-                "https://pgmarket.longsoeng.website/api/addProductImages/" +
+                "https://pgmarket.online/api/addProductImages/" +
                     proId,
                 {
                     method: "POST",
@@ -224,7 +224,7 @@ const ProductImagesScreen = ({ route, navigation }) => {
                         <Image
                             source={{
                                 uri:
-                                    "https://pgmarket.longsoeng.website/public/images/product_images/" +
+                                    "https://pgmarket.online/public/images/product_images/" +
                                     row.images,
                             }}
                             style={styles.image}

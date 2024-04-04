@@ -65,7 +65,7 @@ const UserOrder = ({ navigation }) => {
     React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData(
-                "https://pgmarket.longsoeng.website/api/userorders/" + user.user.id,
+                "https://pgmarket.online/api/userorders/" + user.user.id,
                 setOrders
             );
             setIsFetching(false);
@@ -105,7 +105,7 @@ const UserOrder = ({ navigation }) => {
                         };
 
                         fetch(
-                            "https://pgmarket.longsoeng.website/api/cancelOrder/" +
+                            "https://pgmarket.online/api/cancelOrder/" +
                                 orderId,
                             requestOptions
                         )

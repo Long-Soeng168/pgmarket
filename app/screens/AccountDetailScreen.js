@@ -170,7 +170,7 @@ const AccountDetailScreen = ({ navigation }) => {
             };
 
             fetch(
-                "https://pgmarket.longsoeng.website/api/updateUserDetail/" +
+                "https://pgmarket.online/api/updateUserDetail/" +
                     userInfo.id,
                 requestOptions
             )

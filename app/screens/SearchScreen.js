@@ -31,7 +31,7 @@ export default function SearchScreen({ route, navigation }) {
     React.useEffect(() => {
         
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.longsoeng.website/api/productSearch?search=" + search, currentPage, setProducts);
+            await fetchData("https://pgmarket.online/api/productSearch?search=" + search, currentPage, setProducts);
             setIsFetching(false);
             setPageLoading(false);
         };
@@ -142,7 +142,7 @@ export default function SearchScreen({ route, navigation }) {
                         item={product}
                         width={width}
                         title={product.pro_name}
-                        imageUrl={"https://pgmarket.longsoeng.website/public/images/product/thumb/" + product.thumbnail}
+                        imageUrl={"https://pgmarket.online/public/images/product/thumb/" + product.thumbnail}
                         description={product.description}
                         price={product.price}
                     />

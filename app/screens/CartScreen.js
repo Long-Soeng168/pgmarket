@@ -65,7 +65,7 @@ export default function CartScreen({navigation}) {
                 renderItem={({ item }) => (
                     <CartItem item={item} 
                         title = {item.pro_name}
-                        imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
+                        imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
                         buyerNote= {item.note}
                         price = {item.price}
                         color = {item.color}

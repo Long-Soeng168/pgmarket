@@ -62,9 +62,9 @@ export default function HomeScreen({ navigation }) {
     
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.longsoeng.website/api/toprecommendshops", setCategories);
-            await fetchData("https://pgmarket.longsoeng.website/api/getslides", setSlides);
-            await fetchData("https://pgmarket.longsoeng.website/api/getbanners", setBanners);
+            await fetchData("https://pgmarket.online/api/toprecommendshops", setCategories);
+            await fetchData("https://pgmarket.online/api/getslides", setSlides);
+            await fetchData("https://pgmarket.online/api/getbanners", setBanners);
             
             setIsFetching(false);
         };
@@ -76,7 +76,7 @@ export default function HomeScreen({ navigation }) {
     const [newProductsPage, setNewProductsPage] = React.useState(1);
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchDataPage("https://pgmarket.longsoeng.website/api/getnewproducts", newProductsPage, setNewProducts);
+            await fetchDataPage("https://pgmarket.online/api/getnewproducts", newProductsPage, setNewProducts);
         };
         
         fetchDataAsync();
@@ -90,7 +90,7 @@ export default function HomeScreen({ navigation }) {
     const [bestSellingPage, setBestSellingPage] = React.useState(1);
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchDataPage("https://pgmarket.longsoeng.website/api/getbestselling", bestSellingPage, setBestSellingProducts);
+            await fetchDataPage("https://pgmarket.online/api/getbestselling", bestSellingPage, setBestSellingProducts);
         };
 
         fetchDataAsync();
@@ -106,7 +106,7 @@ export default function HomeScreen({ navigation }) {
     const [loading, setLoading] = React.useState(false);
     const [noMoreProduct, setNoMoreProduct] = React.useState(false);
     React.useEffect(() => {
-            fetch("https://pgmarket.longsoeng.website/api/getallproducts?page=" + allProductsPage,)
+            fetch("https://pgmarket.online/api/getallproducts?page=" + allProductsPage,)
             .then(response => response.json())
             .then(result => {
                 if(result.data.length < 1) {
@@ -141,7 +141,7 @@ export default function HomeScreen({ navigation }) {
                         />
                         <Slider 
                             addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 16/9 }}
-                            images={slides} endPoint="https://pgmarket.longsoeng.website/public/images/slide/" />
+                            images={slides} endPoint="https://pgmarket.online/public/images/slide/" />
                         {/* Categories */}
                         <Text
                             style={{
@@ -185,7 +185,7 @@ export default function HomeScreen({ navigation }) {
                                     renderItem={({ item }) => (
                                         <Card item={item} 
                                             title = {item.pro_name}
-                                            imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
+                                            imageUrl = {"https://pgmarket.online/public/images/product/thumb/" + item.thumbnail}
                                             description= {item.description}
                                             price = {item.price}
                                         />
@@ -205,7 +205,7 @@ export default function HomeScreen({ navigation }) {
                                 <Slider
                                     addStyle={{ borderRadius: 10, width: '96%', aspectRatio: 13/3}}
                                     images={banners}
-                                    endPoint="https://pgmarket.longsoeng.website/public/images/banner/"
+                                    endPoint="https://pgmarket.online/public/images/banner/"
                                 />
                             </View>
                             
@@ -226,7 +226,7 @@ export default function HomeScreen({ navigation }) {
                                         renderItem={({ item }) => (
                                             <Card item={item} 
                                                 title = {item.pro_name}
-                                                imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/thumb/" + item.thumbnail}
+                                                imageUrl = {"https://pgmarket.online/public/images/product/thumb/" + item.thumbnail}
                                                 description= {item.description}
                                                 price = {item.price}
                                             />
@@ -287,7 +287,7 @@ export default function HomeScreen({ navigation }) {
                                                         width={width}
                                                         title={item.pro_name}
                                                         imageUrl={
-                                                            "https://pgmarket.longsoeng.website/public/images/product/thumb/" +
+                                                            "https://pgmarket.online/public/images/product/thumb/" +
                                                             item.thumbnail
                                                         }
                                                         description={item.description}

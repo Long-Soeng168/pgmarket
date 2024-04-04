@@ -107,7 +107,7 @@ const AddProductScreen = ({ navigation }) => {
     // });
 
     React.useEffect(() => {
-        fetch("https://pgmarket.longsoeng.website/api/getmaincategories")
+        fetch("https://pgmarket.online/api/getmaincategories")
             .then((response) => response.json())
             .then((result) => {
                 setMainCate(result);
@@ -115,7 +115,7 @@ const AddProductScreen = ({ navigation }) => {
             })
             .catch((error) => console.error(error));
 
-        fetch("https://pgmarket.longsoeng.website/api/getcategories")
+        fetch("https://pgmarket.online/api/getcategories")
             .then((response) => response.json())
             .then((result) => {
                 setCate(result);
@@ -123,7 +123,7 @@ const AddProductScreen = ({ navigation }) => {
             })
             .catch((error) => console.error(error));
 
-        fetch("https://pgmarket.longsoeng.website/api/getsubcategories")
+        fetch("https://pgmarket.online/api/getsubcategories")
             .then((response) => response.json())
             .then((result) => {
                 setSubCate(result);
@@ -131,14 +131,14 @@ const AddProductScreen = ({ navigation }) => {
             })
             .catch((error) => console.error(error));
 
-        fetch("https://pgmarket.longsoeng.website/api/getcolors")
+        fetch("https://pgmarket.online/api/getcolors")
             .then((response) => response.json())
             .then((result) => {
                 setAllColors(result);
                 // console.log(JSON.stringify(result, null, 2));
             })
             .catch((error) => console.error(error));
-        fetch("https://pgmarket.longsoeng.website/api/getbrands")
+        fetch("https://pgmarket.online/api/getbrands")
             .then((response) => response.json())
             .then((result) => {
                 setAllBrands(result);
@@ -146,7 +146,7 @@ const AddProductScreen = ({ navigation }) => {
             })
             .catch((error) => console.error(error));
 
-        fetch("https://pgmarket.longsoeng.website/api/getsizes")
+        fetch("https://pgmarket.online/api/getsizes")
             .then((response) => response.json())
             .then((result) => {
                 setAllSizes(result);
@@ -361,7 +361,7 @@ const AddProductScreen = ({ navigation }) => {
         };
         setLoading(true);
         fetch(
-            "https://pgmarket.longsoeng.website/api/storeProduct",
+            "https://pgmarket.online/api/storeProduct",
             requestOptions
         )
             .then((response) => response.json())

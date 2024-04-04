@@ -25,7 +25,7 @@ export default function ProductByBrandScreen({ route }) {
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.longsoeng.website/api/getproducts_bybrand/" + item, setProducts); 
+            await fetchData("https://pgmarket.online/api/getproducts_bybrand/" + item, setProducts); 
             setIsFetching(false);
         };
 
@@ -52,7 +52,7 @@ export default function ProductByBrandScreen({ route }) {
                             renderItem={({ item }) => (
                                 <Card item={item} width={width} 
                                     title = {item.pro_name}
-                                    imageUrl = {"https://pgmarket.longsoeng.website/public/images/product/" + item.thumbnail}
+                                    imageUrl = {"https://pgmarket.online/public/images/product/" + item.thumbnail}
                                     description= {item.description}
                                     price = {item.price}
                                 />

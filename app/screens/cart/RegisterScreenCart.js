@@ -104,7 +104,7 @@ const RegisterScreenCart = () => {
       };
 
       fetch(
-          "https://pgmarket.longsoeng.website/api/register",
+          "https://pgmarket.online/api/register",
           requestOptions
       )
           .then((response) => {

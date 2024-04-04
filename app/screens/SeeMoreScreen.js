@@ -26,7 +26,7 @@ export default function SeeMoreScreen({ route }) {
 
     React.useEffect(() => {
         const fetchDataAsync = async () => {
-            await fetchData("https://pgmarket.longsoeng.website/api/" + item, currentPage, setProducts);
+            await fetchData("https://pgmarket.online/api/" + item, currentPage, setProducts);
             setIsFetching(false);
             setPageLoading(false);
         };
@@ -68,7 +68,7 @@ export default function SeeMoreScreen({ route }) {
                         item={product}
                         width={width}
                         title={product.pro_name}
-                        imageUrl={"https://pgmarket.longsoeng.website/public/images/product/thumb/" + product.thumbnail}
+                        imageUrl={"https://pgmarket.online/public/images/product/thumb/" + product.thumbnail}
                         description={product.description}
                         price={product.price}
                     />

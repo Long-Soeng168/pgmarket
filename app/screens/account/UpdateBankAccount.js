@@ -52,7 +52,7 @@ const UpdateBankAccount = ({ navigation }) => {
         };
 
         fetch(
-            "https://pgmarket.longsoeng.website/api/get_banks_for_dealer/" + 20,
+            "https://pgmarket.online/api/get_banks_for_dealer/" + 20,
             requestOptions
         )
             .then((response) => response.json())
@@ -172,7 +172,7 @@ const UpdateBankAccount = ({ navigation }) => {
         };
 
         fetch(
-            `https://pgmarket.longsoeng.website/api/deleteShopPayment/${id}`,
+            `https://pgmarket.online/api/deleteShopPayment/${id}`,
             requestOptions
         )
             .then((response) => response.json())
@@ -248,7 +248,7 @@ const UpdateBankAccount = ({ navigation }) => {
         };
 
         fetch(
-            "https://pgmarket.longsoeng.website/api/storeShopPayment",
+            "https://pgmarket.online/api/storeShopPayment",
             requestOptions
         )
             .then((response) => response.json())
@@ -325,7 +325,7 @@ const UpdateBankAccount = ({ navigation }) => {
         };
 
         fetch(
-            "https://pgmarket.longsoeng.website/api/updateMainBank",
+            "https://pgmarket.online/api/updateMainBank",
             requestOptions
         )
             .then((response) => response.json())

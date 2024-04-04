@@ -29,7 +29,7 @@ const OrderDetailScreen = ({ route }) => {
                 redirect: 'follow',
             };
             
-            fetch("https://pgmarket.longsoeng.website/api/invoiceDetail/" + orderId, requestOptions)
+            fetch("https://pgmarket.online/api/invoiceDetail/" + orderId, requestOptions)
                 .then(response => response.json())
                 .then(result => {
                     console.log(JSON.stringify(result, null, 2))
@@ -55,7 +55,7 @@ const OrderDetailScreen = ({ route }) => {
             redirect: 'follow',
         };
         
-        fetch("https://pgmarket.longsoeng.website/api/updateDeliveryStatus/" + orderId, requestOptions)
+        fetch("https://pgmarket.online/api/updateDeliveryStatus/" + orderId, requestOptions)
             .then(response => response.json())
             .then(result => {
                 // console.log(JSON.stringify(result, null, 2))
@@ -121,7 +121,7 @@ const ItemComponents = ({ qty, title, imageUrl, price, note, size, color, discou
             <Image
                 style={styles.image}
                 source={{
-                    uri: "https://pgmarket.longsoeng.website/public/images/product/" + imageUrl,
+                    uri: "https://pgmarket.online/public/images/product/" + imageUrl,
                 }}
             />
             <View style={styles.rightSideContainer}>

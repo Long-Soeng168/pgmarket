@@ -5,11 +5,13 @@ import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { favoritesContext } from "../../App";
 import HeaderText from "../components/HeaderText";
+import { useTranslation } from "react-i18next";
 
 const width = Dimensions.get("screen").width / 2 - 15;
 
 export default function FavoriteScreen() {
     const [favorites, setFavorites] = React.useContext(favoritesContext);
+    const [t, i18n] = useTranslation('global');
     return (
         <View
             style={{
@@ -45,7 +47,7 @@ export default function FavoriteScreen() {
                     item={product}
                     width={width}
                     title={product.pro_name}
-                    imageUrl={"https://pgmarket.longsoeng.website/public/images/product/thumb/" + product.thumbnail}
+                    imageUrl={"https://pgmarket.online/public/images/product/thumb/" + product.thumbnail}
                     description={product.description}
                     price={product.price}
                 />

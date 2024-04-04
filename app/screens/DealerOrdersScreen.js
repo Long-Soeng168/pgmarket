@@ -44,7 +44,7 @@ const PurchaseHistoryScreen = ({ navigation }) => {
     React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData(
-                "https://pgmarket.longsoeng.website/api/orders/" + user.user.id,
+                "https://pgmarket.online/api/orders/" + user.user.id,
                 setOrders
             );
             setIsFetching(false);
@@ -84,7 +84,7 @@ const PurchaseHistoryScreen = ({ navigation }) => {
                         };
 
                         fetch(
-                            "https://pgmarket.longsoeng.website/api/cancelOrder/" +
+                            "https://pgmarket.online/api/cancelOrder/" +
                                 orderId,
                             requestOptions
                         )

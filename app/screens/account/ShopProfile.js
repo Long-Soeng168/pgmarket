@@ -52,7 +52,7 @@ export default function ShopProfile({ navigation, route }) {
 
     const getData = () => {
         fetch(
-            `https://pgmarket.longsoeng.website/api/getproducts_byshop/` +
+            `https://pgmarket.online/api/getproducts_byshop/` +
                 user.user.id +
                 "?page=" +
                 currentPage
@@ -78,7 +78,7 @@ export default function ShopProfile({ navigation, route }) {
     React.useEffect(() => {
         const fetchDataAsync = async () => {
             await fetchData(
-                "https://pgmarket.longsoeng.website/api/shopview/" +
+                "https://pgmarket.online/api/shopview/" +
                     user.user.id,
                 setShop
             );
@@ -91,11 +91,11 @@ export default function ShopProfile({ navigation, route }) {
 
     const bannerUrl =
         shop &&
-        "https://pgmarket.longsoeng.website/public/images/shop_banner/" +
+        "https://pgmarket.online/public/images/shop_banner/" +
             shop.image_banner;
     const imageUrl =
         shop &&
-        "https://pgmarket.longsoeng.website/public/images/shop/" + shop.image;
+        "https://pgmarket.online/public/images/shop/" + shop.image;
     const shopName = shop && shop.shop_name;
     const shopAddress = shop && shop.shop_address;
     const shopNumber = shop && shop.shop_phone;
@@ -220,7 +220,7 @@ export default function ShopProfile({ navigation, route }) {
                                                         width={width}
                                                         title={item.pro_name}
                                                         imageUrl={
-                                                            "https://pgmarket.longsoeng.website/public/images/product/thumb/" +
+                                                            "https://pgmarket.online/public/images/product/thumb/" +
                                                             item.thumbnail
                                                         }
                                                         description={

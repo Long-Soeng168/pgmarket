@@ -96,7 +96,7 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
         redirect: 'follow'
         };
 
-        fetch("https://pgmarket.longsoeng.website/api/updateUserDetail/" + userInfo.id, requestOptions)
+        fetch("https://pgmarket.online/api/updateUserDetail/" + userInfo.id, requestOptions)
         .then(response => response.json())
         .then(result => {
             if(result.errors) {

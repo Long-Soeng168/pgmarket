@@ -50,7 +50,7 @@ const LoginScreen = () => {
             };
 
             fetch(
-                "https://pgmarket.longsoeng.website/api/login",
+                "https://pgmarket.online/api/login",
                 requestOptions
             )
                 .then((response) => {
