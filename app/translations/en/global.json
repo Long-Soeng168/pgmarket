@@ -30,5 +30,17 @@
     "totalPrice" : "Total Price",
     "note" : "Note",
     "color" : "Color",
-    "size" : "Size"
+    "size" : "Size",
+    "userInformation" : "User Information",
+    "name" : "Name",
+    "phone" : "Phone",
+    "email" : "Email",
+    "address" : "Address",
+    "password" : "Password",
+    "confirmPassword" : "Confirm Password",
+    "updateDetails" : "Update Details",
+    "paymentMethod" : "Payment Method",
+    "cashOnDelivery" : "Cash On Delivery",
+    "uploadTransaction" : "Upload Transaction",
+    "pleaseSelectBankForPay" : "Please Select Bank For Pay!"
 }

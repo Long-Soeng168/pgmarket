@@ -21,6 +21,7 @@ import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const CheckoutProcess = ({ navigation }) => {
     const [selectedBank, setSelectedBank] = React.useState(null);
@@ -31,6 +32,7 @@ const CheckoutProcess = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
     // console.log(JSON.stringify(user, null, 2));
     const userInfo = user && user.user;
+    const [t, i18n] = useTranslation("global");
 
     const [banks, setBanks] = React.useState([]);
     const [cashOnDelivery, setCashOnDelivery] = React.useState(null);
@@ -64,7 +66,7 @@ const CheckoutProcess = ({ navigation }) => {
         if (!selectedBank) {
             Alert.alert(
                 "Message",
-                "Please select bank for pay!",
+                `${t('pleaseSelectBankForPay')}`,
                 [
                     { text: "", style: "" },
                     {
@@ -324,7 +326,7 @@ const CheckoutProcess = ({ navigation }) => {
                             userInfo={userInfo && userInfo}
                         />
 
-                        <Text style={styles.title}>User Information</Text>
+                        <Text style={styles.title}>{t('userInformation')}</Text>
                         <TouchableOpacity
                             onPress={() => setIsVisibleModal(true)}
                             style={styles.userInfo}
@@ -339,23 +341,23 @@ const CheckoutProcess = ({ navigation }) => {
                                 <Feather name="edit" size={24} color="gray" />
                             </View>
                             <Text style={styles.value}>
-                                <Text style={styles.label}>Name: </Text>
+                                <Text style={styles.label}>{t('name')}: </Text>
                                 {userInfo && userInfo.name}
                             </Text>
                             <Text style={styles.value}>
-                                <Text style={styles.label}>Phone: </Text>
+                                <Text style={styles.label}>{t('phone')}: </Text>
                                 {userInfo && userInfo.phone}
                             </Text>
                             <Text style={styles.value}>
-                                <Text style={styles.label}>Email: </Text>
+                                <Text style={styles.label}>{t('email')}: </Text>
                                 {userInfo && userInfo.email}
                             </Text>
                             <Text style={styles.value}>
-                                <Text style={styles.label}>Address: </Text>
+                                <Text style={styles.label}>{t('address')}: </Text>
                                 {userInfo && userInfo.address}
                             </Text>
                         </TouchableOpacity>
-                        <Text style={styles.title}>Payment Method</Text>
+                        <Text style={styles.title}>{t('paymentMethod')}</Text>
 
                         {/* <FlatList
                         data={banks}
@@ -406,7 +408,7 @@ const CheckoutProcess = ({ navigation }) => {
                                         </View>
                                         <View>
                                             <Text style={styles.bankName}>
-                                                Cash on delivery
+                                                {t('cashOnDelivery')}
                                             </Text>
                                             <Text>
                                                 Tap here to pay on delivery
@@ -441,7 +443,7 @@ const CheckoutProcess = ({ navigation }) => {
                                         />
                                     </TouchableOpacity>
                                 )}
-                                <Text>Upload Transaction</Text>
+                                <Text>{t('uploadTransaction')}</Text>
                             </View>
                         </View>
                     </View>
@@ -458,7 +460,7 @@ const CheckoutProcess = ({ navigation }) => {
                         style={styles.button}
                         onPress={handleConfirm}
                     >
-                        <Text style={styles.buttonText}>Checkout</Text>
+                        <Text style={styles.buttonText}>{t('checkout')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

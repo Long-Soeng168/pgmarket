@@ -30,5 +30,17 @@
     "totalPrice" : "តម្លៃសរុប",
     "note" : "ចំណាំ",
     "color" : "ពណ៌",
-    "size" : "ទំហំ"
+    "size" : "ទំហំ",
+    "userInformation" : "ព័ត៌មានអ្នកប្រើប្រាស់",
+    "name" : "ឈ្មោះ",
+    "phone" : "លេខទូរស័ព្ទ",
+    "email" : "អ៊ីម៉ែល",
+    "address" : "អាស័យដ្ឋាន",
+    "password" : "លេខសម្ងាត់",
+    "confirmPassword" : "ផ្ទៀងផ្ទាត់លេខសម្ងាត់",
+    "updateDetails" : "កែប្រែព័ត៌មាន",
+    "paymentMethod" : "របៀបទូទាត់",
+    "cashOnDelivery" : "ទូទាត់ជាមួយអ្នកដឹកជញ្ជូន",
+    "uploadTransaction" : "ផ្ញើរូបភាពទូទាត់",
+    "pleaseSelectBankForPay" : "សូមជ្រើសរើសរបៀបទូទាត់!"
 }

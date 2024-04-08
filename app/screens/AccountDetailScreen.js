@@ -16,6 +16,7 @@ import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import { userContext } from "../../App";
 import LoadingOverlay from "../components/LoadingOverlay";
+import { useTranslation } from "react-i18next";
 
 const AccountDetailScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
@@ -24,6 +25,7 @@ const AccountDetailScreen = ({ navigation }) => {
     const [isUpdate, setIsUpdate] = React.useState(false);
     const userInfo = user.user;
     console.log(userInfo);
+    const [t, i18n] = useTranslation("global");
 
     const [name, setName] = useState(userInfo.name);
     const [phoneNumber, setPhoneNumber] = useState(userInfo.phone);
@@ -251,7 +253,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Name
+                                {t('name')}
                             </Text>
                             <TextInput
                                 style={styles.input}
@@ -267,7 +269,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Phone Number
+                                {t('phone')}
                             </Text>
                             <TextInput
                                 style={styles.input}
@@ -286,7 +288,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Email
+                                {t('email')}
                             </Text>
                             <TextInput
                                 style={styles.input}
@@ -304,7 +306,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Address
+                                {t('address')}
                             </Text>
                             <TextInput
                                 style={styles.input}
@@ -320,7 +322,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Password
+                                {t('password')}
                             </Text>
                             <View style={styles.passwordContainer}>
                                 <TextInput
@@ -353,7 +355,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Confirm Password
+                                {t('confirmPassword')}
                             </Text>
                             <View style={styles.passwordContainer}>
                                 <TextInput
@@ -391,7 +393,7 @@ const AccountDetailScreen = ({ navigation }) => {
                             onPress={updateDetails}
                         >
                             <Text style={styles.buttonText}>
-                                Update Details
+                                {t('updateDetails')}
                             </Text>
                         </TouchableOpacity>
                     </View>
