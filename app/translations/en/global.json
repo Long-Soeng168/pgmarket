@@ -47,6 +47,9 @@
     "confirmPassword" : "Confirm Password",
     "updateDetails" : "Update Details",
     "paymentMethod" : "Payment Method",
+    "addPaymentMethod" : "Add Payment Method",
+    "morePaymentMethod" : "More Payment Method",
+    "mainPaymentMethod" : "Main Payment Method",
     "cashOnDelivery" : "Cash On Delivery",
     "uploadTransaction" : "Upload Transaction",
     "pleaseSelectBankForPay" : "Please Select Bank For Pay!",
@@ -61,6 +64,12 @@
     "buyerInfo": "Buyer Info",
     "shopInfo": "Shop Info",
     "productsOrder": "Products Order",
-    "updateDeliveryStatus": "Update Delivery Status"
+    "updateDeliveryStatus": "Update Delivery Status",
+    "Products": "Products",
+    "Detail": "Detail",
+    "addProduct": "Add Product",
+    "description": "Description",
+    "deleteProduct": "Delete Product",
+    "images": "Images"
 
 }

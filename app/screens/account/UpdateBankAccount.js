@@ -19,6 +19,7 @@ import HeaderText from "../../components/HeaderText";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const UpdateBankAccount = ({ navigation }) => {
     const [selectedBank, setSelectedBank] = React.useState(null);
@@ -28,6 +29,7 @@ const UpdateBankAccount = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
     // console.log(JSON.stringify(user, null, 2));
     const userInfo = user && user.user;
+    const [t, i18n] = useTranslation('global');
 
     const [mainBank, setMainBank] = React.useState({});
     const [moreBanks, setMoreBanks] = React.useState([]);
@@ -406,7 +408,7 @@ const UpdateBankAccount = ({ navigation }) => {
                                     }}
                                 >
                                     <Text style={styles.title}>
-                                        Main Payment
+                                        {t('mainPaymentMethod')}
                                     </Text>
                                     <View
                                         style={{
@@ -469,10 +471,10 @@ const UpdateBankAccount = ({ navigation }) => {
                                             </View>
                                             <View>
                                                 <Text style={styles.bankName}>
-                                                    Cash on delivery
+                                                    {t('cashOnDelivery')}
                                                 </Text>
                                                 <Text>
-                                                    Payment Method : On Delivery
+                                                    {t('paymentMethod')} : On Delivery
                                                 </Text>
                                             </View>
                                         </View>
@@ -480,7 +482,7 @@ const UpdateBankAccount = ({ navigation }) => {
 
                                 <View style={{ paddingHorizontal: 10 }}>
                                     <Text style={styles.title}>
-                                        More Payments
+                                        {t('morePaymentMethod')}
                                     </Text>
                                     {moreBanks.map((item) => (
                                         <RenderBankItem
@@ -498,7 +500,7 @@ const UpdateBankAccount = ({ navigation }) => {
                         style={styles.button}
                         onPress={() => setNewPaymentModal(true)}
                     >
-                        <Text style={styles.buttonText}>Add More Payment</Text>
+                        <Text style={styles.buttonText}>{t('addPaymentMethod')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

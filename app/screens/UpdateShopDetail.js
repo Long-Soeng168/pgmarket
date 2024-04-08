@@ -17,10 +17,12 @@ import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import { userContext } from "../../App";
 import LoadingOverlay from "../components/LoadingOverlay";
+import { useTranslation } from "react-i18next";
 
 const UpdateShopDetail = ({navigation}) => {
     const [user, setUser] = React.useContext(userContext); 
     const [loading, setLoading] = useState(true);
+    const [t, i18n] = useTranslation('global');
 
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -295,7 +297,7 @@ const UpdateShopDetail = ({navigation}) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Name
+                                {t('name')}
                             </Text>
                     <TextInput
                         style={styles.input}
@@ -311,7 +313,7 @@ const UpdateShopDetail = ({navigation}) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Phone Number
+                                {t('phone')}
                             </Text>
                     <TextInput
                         style={styles.input}
@@ -328,7 +330,7 @@ const UpdateShopDetail = ({navigation}) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Email
+                                {t('email')}
                             </Text>
                     <TextInput
                         style={styles.input}
@@ -346,7 +348,7 @@ const UpdateShopDetail = ({navigation}) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Address
+                                {t('address')}
                             </Text>
                     <TextInput
                         style={styles.input}
@@ -362,7 +364,7 @@ const UpdateShopDetail = ({navigation}) => {
                             <Text
                                 style={{ fontWeight: "bold", marginBottom: 3 }}
                             >
-                                Description
+                                {t('description')}
                             </Text>
                     <TextInput
                         multiline
@@ -379,7 +381,7 @@ const UpdateShopDetail = ({navigation}) => {
                         style={styles.button}
                         onPress={updateDetails}
                     >
-                        <Text style={styles.buttonText}>Update Details</Text>
+                        <Text style={styles.buttonText}>{t('updateDetails')}</Text>
                     </TouchableOpacity>
             </ScrollView>
         </KeyboardAvoidingView>

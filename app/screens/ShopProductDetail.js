@@ -24,6 +24,7 @@ import ListHeader from "../components/ListHeader";
 import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import LoadingOverlay from "../components/LoadingOverlay";
+import { useTranslation } from "react-i18next";
 
 export default function ShopProductDetail({ route, navigation }) {
     const item = route.params;
@@ -149,12 +150,12 @@ export default function ShopProductDetail({ route, navigation }) {
                 }}
             >
                 <Button
-                    title="Delete Product"
+                    title="deleteProduct"
                     bgColor={colors.danger}
                     onPress={DeleteProduct}
                 />
                 <Button
-                    title="Update Details"
+                    title="updateDetails"
                     bgColor={colors.primary}
                     onPress={UpdateDetails}
                 />
@@ -162,7 +163,7 @@ export default function ShopProductDetail({ route, navigation }) {
             <View style={{ marginHorizontal: 10 }}>
                 <Button
                     
-                    title="Images"
+                    title="images"
                     bgColor={colors.medium}
                     onPress={addImages}
                 />
@@ -260,6 +261,7 @@ function LabelValue({ label, value }) {
 
 //Cart Button component
 function Button({ title, onPress, bgColor }) {
+    const [t, i18n] = useTranslation('global');
     return (
         <TouchableOpacity
             activeOpacity={0.8}
@@ -287,7 +289,7 @@ function Button({ title, onPress, bgColor }) {
                         fontWeight: "500",
                     }}
                 >
-                    {title}
+                    {t(title)}
                 </Text>
             </View>
         </TouchableOpacity>

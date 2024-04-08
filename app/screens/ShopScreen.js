@@ -12,8 +12,8 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
-import BackButton from "../components/BackButton";
-import { selectTextOnFocus } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+import BackButton from "../components/BackButton"; 
+import { useTranslation } from "react-i18next";
 
 const width = Dimensions.get("screen").width / 2 - 15;
 
@@ -31,6 +31,7 @@ export default function ShopScreen({ navigation, route }) {
     const shopNumber = shop.shop_phone;
     const shopEmail = shop.shop_email;
     const shopDescription = stripHtmlTags(shop.description);
+    const [t, i18n] = useTranslation('global');
 
     const [selected, setSelected] = React.useState("Products");
 
@@ -148,10 +149,10 @@ export default function ShopScreen({ navigation, route }) {
                                 onPress={() => setSelected("Products")}
                             />
                             <ShopSelection
-                                title="About"
+                                title="Detail"
                                 icon="bars"
                                 selected={selected}
-                                onPress={() => setSelected("About")}
+                                onPress={() => setSelected("Detail")}
                             />
                         </View>
 
@@ -192,7 +193,7 @@ export default function ShopScreen({ navigation, route }) {
                                         }}
                                     />
                                 ) : (
-                                    <Text>No Product</Text>
+                                    <Text>{t('noItem')}</Text>
                                 )}
                                 <ActivityIndicator visibility={loading} />
                                 {!noMoreProduct && (
@@ -213,7 +214,7 @@ export default function ShopScreen({ navigation, route }) {
                                                 color: "tomato",
                                             }}
                                         >
-                                            More Products
+                                            {t('moreProducts')}
                                         </Text>
                                         <FontAwesome
                                             name="angle-double-down"
@@ -226,12 +227,12 @@ export default function ShopScreen({ navigation, route }) {
                         ) : (
                             <View style={{ padding: 10, gap: 15 }}>
                                 <AboutItem
-                                    title="Address"
+                                    title="address"
                                     detail={shopAddress}
                                     icon="map-marker"
                                 />
                                 <AboutItem
-                                    title="Phone Number"
+                                    title="phone"
                                     detail={shopNumber}
                                     icon="mobile-phone"
                                 />
@@ -241,7 +242,7 @@ export default function ShopScreen({ navigation, route }) {
                                     icon="envelope-o"
                                 />
                                 <AboutItem
-                                    title="Description"
+                                    title="description"
                                     detail={shopDescription}
                                     icon="navicon"
                                 />
@@ -268,6 +269,7 @@ export default function ShopScreen({ navigation, route }) {
 // Shop Selection
 function ShopSelection({ title, icon, selected, onPress }) {
     const isSelected = title === selected;
+    const [t, i18n] = useTranslation('global');
     return (
         <TouchableOpacity
             opacity={0.8}
@@ -296,7 +298,7 @@ function ShopSelection({ title, icon, selected, onPress }) {
                     color: isSelected ? colors.dark : colors.medium,
                 }}
             >
-                {title}
+                {t(title)}
             </Text>
         </TouchableOpacity>
     );
@@ -304,6 +306,7 @@ function ShopSelection({ title, icon, selected, onPress }) {
 
 // About Item component
 function AboutItem({ title, detail, icon }) {
+    const [t, i18n] = useTranslation('global');
     return (
         <View
             style={{
@@ -324,7 +327,7 @@ function AboutItem({ title, detail, icon }) {
                     color="black"
                 />
             </View>
-            <Text style={{ fontSize: 18, fontWeight: "500" }}>{title} :</Text>
+            <Text style={{ fontSize: 18, fontWeight: "500" }}>{t(title)} :</Text>
             <Text style={{ fontSize: 18, flex: 1 }}>{detail}</Text>
         </View>
     );

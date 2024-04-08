@@ -47,6 +47,9 @@
     "confirmPassword" : "ផ្ទៀងផ្ទាត់លេខសម្ងាត់",
     "updateDetails" : "កែប្រែព័ត៌មាន",
     "paymentMethod" : "របៀបទូទាត់",
+    "addPaymentMethod" : "បន្ថែមរបៀបទូទាត់",
+    "morePaymentMethod" : "របៀបទូទាត់ផ្សេងទៀត",
+    "mainPaymentMethod" : "របៀបទូទាត់ចម្បង",
     "cashOnDelivery" : "ទូទាត់ជាមួយអ្នកដឹកជញ្ជូន",
     "uploadTransaction" : "ផ្ញើរូបភាពទូទាត់",
     "pleaseSelectBankForPay" : "សូមជ្រើសរើសរបៀបទូទាត់!",
@@ -61,5 +64,12 @@
     "buyerInfo": "ព័ត៌មានអ្នកទិញ",
     "shopInfo": "ព័ត៌មានហាង",
     "productsOrder": "ផលិតផលដែលកម្មង់",
-    "updateDeliveryStatus": "កែប្រែស្ថានភាពដឺកជញ្ជូន"
+    "updateDeliveryStatus": "កែប្រែស្ថានភាពដឹកជញ្ជូន",
+    "Products": "ផលិតផល",
+    "Detail": "ព័ត៌មានលម្អិត",
+    "addProduct": "បន្ថែមផលិតផល",
+    "description": "ព័ត៌មានលម្អិត",
+    "deleteProduct": "លុបផលិតផល",
+    "images": "រូបភាពបន្ថែម"
+
 }
