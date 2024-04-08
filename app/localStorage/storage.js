@@ -25,8 +25,27 @@ const removeAuthToken = async () => {
     }
 }
 
+// Language
+const storeLanguage = async language => {
+    try {
+        await SecureStore.setItemAsync("language", language)
+    } catch (error) {
+        console.log(error);        
+    }
+}
+const getLanguage = async () => {
+    try {
+        const language = await SecureStore.getItemAsync("language");
+        return language;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export default {
     getToken,
     storeToken,
     removeAuthToken,   
+    getLanguage,
+    storeLanguage,
 }

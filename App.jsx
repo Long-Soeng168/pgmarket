@@ -20,7 +20,7 @@ import { I18nextProvider } from "react-i18next";
 i18next.init({
     compatibilityJSON: 'v3',
     interpolation: {escapeValue: false},
-    lng: "en",
+    lng: 'en',
     resources: {
         en: {
             global: global_en,
@@ -30,6 +30,7 @@ i18next.init({
         },
     }
 })
+
 
 export const favoritesContext = React.createContext();
 export const cartContext = React.createContext();
@@ -73,6 +74,7 @@ export default function App() {
         }
         
     }
+    
 
     const restoreCartItems = async () => {
         const cartItemsString = await cartStorage.getCartItems("cartItems");
@@ -102,6 +104,7 @@ export default function App() {
         restoreToken();
         restoreCartItems();
         restoreFavorites();
+        
     }, [])
 
     React.useEffect(() => {

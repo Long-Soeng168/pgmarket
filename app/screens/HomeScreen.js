@@ -23,6 +23,7 @@ import colors from "../config/colors";
 import Slider from "../components/Slider";
 import { FontAwesome } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import storage from "../localStorage/storage";
 
 const width = Dimensions.get("screen").width / 2 - 15;
 
@@ -56,11 +57,24 @@ export default function HomeScreen({ navigation }) {
     const [t, i18n] = useTranslation("global");
     const handleChangeLanguage = (lang) => {
         i18n.changeLanguage(lang);
-        
+        storage.storeLanguage(lang);
     };
+
+    const restoreLanguage = async () => {
+        const language = await storage.getLanguage("language");
+        // const token = JSON.parse(tokenString);
+        let initLng = 'en';
+        if(language == 'kh') {
+            initLng = 'kh';
+        }
+        i18n.changeLanguage(initLng);
+        console.log(JSON.stringify(language, null, 2));
+    }
+    
     
     
     React.useEffect(() => {
+        restoreLanguage();
         const fetchDataAsync = async () => {
             await fetchData("https://pgmarket.online/api/toprecommendshops", setCategories);
             await fetchData("https://pgmarket.online/api/getslides", setSlides);
