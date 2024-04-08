@@ -25,5 +25,10 @@
     "chooseColor" : "ជ្រើសរើសពណ៌",
     "addToCart" : "បន្ថែមទៅរទេះ",
     "removeFromCart" : "ដកចេញពីរទេះ",
-    "productDescription" : "ព័ត៌មានបន្ថែមផលិតផល"
+    "productDescription" : "ព័ត៌មានបន្ថែមផលិតផល",
+    "checkout" : "ទូទាត់",
+    "totalPrice" : "តម្លៃសរុប",
+    "note" : "ចំណាំ",
+    "color" : "ពណ៌",
+    "size" : "ទំហំ"
 }

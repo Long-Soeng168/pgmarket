@@ -11,11 +11,12 @@ import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { TouchableWithoutFeedback } from "react-native";
+import { useTranslation } from "react-i18next";
 
 export default function CartItem({ item, title, buyerNote, imageUrl, price, color, size }) {
 
     const buyerNoteNoHtml = stripHtmlTags(buyerNote);
-
+    const [t, i18n] = useTranslation("global");
     const [cartItems, setCartItems] = React.useContext(cartContext);
 
     let proPrice = parseFloat(item.price).toFixed(2);
@@ -76,7 +77,7 @@ export default function CartItem({ item, title, buyerNote, imageUrl, price, colo
                             {title}
                         </Text>
                         <Text numberOfLines={1} style={styles.buyerNote}>
-                            Note: {buyerNoteNoHtml}
+                            {t('note')}: {buyerNoteNoHtml}
                         </Text>
                         <Text numberOfLines={1} style={styles.pricePerUnit}>
                             <Text
@@ -85,7 +86,8 @@ export default function CartItem({ item, title, buyerNote, imageUrl, price, colo
                                  }}
                             >$ {proPrice}</Text>  
                             {discountPrice > 0 && <Text> $ {(proPrice - discountPrice).toFixed(2)}  </Text>} 
-                            {color && " (Color: Red)"} {size && "(Size: XL)"}
+                            {color && ` (${t('color')}: ${color})` } 
+                            {size && ` (${t('size')}: ${size})`}
                         </Text>
                     </View>
                     <View style={styles.updateContainer}>

@@ -93,7 +93,7 @@ export default function CartScreen({navigation}) {
                     }}
                 >
                     <Text style={{ fontSize: 18, color: colors.dark }}>
-                        Total Price :
+                        {t('totalPrice')} :
                     </Text>
                     <Text
                         style={{
@@ -116,7 +116,7 @@ export default function CartScreen({navigation}) {
                     onPress={() => handleCheckout()}
                 >
                     <Text style={{ color: colors.white, fontSize: 16 }}>
-                        Checkout
+                        {t('checkout')}
                     </Text>
                 </TouchableOpacity>
             </View>}

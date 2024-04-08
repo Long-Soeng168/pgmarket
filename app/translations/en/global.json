@@ -25,5 +25,10 @@
     "chooseColor" : "Choose Color",
     "addToCart" : "Add To Cart",
     "removeFromCart" : "Remove From Cart",
-    "productDescription" : "Product Description"
+    "productDescription" : "Product Description",
+    "checkout" : "Checkout",
+    "totalPrice" : "Total Price",
+    "note" : "Note",
+    "color" : "Color",
+    "size" : "Size"
 }
