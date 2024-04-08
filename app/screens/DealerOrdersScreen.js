@@ -14,6 +14,7 @@ import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { userContext } from "../../App";
+import { useTranslation } from "react-i18next";
 
 const fetchData = async (url, setter) => {
     try {
@@ -31,6 +32,7 @@ const PurchaseHistoryScreen = ({ navigation }) => {
     const [orders, setOrders] = React.useState([]);
     const [reload, setReload] = React.useState(false);
     console.log(JSON.stringify(orders, null, 2));
+    const [t, i18n] = useTranslation('global');
 
     const [user, setUser] = React.useContext(userContext);
     const userToken = user.token;
@@ -105,11 +107,11 @@ const PurchaseHistoryScreen = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <View style={styles.orderContainer}>
             <View style={styles.orderColumn}>
-                <Text style={styles.headerText}>INV-Number</Text>
-                <Text style={styles.headerText}>Date</Text>
-                <Text style={styles.headerText}>Amount</Text>
-                <Text style={styles.headerText}>Payment Method</Text>
-                <Text style={styles.headerText}>Delivery Status</Text>
+                <Text style={styles.headerText}>{t('invNumber')}</Text>
+                <Text style={styles.headerText}>{t('date')}</Text>
+                <Text style={styles.headerText}>{t('amount')}</Text>
+                <Text style={styles.headerText}>{t('paymentMethod')}</Text>
+                <Text style={styles.headerText}>{t('deliveryStatus')}</Text>
             </View>
             <View style={styles.orderColumn}>
                 <Text style={styles.orderText}>{item.inv_number}</Text>
@@ -121,12 +123,12 @@ const PurchaseHistoryScreen = ({ navigation }) => {
                 {
                     item.status_delivery == 1
                     ?
-                    <Text style={[styles.orderText, {color: '#06a4d8', fontWeight: 'bold'}]}>Pending</Text>
+                    <Text style={[styles.orderText, {color: '#06a4d8', fontWeight: 'bold'}]}>{t('pending')}</Text>
                     :
                     item.status_delivery == 2 ? 
-                        <Text style={[styles.orderText, {color: '#e6a800', fontWeight: 'bold'}]}>Delivery</Text> 
+                        <Text style={[styles.orderText, {color: '#e6a800', fontWeight: 'bold'}]}>{t('delivery')}</Text> 
                         : 
-                        <Text style={[styles.orderText, {color: 'green', fontWeight: 'bold'}]}>Completed</Text>
+                        <Text style={[styles.orderText, {color: 'green', fontWeight: 'bold'}]}>{t('completed')}</Text>
                 
                 }
             </View>

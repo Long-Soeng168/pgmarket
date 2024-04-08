@@ -4,12 +4,14 @@ import colors from "../config/colors";
 import HeaderText from '../components/HeaderText';
 import { userContext } from '../../App';
 import LoadingOverlay from '../components/LoadingOverlay';
+import { useTranslation } from 'react-i18next';
 
 const OrderDetailScreen = ({ route }) => {
   const orderId= route.params;
   const [user, setUser] = React.useContext(userContext);
   const userToken = user.token;
   const userInfo = user.user;
+  const [t, i18n] = useTranslation('global');
 
   const [loading, setLoading] = React.useState(true);
   const [products, setProducts] = React.useState([]);
@@ -74,7 +76,7 @@ const OrderDetailScreen = ({ route }) => {
             </View>
         <ScrollView style={styles.container}>
             <RenderItem item = {invoice} shop={shop} userInfo ={userInfo} />
-            <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>Products Order</Text>
+            <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>{t('productsOrder')}</Text>
           <FlatList
                     scrollEnabled={false}
                     data={products}
@@ -105,7 +107,7 @@ const OrderDetailScreen = ({ route }) => {
                         style={styles.button} 
                         onPress={handleUpdateDelivery}
                     >
-                        <Text style={styles.buttonText}>Update Delivery Status</Text>
+                        <Text style={styles.buttonText}>{t('updateDeliveryStatus')}</Text>
                     </TouchableOpacity>
                 </View>}
     </View>
@@ -115,6 +117,7 @@ const OrderDetailScreen = ({ route }) => {
 const ItemComponents = ({ qty, title, imageUrl, price, note, size, color, discount }) => {
     let totalDiscountPrice = qty * (price - discount / 100 * price);
     let totolPrice = qty * price - totalDiscountPrice;
+    const [t, i18n] = useTranslation('global');
     return (
         <View style={styles.productContainer}>
             {/* Remove Button */}
@@ -132,13 +135,13 @@ const ItemComponents = ({ qty, title, imageUrl, price, note, size, color, discou
                     <Text 
                         numberOfLines={3}
                     >
-                        <Text style={{ color: 'gray' }}>Note</Text> : {note}
+                        <Text style={{ color: 'gray' }}>{t('note')}</Text> : {note}
                     </Text>
                     <Text numberOfLines={1}>
-                        <Text style={{ color: 'gray' }}>Size</Text> : {size}
+                        <Text style={{ color: 'gray' }}>{t('size')}</Text> : {size}
                     </Text>
                     <Text numberOfLines={1}>
-                        <Text style={{ color: 'gray' }}>Color</Text> : {color}
+                        <Text style={{ color: 'gray' }}>{t('color')}</Text> : {color}
                     </Text>
                 </View>
                
@@ -158,16 +161,17 @@ const ItemComponents = ({ qty, title, imageUrl, price, note, size, color, discou
 }
 
 
-const RenderItem = ({ item, shop, userInfo }) => (
-    <View>
-        <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>Order Info</Text>
+const RenderItem = ({ item, shop, userInfo }) => {
+    const [t, i18n] = useTranslation('global');
+    return (<View>
+        <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>{t('orderInfo')}</Text>
         <View style={styles.orderContainer}>
             <View style={[styles.orderColumn, {maxWidth: 150}]}>
-                <Text style={styles.headerText}>INV-Number</Text>
-                <Text style={styles.headerText}>Date</Text>
-                <Text style={styles.headerText}>Amount</Text>
-                <Text style={styles.headerText}>Payment Method</Text>
-                <Text style={styles.headerText}>Delivery Status</Text>
+                <Text style={styles.headerText}>{t('invNumber')}</Text>
+                <Text style={styles.headerText}>{t('date')}</Text>
+                <Text style={styles.headerText}>{t('amount')}</Text>
+                <Text style={styles.headerText}>{t('paymentMethod')}</Text>
+                <Text style={styles.headerText}>{t('deliveryStatus')}</Text>
             </View>
             <View style={styles.orderColumn}>
                 <Text style={styles.orderText}>{item.inv_number}</Text>
@@ -179,24 +183,24 @@ const RenderItem = ({ item, shop, userInfo }) => (
                 {
                     item.status_delivery == 1
                     ?
-                    <Text style={[styles.orderText, {color: '#06a4d8', fontWeight: 'bold'}]}>Pending</Text>
+                    <Text style={[styles.orderText, {color: '#06a4d8', fontWeight: 'bold'}]}>{t('pending')}</Text>
                     :
                     item.status_delivery == 2 ? 
-                        <Text style={[styles.orderText, {color: '#e6a800', fontWeight: 'bold'}]}>Delivery</Text> 
+                        <Text style={[styles.orderText, {color: '#e6a800', fontWeight: 'bold'}]}>{t('delivery')}</Text> 
                         : 
-                        <Text style={[styles.orderText, {color: 'green', fontWeight: 'bold'}]}>Completed</Text>
+                        <Text style={[styles.orderText, {color: 'green', fontWeight: 'bold'}]}>{t('completed')}</Text>
                 
                 }
             </View>
         </View>
-        <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>Buyer Info</Text>
+        <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>{t('buyerInfo')}</Text>
         <View style={styles.orderContainer}>
             <View style={[styles.orderColumn, {maxWidth: 150}]}>
                 <Text style={styles.headerText}>ID</Text>
-                <Text style={styles.headerText}>Name</Text>
-                <Text style={styles.headerText}>Phone</Text>
-                <Text style={styles.headerText}>Email</Text>
-                <Text style={styles.headerText}>Address</Text>
+                <Text style={styles.headerText}>{t('name')}</Text>
+                <Text style={styles.headerText}>{t('phone')}</Text>
+                <Text style={styles.headerText}>{t('email')}</Text>
+                <Text style={styles.headerText}>{t('address')}</Text>
             </View>
             <View style={styles.orderColumn}>
                 <Text style={styles.orderText}>{item.customer_id}</Text>
@@ -209,14 +213,14 @@ const RenderItem = ({ item, shop, userInfo }) => (
 
         {shop && userInfo.type_roles != "dealer" && 
             <>
-            <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>Shop Info</Text>
+            <Text style={[styles.headerText, {paddingLeft: 12, paddingTop: 5, color: 'tomato', textDecorationLine: 'underline'}]}>{t('shopInfo')}</Text>
             <View style={styles.orderContainer}>
                 <View style={[styles.orderColumn, {maxWidth: 150}]}>
                     <Text style={styles.headerText}>ID</Text>
-                    <Text style={styles.headerText}>Name</Text>
-                    <Text style={styles.headerText}>Phone</Text>
-                    <Text style={styles.headerText}>Email</Text>
-                    <Text style={styles.headerText}>Address</Text>
+                    <Text style={styles.headerText}>{t('name')}</Text>
+                    <Text style={styles.headerText}>{t('phone')}</Text>
+                    <Text style={styles.headerText}>{t('email')}</Text>
+                    <Text style={styles.headerText}>{t('address')}</Text>
                 </View>
                 <View style={styles.orderColumn}>
                     <Text style={styles.orderText}>{shop.id}</Text>
@@ -227,8 +231,8 @@ const RenderItem = ({ item, shop, userInfo }) => (
                 </View>
             </View>
         </>}
-    </View>
-);
+    </View>)
+};
 
 
 

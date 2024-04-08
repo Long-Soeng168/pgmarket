@@ -49,5 +49,18 @@
     "paymentMethod" : "Payment Method",
     "cashOnDelivery" : "Cash On Delivery",
     "uploadTransaction" : "Upload Transaction",
-    "pleaseSelectBankForPay" : "Please Select Bank For Pay!"
+    "pleaseSelectBankForPay" : "Please Select Bank For Pay!",
+    "invNumber": "INV-Number",
+    "date": "Date",
+    "amount": "Amount",
+    "deliveryStatus": "Delivery Status",
+    "pending": "Pending",
+    "delivery": "Delivery",
+    "completed": "Completed",
+    "orderInfo": "Order Info",
+    "buyerInfo": "Buyer Info",
+    "shopInfo": "Shop Info",
+    "productsOrder": "Products Order",
+    "updateDeliveryStatus": "Update Delivery Status"
+
 }

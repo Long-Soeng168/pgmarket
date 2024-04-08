@@ -49,5 +49,17 @@
     "paymentMethod" : "របៀបទូទាត់",
     "cashOnDelivery" : "ទូទាត់ជាមួយអ្នកដឹកជញ្ជូន",
     "uploadTransaction" : "ផ្ញើរូបភាពទូទាត់",
-    "pleaseSelectBankForPay" : "សូមជ្រើសរើសរបៀបទូទាត់!"
+    "pleaseSelectBankForPay" : "សូមជ្រើសរើសរបៀបទូទាត់!",
+    "invNumber": "លេខINV",
+    "date": "កាលបរិច្ឆេទ",
+    "amount": "ចំនួនទឹកប្រាក់",
+    "deliveryStatus": "ស្ថានភាពដឹកជញ្ជូន",
+    "pending": "កំពុងរង់ចាំ",
+    "delivery": "កំពុងដឹកជញ្ជូន",
+    "completed": "បានបញ្ចប់",
+    "orderInfo": "ព័ត៌មានការកម្មង់",
+    "buyerInfo": "ព័ត៌មានអ្នកទិញ",
+    "shopInfo": "ព័ត៌មានហាង",
+    "productsOrder": "ផលិតផលដែលកម្មង់",
+    "updateDeliveryStatus": "កែប្រែស្ថានភាពដឺកជញ្ជូន"
 }
