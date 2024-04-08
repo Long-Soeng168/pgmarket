@@ -46,9 +46,32 @@ export default function App() {
     const restoreToken = async () => {
         const tokenString = await storage.getToken("authToken");
         const token = JSON.parse(tokenString);
+        console.log(JSON.stringify(token, null, 2));
         if(!token) return;
-        // console.log(JSON.stringify(token, null, 2));
-        setUser(token);
+        if(token.token) {
+            const myHeaders = new Headers();
+            myHeaders.append("Accept", "application/json");
+            myHeaders.append("Authorization", "Bearer " + token.token);
+
+            const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow"
+            };
+
+            fetch("https://pgmarket.online/api/user", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                if(result.message == 'Unauthenticated.') return;
+                setUser({
+                    'token': token.token,
+                    'user': result
+                })
+                // console.log(JSON.stringify(result, null, 2));
+            })
+            .catch((error) => console.error(error));
+        }
+        
     }
 
     const restoreCartItems = async () => {

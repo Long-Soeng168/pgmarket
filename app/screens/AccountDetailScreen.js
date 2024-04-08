@@ -186,7 +186,7 @@ const AccountDetailScreen = ({ navigation }) => {
                         console.log("Update Successfully!");
                         setMessage("Update Successfully");
                         setReload(!reload);
-                        // console.log(result.user);
+                        console.log(result.user);
                         setUser((user) => {
                             return {
                                 token: user.token,
