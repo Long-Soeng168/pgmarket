@@ -62,7 +62,7 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.profileInfo}>
                 {/* Display user profile information here */}
-                {!userInfo.image ? (
+                {!userInfo.image || userInfo.image == 'user.png' ? (
                     <Image
                         style={{
                             width: 100,

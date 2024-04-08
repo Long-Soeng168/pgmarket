@@ -16,12 +16,14 @@ import { Ionicons } from "@expo/vector-icons";
 import colors from "../../config/colors";
 import { userContext } from "../../../App";
 import storage from "../../localStorage/storage";
+import { useTranslation } from "react-i18next";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
 
     const [user, setUser] = React.useContext(userContext);
     // console.log(JSON.stringify(user, null, 2));
+    const [t, i18n] = useTranslation('global');
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -111,10 +113,10 @@ const LoginScreen = () => {
                     }}
                     source={require("../../assets/images/pgmarketLogo.png")}
                 />
-                <Text style={styles.title}>Login</Text>
+                <Text style={styles.title}>{t('login')}</Text>
                 <View style={{ width: "100%" }}>
                     <Text style={{ fontWeight: "bold", marginBottom: 3 }}>
-                        Email or Phone
+                    {t('emailOrPhone')}
                     </Text>
                     <TextInput
                         style={styles.input}
@@ -127,7 +129,7 @@ const LoginScreen = () => {
                 </View>
                 <View style={{ width: "100%" }}>
                     <Text style={{ fontWeight: "bold", marginBottom: 3 }}>
-                        Password
+                    {t('password')}
                     </Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
@@ -162,23 +164,23 @@ const LoginScreen = () => {
                                 textDecorationLine: "underline",
                             }}
                         >
-                            Forgot Password?
+                            {t('forgotPassword')}
                         </Text>
                     </TouchableOpacity>
                 </View>
                 {isError && (
                     <Text style={{ color: "red", marginTop: 5 }}>
-                        Email or Password are invalid.
+                        {t('passwordInvalid')}
                     </Text>
                 )}
 
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
+                    <Text style={styles.buttonText}>{t('login')}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={handleRegister}>
                     <Text style={styles.registerText}>
-                        Don't have an account? Register here
+                    {t('dontHasAcc')}
                     </Text>
                 </TouchableOpacity>
             </View>

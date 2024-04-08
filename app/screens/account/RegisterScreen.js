@@ -6,11 +6,13 @@ import colors from '../../config/colors';
 import storage from '../../localStorage/storage';
 import { userContext } from '../../../App';
 import HeaderText from '../../components/HeaderText';
+import { useTranslation } from 'react-i18next';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const [user, setUser] = React.useContext(userContext);
+  const [t, i18n] = useTranslation('global');
 
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -158,9 +160,9 @@ const RegisterScreen = () => {
             }}
             source={require("../../assets/images/pgmarketLogo.png")}
           />
-          <Text style={styles.title}>Register</Text>
+          <Text style={styles.title}>{t('register')}</Text>
           <View style={{ width: '100%',  }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Name</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('name')}</Text>
             <TextInput
               style={styles.input}
               placeholder="Name"
@@ -173,7 +175,7 @@ const RegisterScreen = () => {
           </View>
           {nameError && <Text style={styles.errorText}>{nameError}</Text>}
           <View style={{ width: '100%',  }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Phone Number</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('phone')}</Text>
           <TextInput
             style={styles.input}
             placeholder="Phone Number"
@@ -187,7 +189,7 @@ const RegisterScreen = () => {
           </View>
           {phoneNumberError && <Text style={styles.errorText}>{phoneNumberError}</Text>}
           <View style={{ width: '100%',  }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Email</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('email')}</Text>
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -202,7 +204,7 @@ const RegisterScreen = () => {
              </View>
           {emailError && <Text style={styles.errorText}>{emailError}</Text>}
           <View style={{ width: '100%',  }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Address</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('address')}</Text>
           <TextInput
             style={styles.input}
             placeholder="Address"
@@ -215,7 +217,7 @@ const RegisterScreen = () => {
              </View>
           {addressError && <Text style={styles.errorText}>{addressError}</Text>}
           <View style={{ width: '100%',  }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Passowrd</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('password')}</Text>
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
@@ -234,7 +236,7 @@ const RegisterScreen = () => {
           </View>
           {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
           <View style={{ width: '100%',  }}>
-            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Confirm Password</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('confirmPassword')}</Text>
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
@@ -256,10 +258,10 @@ const RegisterScreen = () => {
       
           {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>Phone or Email was Taken</Text>}
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Register</Text>
+            <Text style={styles.buttonText}>{t('register')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-            <Text style={styles.loginText}>Already have an account? Login here</Text>
+            <Text style={styles.loginText}>{t('hasAcc')}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

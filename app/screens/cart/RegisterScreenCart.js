@@ -5,11 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '../../config/colors'; 
 import storage from '../../localStorage/storage';
 import { userContext } from '../../../App';
+import { useTranslation } from 'react-i18next';
 
 const RegisterScreenCart = () => {
   const navigation = useNavigation();
 
   const [user, setUser] = React.useContext(userContext);
+  const [t, i18n] = useTranslation('global');
 
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -165,9 +167,9 @@ const RegisterScreenCart = () => {
             }}
             source={require("../../assets/images/pgmarketLogo.png")}
           />
-          <Text style={styles.title}>Register</Text>
+          <Text style={styles.title}>{t('register')}</Text>
           <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Name</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('name')}</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Name"
@@ -180,7 +182,7 @@ const RegisterScreenCart = () => {
             </View>
             {nameError && <Text style={styles.errorText}>{nameError}</Text>}
             <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Phone Number</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('phone')}</Text>
             <TextInput
               style={styles.input}
               placeholder="Phone Number"
@@ -194,7 +196,7 @@ const RegisterScreenCart = () => {
             </View>
             {phoneNumberError && <Text style={styles.errorText}>{phoneNumberError}</Text>}
             <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Email</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('email')}</Text>
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -209,7 +211,7 @@ const RegisterScreenCart = () => {
                </View>
             {emailError && <Text style={styles.errorText}>{emailError}</Text>}
             <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Address</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('address')}</Text>
             <TextInput
               style={styles.input}
               placeholder="Address"
@@ -222,7 +224,7 @@ const RegisterScreenCart = () => {
                </View>
             {addressError && <Text style={styles.errorText}>{addressError}</Text>}
             <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Passowrd</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('password')}</Text>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.passwordInput}
@@ -241,7 +243,7 @@ const RegisterScreenCart = () => {
             </View>
             {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
             <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>Confirm Password</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('confirmPassword')}</Text>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.passwordInput}
@@ -263,10 +265,10 @@ const RegisterScreenCart = () => {
       
           {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>Phone or Email was Taken</Text>}
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Register</Text>
+            <Text style={styles.buttonText}>{t('register')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LoginScreenCart')}>
-            <Text style={styles.loginText}>Already have an account? Login here</Text>
+            <Text style={styles.loginText}>{t('hasAcc')}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
