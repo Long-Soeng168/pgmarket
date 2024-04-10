@@ -29,7 +29,7 @@ import { useTranslation } from "react-i18next";
 export default function ShopProductDetail({ route, navigation }) {
     const item = route.params;
     // console.log(JSON.stringify(item, null, 2));  
-
+    const [t, i18n] = useTranslation('global');
     const [user, setUser] = React.useContext(userContext);
     const userToken = user.token;
 
@@ -174,13 +174,13 @@ export default function ShopProductDetail({ route, navigation }) {
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.price}>$ {price}</Text>
 
-                    <LabelValue label="Discount" value={discount + '%'} />
+                    <LabelValue label="discount" value={discount + '%'} />
                     <LabelValue
-                        label="Discount Date"
+                        label="discountDate"
                         value={discount_date_start + ' - ' + discount_date_end}
                     />
-                    <LabelValue label="Brand" value={productBrand ? productBrand.name : 'N/A'} />
-                    <LabelValue label="Shipping" value={shipping ? shipping : 'Free Delivery'} />
+                    <LabelValue label="brand" value={productBrand ? productBrand.name : 'N/A'} />
+                    <LabelValue label="shipping" value={shipping ? shipping : 'Free Delivery'} />
                     <LabelValue label="Main Category" value={productMainCategory && productMainCategory.name_en} />
                     <LabelValue label="Category" value={productCategory && productCategory.name_en} /> 
                     <LabelValue label="Sub-Category" value={productSubCategory && productSubCategory.name_en} /> 
@@ -190,7 +190,7 @@ export default function ShopProductDetail({ route, navigation }) {
                     />
                     <LabelValue label="Sizes Available" value="M, L, XL" /> */}
                     <LabelValue
-                        label="Video URL"
+                        label="videoUrl"
                         value={videoUrl}
                     />
 
@@ -201,7 +201,7 @@ export default function ShopProductDetail({ route, navigation }) {
                                 fontWeight: "500",
                             }}
                         >
-                            Description :
+                            {t('description')} :
                         </Text>
                         <Text style={styles.description}>
                             {descriptionNoHtml}
@@ -244,6 +244,7 @@ const styles = StyleSheet.create({
 });
 
 function LabelValue({ label, value }) {
+    const [t, i18n] = useTranslation('global');
     return (
         <View style={{ flexDirection: "row", gap: 10 }}>
             <Text
@@ -252,7 +253,7 @@ function LabelValue({ label, value }) {
                     fontWeight: "500",
                 }}
             >
-                {label} :
+                {t(label)} :
             </Text>
             <Text style={styles.description}>{value}</Text>
         </View>

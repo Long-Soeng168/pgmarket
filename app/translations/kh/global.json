@@ -11,6 +11,7 @@
     "noShop" : "មិនមានហាង",
     "noItem" : "មិនមានធាតុ",
     "brands" : "ម៉ាក",
+    "brand" : "ម៉ាក",
     "favorite" : "ចូលចិត្ត",
     "cart" : "រទេះ",
     "account" : "គណនី",
@@ -46,6 +47,7 @@
     "passwordInvalid" : "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ មិនត្រឹមត្រូវ",
     "confirmPassword" : "ផ្ទៀងផ្ទាត់លេខសម្ងាត់",
     "updateDetails" : "កែប្រែព័ត៌មាន",
+    "update" : "កែប្រែ",
     "paymentMethod" : "របៀបទូទាត់",
     "addPaymentMethod" : "បន្ថែមរបៀបទូទាត់",
     "morePaymentMethod" : "របៀបទូទាត់ផ្សេងទៀត",
@@ -70,6 +72,12 @@
     "addProduct": "បន្ថែមផលិតផល",
     "description": "ព័ត៌មានលម្អិត",
     "deleteProduct": "លុបផលិតផល",
-    "images": "រូបភាពបន្ថែម"
-
+    "images": "រូបភាពបន្ថែម",
+    "price": "តម្លៃ($)",
+    "shipping": "ថ្លៃដឹក($)",
+    "videoUrl": "តំណភ្ជាប់វីដេអូ",
+    "discount": "បញ្ចុះតម្លៃ(%)",
+    "discountStart": "ថ្ងៃចាប់ផ្ដើមញ្ចុះតម្លៃ",
+    "discountEnd": "ថ្ងៃបញ្ចប់ញ្ចុះតម្លៃ",
+    "discountDate": "កាលបរិច្ឆេទបញ្ចុះតម្លៃ"
 }

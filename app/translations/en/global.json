@@ -11,6 +11,7 @@
     "noShop" : "No Shop",
     "noItem" : "No Item",
     "brands" : "Brands",
+    "brand" : "Brand",
     "favorite" : "Favorite",
     "cart" : "Cart",
     "account" : "Account",
@@ -46,6 +47,7 @@
     "passwordInvalid" : "Email or Password are invalid.",
     "confirmPassword" : "Confirm Password",
     "updateDetails" : "Update Details",
+    "update" : "Update",
     "paymentMethod" : "Payment Method",
     "addPaymentMethod" : "Add Payment Method",
     "morePaymentMethod" : "More Payment Method",
@@ -70,6 +72,13 @@
     "addProduct": "Add Product",
     "description": "Description",
     "deleteProduct": "Delete Product",
-    "images": "Images"
+    "images": "Images",
+    "price": "Price($)",
+    "shipping": "Shipping($)",
+    "videoUrl": "Viedeo URL",
+    "discount": "Discount(%)",
+    "discountStart": "Discount Start",
+    "discountEnd": "Discount End",
+    "discountDate": "Discount Date"
 
 }

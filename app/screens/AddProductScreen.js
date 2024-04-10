@@ -23,6 +23,7 @@ import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import { userContext } from "../../App";
 import LoadingOverlay from "../components/LoadingOverlay";
+import { useTranslation } from "react-i18next";
 
 const InputField = ({
     placeholder,
@@ -32,10 +33,11 @@ const InputField = ({
     keyboardType = "default",
     error,
     style,
-}) => (
-    <View style={[style, { flex: 1 }]}>
+}) => {
+    const [t, i18n] = useTranslation('global');
+    return <View style={[style, { flex: 1 }]}>
         <Text style={{ marginTop: 10, fontWeight: "500", marginBottom: 3 }}>
-            {headTitle}
+            {t(headTitle)}
         </Text>
         <TextInput
             style={styles.input}
@@ -46,7 +48,7 @@ const InputField = ({
         />
         {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
-);
+};
 
 const ImageUploadButton = ({ onPress, image }) => (
     <TouchableOpacity onPress={onPress}>
@@ -63,6 +65,7 @@ const ImageUploadButton = ({ onPress, image }) => (
 const AddProductScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
     const [loading, setLoading] = useState(true);
+    const [t, i18n] = useTranslation('global');
 
     const [mainCategory, setMainCategory] = useState("");
     const [category, setCategory] = useState("");
@@ -690,7 +693,7 @@ const AddProductScreen = ({ navigation }) => {
                     {/* InputFields for Product Name, Unit Price, Discount, Video URL, and Shipping */}
                     <InputField
                         placeholder="Product Name"
-                        headTitle="Name"
+                        headTitle="name"
                         value={productName}
                         onChangeText={(text) => {
                             setProductName(text);
@@ -702,7 +705,7 @@ const AddProductScreen = ({ navigation }) => {
                     <View style={{ flexDirection: "row", gap: 10 }}>
                         <InputField
                             placeholder="Unit Price"
-                            headTitle="Price($)"
+                            headTitle="price"
                             value={unitPrice}
                             onChangeText={(text) => {
                                 setUnitPrice(text);
@@ -713,7 +716,7 @@ const AddProductScreen = ({ navigation }) => {
                         />
                         <InputField
                             placeholder="Discount"
-                            headTitle="Discount(%)"
+                            headTitle="discount"
                             value={discount}
                             onChangeText={(text) => {
                                 setDiscount(text);
@@ -724,7 +727,7 @@ const AddProductScreen = ({ navigation }) => {
                         />
                         <InputField
                             placeholder="Shipping"
-                            headTitle="Shipping($)"
+                            headTitle="shipping"
                             value={shipping}
                             onChangeText={(text) => {
                                 setShipping(text);
@@ -744,7 +747,7 @@ const AddProductScreen = ({ navigation }) => {
                                     marginTop: 10,
                                 }}
                             >
-                                Discount Start
+                                {t('discountStart')}
                             </Text>
                             <TouchableOpacity
                                 style={styles.inputBtn}
@@ -761,7 +764,7 @@ const AddProductScreen = ({ navigation }) => {
                                     marginTop: 10,
                                 }}
                             >
-                                Discount End
+                                {t('discountEnd')}
                             </Text>
                             <TouchableOpacity
                                 style={styles.inputBtn}
@@ -774,7 +777,7 @@ const AddProductScreen = ({ navigation }) => {
 
                     <InputField
                         placeholder="Video URL"
-                        headTitle="Viedeo URL"
+                        headTitle="videoUrl"
                         value={videoUrl}
                         onChangeText={(text) => {
                             setVideoUrl(text);
@@ -787,7 +790,7 @@ const AddProductScreen = ({ navigation }) => {
 
                     <InputField
                         placeholder="Description"
-                        headTitle="Description"
+                        headTitle="description"
                         value={description}
                         onChangeText={(text) => setDescription(text)}
                     />
@@ -796,7 +799,7 @@ const AddProductScreen = ({ navigation }) => {
                         style={styles.button}
                         onPress={addProduct}
                     >
-                        <Text style={styles.buttonText}>Add Product</Text>
+                        <Text style={styles.buttonText}>{t("addProduct")}</Text>
                     </TouchableOpacity>
 
                     {/* Create modal for date picker */}

@@ -261,7 +261,7 @@ export default function ShopProfile({ navigation, route }) {
                                                         color: "tomato",
                                                     }}
                                                 >
-                                                    More Products
+                                                    {t("moreProducts")}
                                                 </Text>
                                                 <FontAwesome
                                                     name="angle-double-down"
