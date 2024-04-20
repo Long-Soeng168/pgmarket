@@ -25,8 +25,9 @@ export default function ShopsNavigator() {
                 name="ProductDetailScreen"
                 options={{ 
                     title: "Product Detail", 
-                    headerTitleAlign: "center" ,
-                    headerTitleStyle: {color: "tomato"},
+                    headerShown: false,
+                    // headerTitleAlign: "center" ,
+                    // headerTitleStyle: {color: "tomato"},
                 }}
 
                 component={ProductDetailScreen}

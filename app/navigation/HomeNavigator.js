@@ -23,8 +23,9 @@ export default function HomeNavigator() {
                 component={ProductDetailScreen}
                 options={{
                     title: "Product Detail",
-                    headerTitleStyle: {color: "tomato"},
-                    headerTitleAlign: "center",
+                    headerShown: false,
+                    // headerTitleStyle: {color: "tomato"},
+                    // headerTitleAlign: "center",
                 }}
             />
             {/* <Stack.Screen
@@ -43,6 +44,7 @@ export default function HomeNavigator() {
                     title: "Products",
                     headerTitleStyle: {color: "tomato"},
                     headerTitleAlign: "center",
+                    headerShown: false
                 }}
             />
             <Stack.Screen
@@ -56,6 +58,7 @@ export default function HomeNavigator() {
                 options={({ route }) => ({
                     title: route.params,
                     headerTitleAlign: "center",
+                    headerShown: false
                 })}
             />
             <Stack.Screen

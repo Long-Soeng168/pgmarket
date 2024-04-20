@@ -297,7 +297,7 @@ export default function ShopProfile({ navigation, route }) {
                                     detail={shopDescription}
                                     icon="navicon"
                                 />
-                                <View style={{ flexDirection: "row", gap: 10 }}>
+                                <View style={{ flexDirection: "row" }}>
                                     <TouchableOpacity
                                         style={[
                                             styles.AddButton,
@@ -482,9 +482,9 @@ const styles = StyleSheet.create({
     AddButton: {
         flex: 1,
         backgroundColor: colors.primary,
-        padding: 12,
-        borderRadius: 8,
-        marginHorizontal: 15,
+        padding: 10,
+        borderRadius: 5,
+        marginHorizontal: 10,
         marginBottom: 16,
         // marginTop: 16,
         alignItems: "center",

@@ -80,12 +80,12 @@ const AddProductScreen = ({ navigation, route }) => {
     const [brand, setBrand] = useState(productInfo.brand_id);
     const [productName, setProductName] = useState(productInfo.pro_name);
     const [unitPrice, setUnitPrice] = useState(productInfo.price);
-    const [discount, setDiscount] = useState(productInfo.discount || 0);
+    const [discount, setDiscount] = useState(productInfo.discount || "0");
     const [discountFromDate, setDiscountFromDate] = useState(productInfo.discount_date_start);
     const [discountToDate, setDiscountToDate] = useState(productInfo.discount_date_end);
     const [image, setImage] = useState(null);
     const [videoUrl, setVideoUrl] = useState(productInfo.video_url);
-    const [shipping, setShipping] = useState(productInfo.shipping);
+    const [shipping, setShipping] = useState(productInfo.shipping || "0");
     const [selectedColors, setSelectedColors] = useState(productColors);
     const [selectedSizes, setSelectedSizes] = useState(productSizes);
     const [description, setDescription] = useState(productInfo.description); 
@@ -803,9 +803,22 @@ const AddProductScreen = ({ navigation, route }) => {
 
                     {/* Selected Colors and Sizes - Implement multi-select components as needed */}
 
-                    <InputField
+                    {/* <InputField
                         placeholder="Description"
                         headTitle="description"
+                        value={description}
+                        onChangeText={(text) => setDescription(text)}
+                    /> */}
+                    <Text
+                        style={{ fontWeight: "bold", marginBottom: 3, marginTop: 10 }}
+                    >
+                        {t('description')}
+                    </Text>
+                    <TextInput
+                        multiline
+                        numberOfLines={10} 
+                        style={[styles.input, {minHeight: 70, textAlignVertical: 'top'}]}
+                        placeholder="Description"
                         value={description}
                         onChangeText={(text) => setDescription(text)}
                     />

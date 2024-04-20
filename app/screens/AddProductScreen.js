@@ -788,9 +788,23 @@ const AddProductScreen = ({ navigation }) => {
 
                     {/* Selected Colors and Sizes - Implement multi-select components as needed */}
 
-                    <InputField
+                    {/* <InputField
                         placeholder="Description"
                         headTitle="description"
+                        value={description}
+                        onChangeText={(text) => setDescription(text)}
+                    /> */}
+
+                    <Text
+                        style={{ fontWeight: "bold", marginBottom: 3, marginTop: 10 }}
+                    >
+                        {t('description')}
+                    </Text>
+                    <TextInput
+                        multiline
+                        numberOfLines={10} 
+                        style={[styles.input, {minHeight: 70, textAlignVertical: 'top'}]}
+                        placeholder="Description"
                         value={description}
                         onChangeText={(text) => setDescription(text)}
                     />

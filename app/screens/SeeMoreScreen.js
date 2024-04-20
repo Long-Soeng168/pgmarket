@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import colors from "../config/colors";
 import ActivityIndicator from "../components/ActivityIndicator";
 import HomeHeader from "../components/HomeHeader";
+import HeaderText from "../components/HeaderText";
 
 const width = Dimensions.get("screen").width / 2 - 15;
 
@@ -49,6 +50,7 @@ export default function SeeMoreScreen({ route }) {
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.white}}>
+            <HeaderText title="More Products" />
             <ActivityIndicator visibility={isFetching} />
             <ScrollView
                 contentContainerStyle={{

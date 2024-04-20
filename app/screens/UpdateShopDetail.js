@@ -360,12 +360,12 @@ const UpdateShopDetail = ({navigation}) => {
                     {addressError && (
                         <Text style={styles.errorText}>{addressError}</Text>
                         )}
-                        <View style={{ width: "100%" }}>
-                            <Text
-                                style={{ fontWeight: "bold", marginBottom: 3 }}
-                            >
-                                {t('description')}
-                            </Text>
+                    <View style={{ width: "100%" }}>
+                    <Text
+                        style={{ fontWeight: "bold", marginBottom: 3 }}
+                    >
+                        {t('description')}
+                    </Text>
                     <TextInput
                         multiline
                         numberOfLines={10} 

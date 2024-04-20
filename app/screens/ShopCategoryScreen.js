@@ -2,6 +2,7 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { useTranslation } from "react-i18next";
+import HeaderText from "../components/HeaderText";
 
 
 export default function ShopCategoryScreen({ navigation, route }) {
@@ -32,7 +33,8 @@ export default function ShopCategoryScreen({ navigation, route }) {
     const shops = shopsByCate;
     // console.log(JSON.stringify(shops, null, 2));
     return (
-        <View style={{ padding: 10, flex: 1 }}>
+        <View style={{ flex: 1 }}>
+            <HeaderText title="Shops" />
             <ActivityIndicator visibility={isFetching} />
             {!isFetching && (
                 shops.length !== 0 ? (
@@ -42,6 +44,7 @@ export default function ShopCategoryScreen({ navigation, route }) {
                             flexWrap: "wrap",
                             justifyContent: "center",
                             gap: 20,
+                            marginTop: 10,
                         }}
                     >
                         {shops.map((shop) => (
@@ -60,6 +63,7 @@ export default function ShopCategoryScreen({ navigation, route }) {
                             verticalAlign: 'middle',
                             textAlign: 'center',
                             fontSize: 18,
+                            marginTop: 10
                         }}
                     >
                         { t('noShop') }

@@ -222,15 +222,6 @@ export default function ProductDetailScreen({ route, navigation }) {
         <ScrollView>
             <LoadingOverlay visible={loading} />
             {/* Add and Remove to Favorite */}
-            {favorites.some((favorite) => favorite.id === item.id) ? (
-                <FavoriteButton
-                    onPress={removeFromFavorite}
-                    color={colors.accent}
-                />
-            ) : (
-                <FavoriteButton onPress={addToFavorite} color={colors.medium} />
-            )}
-            {/* End Add to favorite */}
 
             <TouchableOpacity
                 onPress={() => {
@@ -238,6 +229,16 @@ export default function ProductDetailScreen({ route, navigation }) {
                     setImages([{ url: imageUrl }]);
                 }}
             >
+                <BackButton onPress={() => {navigation.goBack()}} color={colors.medium} />
+                {favorites.some((favorite) => favorite.id === item.id) ? (
+                    <FavoriteButton
+                        onPress={removeFromFavorite}
+                        color={colors.accent}
+                    />
+                ) : (
+                    <FavoriteButton onPress={addToFavorite} color={colors.medium} />
+                )}
+                {/* End Add to favorite */}
                 <Image
                     style={styles.image}
                     source={{
@@ -488,6 +489,27 @@ function FavoriteButton({ color, onPress }) {
             }}
         >
             <FontAwesome name="heart" size={35} color={color} />
+        </TouchableOpacity>
+    );
+}
+function BackButton({ color, onPress }) {
+    return (
+        <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPress}
+            style={{
+                position: "absolute",
+                zIndex: 100,
+                left: 10,
+                top: 10,
+                backgroundColor: 'gray',
+                paddingHorizontal: 12,
+                paddingVertical: 10,
+                borderRadius: 5,
+                opacity: 0.8,
+            }}
+        >
+            <FontAwesome name="chevron-left" size={20} color="white" />
         </TouchableOpacity>
     );
 }
