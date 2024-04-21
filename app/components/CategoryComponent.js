@@ -11,7 +11,7 @@ export default function CategoryComponent({ item }) {
     // console.log(JSON.stringify(imageUrl, null, 2));
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate("ShopCategoryScreen", title)}
+            onPress={() => navigation.navigate("ShopCategoryScreen", item)}
         >
             <View
                 style={{
