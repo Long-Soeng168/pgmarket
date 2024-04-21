@@ -1,13 +1,11 @@
-import {
-    Image,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions,
-    Animated,
-    Easing,
-  } from 'react-native';
 import React from 'react';
+import {
+  Animated,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  Linking
+} from 'react-native';
   
 const {width, height} = Dimensions.get('screen');
   
@@ -15,7 +13,13 @@ const SlideItem = ({item, endPoint, addStyle}) => {
     // console.warn(item);
     const imageUrl = item.image;
     return (
-      <View style={[styles.container]}>
+      <TouchableOpacity 
+        onPress={() => {
+          //  console.log(item.url);
+          item.url && Linking.openURL(item.url);
+          item.link && Linking.openURL(item.link);
+        }}
+        style={[styles.container]}>
         <Animated.Image
           source={{ uri:endPoint + imageUrl }}
           resizeMode="contain"
@@ -24,7 +28,7 @@ const SlideItem = ({item, endPoint, addStyle}) => {
             addStyle
           ]}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
   
