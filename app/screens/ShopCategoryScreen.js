@@ -7,7 +7,7 @@ import HeaderText from "../components/HeaderText";
 
 export default function ShopCategoryScreen({ navigation, route }) {
     const item = route.params;
-    console.log(JSON.stringify(item.id, null, 2));
+    // console.log(JSON.stringify(item, null, 2));
     // console.log(JSON.stringify("https://pgmarket.online/api/getshops_bycategoryshop/" + item.id, null, 2));
     
     const [isFetching, setIsFetching] = React.useState(true);

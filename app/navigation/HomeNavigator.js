@@ -22,10 +22,7 @@ export default function HomeNavigator() {
                 name="ProductDetailScreen"
                 component={ProductDetailScreen}
                 options={{
-                    title: "Product Detail",
                     headerShown: false,
-                    // headerTitleStyle: {color: "tomato"},
-                    // headerTitleAlign: "center",
                 }}
             />
             {/* <Stack.Screen
@@ -40,10 +37,6 @@ export default function HomeNavigator() {
                 name="SeeMoreScreen"
                 component={SeeMoreScreen}
                 options={{
-                    // headerShown: false
-                    title: "Products",
-                    headerTitleStyle: {color: "tomato"},
-                    headerTitleAlign: "center",
                     headerShown: false
                 }}
             />
@@ -55,11 +48,7 @@ export default function HomeNavigator() {
             <Stack.Screen
                 name="ShopCategoryScreen"
                 component={ShopCategoryScreen}
-                options={({ route }) => ({
-                    title: route.params,
-                    headerTitleAlign: "center",
-                    headerShown: false
-                })}
+                options={{headerShown: false}}
             />
             <Stack.Screen
                 name="ShopScreen"
