@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from "react-native";
 import HTML from "react-native-render-html";
+import { useState, useEffect } from 'react';
 import { Dimensions } from "react-native";
 import HeaderText from "../../components/HeaderText";
+import i18next from 'i18next';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -10,38 +12,64 @@ const DetailScreen = ({ route }) => {
   let routeValue = route.params;
   console.log(routeValue);
 
-  const htmlContent = `
-  <div style="text-align: center;">
-    <h2>Samret Sophat (Mr.)</h2>
-    <h3>Founder of Pond Growth, Co. Ltd.</h3>
-    <p>
-      Samret Sophat, a man of strong leadership, intelligence, and a charitable spirit, is known as Sophat. After completing his university education in ADE, BBA, MBA, and DBA, he served as a school director since 1996. Recognizing real estate as a key business area, he transitioned to become a branch manager in a real estate company in 2007.
-    </p>
-    <p>
-      In 2009, driven by his entrepreneurial spirit and the potential of the real estate sector, Sophat started his own small business (SB). The business experienced rapid growth due to its focus on customer satisfaction and Sophat's strong leadership skills.
-    </p>
-    <h4>Vision:</h4>
-    <p>- To empower all dealers to sell their products to customers in Cambodia and around the world.</p>
-    <h4>Goal:</h4>
-    <p>
-      - Build Your Trust Today<br />
-      - Prepare Your Business for the Future
-    </p>
-    <h4>Mission:</h4>
-    <p>
-      - Facilitate seamless connections between buyers and sellers everywhere.<br />
-      - Reduce costs and time for both buyers and sellers.<br />
-      - Ensure efficient and high-quality transactions with a detailed order history for record-keeping.<br />
-      - Minimize risks at all stages.
-    </p>
-  </div>
-`;
+  
+
+    const currentLanguage = i18next.language;
+
+    if (currentLanguage === 'en') {
+    console.log('The current language is English.');
+    } else {
+    console.log('The current language is', currentLanguage);
+    }
+
+
+  const [data, setData] = useState(null);
+  const [htmlContent, setHtmlContent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://pgmarket.online/api/detail_page?tag=' + routeValue);
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.status}`);
+        }
+        const jsonData = await response.json();
+        setData(jsonData);
+        if(currentLanguage == 'kh' && jsonData.description_kh) {
+            setHtmlContent(jsonData.description_kh)
+        }else {
+            setHtmlContent(jsonData.description)
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <ScrollView>
         <HeaderText  title="PG Market"/>
         <View style={styles.container}>
-            <HTML source={{ html: htmlContent }} contentWidth={screenWidth} />
+            
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#00ff00" />
+            ) : (
+                <>
+                {error ? (
+                    <Text>Error: {error.message}</Text>
+                ) : (
+                    <>
+                    <HTML source={{ html: htmlContent }} contentWidth={screenWidth} />
+                    </>
+                )}
+                </>
+            )}
         </View>
 
     </ScrollView>

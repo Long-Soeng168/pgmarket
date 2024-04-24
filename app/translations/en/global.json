@@ -79,6 +79,11 @@
     "discount": "Discount(%)",
     "discountStart": "Discount Start",
     "discountEnd": "Discount End",
-    "discountDate": "Discount Date"
-
+    "discountDate": "Discount Date",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "terms": "Terms and Conditions",
+    "return": "Return & Refund Policy",
+    "support": "Support Policy",
+    "privacyPolicy": "Privacy Policy"
 }

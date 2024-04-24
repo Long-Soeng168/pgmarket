@@ -40,9 +40,9 @@ const RegisterScreen = () => {
       case 'phoneNumber':
         setPhoneNumberError(value.trim() !== '' ? null : 'Phone number cannot be empty');
         break;
-      case 'email':
-        setEmailError(/\S+@\S+\.\S+/.test(value) ? null : 'Invalid email address');
-        break;
+      // case 'email':
+      //   setEmailError(/\S+@\S+\.\S+/.test(value) ? null : 'Invalid email address');
+      //   break;
       case 'address':
         setAddressError(value.trim() !== '' ? null : 'Address cannot be empty');
         break;
@@ -65,7 +65,7 @@ const RegisterScreen = () => {
     // Validate individual fields
     validateField('name', name);
     validateField('phoneNumber', phoneNumber);
-    validateField('email', email);
+    // validateField('email', email);
     validateField('address', address);
     validateField('password', password);
     validateField('confirmPassword', confirmPassword);
@@ -87,7 +87,11 @@ const RegisterScreen = () => {
       const formdata = new FormData();
       formdata.append("name", name);
       formdata.append("phone", phoneNumber);
-      formdata.append("email", email);
+      if(email) {
+        formdata.append("email", email);
+      }else {
+        formdata.append("email", `${phoneNumber}@email.com`);
+      }
       formdata.append("password", password);
       formdata.append("address", address);
 
@@ -109,8 +113,8 @@ const RegisterScreen = () => {
               return response.json(); // Convert response to JSON
           })
           .then((result) => {
+            console.log(result);
               if (result.token) {
-                  // console.log(result.token);
                   // console.log(JSON.stringify(result, null, 2)); 
                   setUser(result);
                   storage.storeToken(JSON.stringify(result));

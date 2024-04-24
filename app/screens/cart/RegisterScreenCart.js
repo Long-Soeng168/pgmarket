@@ -64,7 +64,7 @@ const RegisterScreenCart = () => {
     // Validate individual fields
     validateField('name', name);
     validateField('phoneNumber', phoneNumber);
-    validateField('email', email);
+    // validateField('email', email);
     validateField('address', address);
     validateField('password', password);
     validateField('confirmPassword', confirmPassword);
@@ -94,7 +94,11 @@ const RegisterScreenCart = () => {
       const formdata = new FormData();
       formdata.append("name", name);
       formdata.append("phone", phoneNumber);
-      formdata.append("email", email);
+      if(email) {
+        formdata.append("email", email);
+      }else {
+        formdata.append("email", `${phoneNumber}@email.com`);
+      }
       formdata.append("password", password);
       formdata.append("address", address);
 

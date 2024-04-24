@@ -203,7 +203,7 @@ const ProfileScreen = ({ navigation }) => {
               <View style={styles.cardButton}>
                 <Entypo name="info" size={24} color={colors.primary} />
                 <Text style={styles.cardText} numberOfLines={1}>
-                  About Us
+                    {t("aboutUs")}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -222,7 +222,7 @@ const ProfileScreen = ({ navigation }) => {
               <View style={styles.cardButton}>
                 <Entypo name="phone" size={24} color={colors.primary} />
                 <Text style={styles.cardText} numberOfLines={1}>
-                  Contact Us
+                    {t("contactUs")}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -241,7 +241,7 @@ const ProfileScreen = ({ navigation }) => {
               <View style={styles.cardButton}>
                 <Entypo name="text-document" size={24} color={colors.primary} />
                 <Text style={styles.cardText} numberOfLines={1}>
-                  Terms and Conditions
+                    {t("terms")}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -260,7 +260,7 @@ const ProfileScreen = ({ navigation }) => {
               <View style={styles.cardButton}>
                 <Entypo name="back" size={24} color={colors.primary} />
                 <Text style={styles.cardText} numberOfLines={1}>
-                  Return & Refund Policy
+                    {t("return")}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -283,7 +283,7 @@ const ProfileScreen = ({ navigation }) => {
                   color={colors.primary}
                 />
                 <Text style={styles.cardText} numberOfLines={1}>
-                  Support Policy
+                    {t("support")}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -306,7 +306,7 @@ const ProfileScreen = ({ navigation }) => {
                   color={colors.primary}
                 />
                 <Text style={styles.cardText} numberOfLines={1}>
-                  Privacy Policy
+                    {t("privacyPolicy")}
                 </Text>
               </View>
             </TouchableOpacity>
