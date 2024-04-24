@@ -24,7 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.longsoeng.pgmarket",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "favicon": "./assets/favicon.png"
