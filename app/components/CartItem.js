@@ -86,8 +86,10 @@ export default function CartItem({ item, title, buyerNote, imageUrl, price, colo
                                  }}
                             >$ {proPrice}</Text>  
                             {discountPrice > 0 && <Text> $ {(proPrice - discountPrice).toFixed(2)}  </Text>} 
-                            {color && ` (${t('color')}: ${color})` } 
-                            {size && ` (${t('size')}: ${size})`}
+                            {/* {color && ` (${t('color')}: ${color})` }  */}
+                            {color && ` (${color})` } 
+                            {/* {size && ` (${t('size')}: ${size})`} */}
+                            {size && ` (${size})`}
                         </Text>
                     </View>
                     <View style={styles.updateContainer}>

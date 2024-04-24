@@ -15,8 +15,8 @@ const ProductImages = ({ imageUrl, imageData, handleImageUrlSelect }) => {
         ]}>
         <Image source={{ uri: item }} style={[styles.image, 
             {
-                width: imageUrl == item ? 110 : 100,
-                height: imageUrl == item ? 110 : 100,
+                width: imageUrl == item ? 103 : 100,
+                height: imageUrl == item ? 103 : 100,
             }
         ]} />
         </View>
