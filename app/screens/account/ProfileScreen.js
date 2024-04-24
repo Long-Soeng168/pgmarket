@@ -1,12 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 
 import colors from "../../config/colors";
 import { userContext } from "../../../App";
 import storage from "../../localStorage/storage";
 import { useTranslation } from "react-i18next";
+import { width } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
 
 const ProfileScreen = ({ navigation }) => {
     const [user, setUser] = React.useContext(userContext);
@@ -59,7 +60,7 @@ const ProfileScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.profileInfo}>
                 {/* Display user profile information here */}
                 {!userInfo.image || userInfo.image == 'user.png' ? (
@@ -142,6 +143,146 @@ const ProfileScreen = ({ navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     )}
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            paddingVertical: 10,
+
+                        }}
+                    >
+
+                        {/* About Us */}
+                        <TouchableOpacity
+                            style={{
+                                width: '50%',
+                                padding: 5
+                            }}
+                        >
+                            <View
+                                style={styles.cardButton}
+                            >
+                                <Entypo name="info" size={24} color={colors.primary} />
+                                <Text 
+                                    style={styles.cardText}
+                                    numberOfLines={1}
+                                >
+                                    About Us
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* End About Us */}
+                        
+                        {/* Contact Us */}
+                        <TouchableOpacity
+                            style={{
+                                width: '50%',
+                                padding: 5
+                            }}
+                        >
+                            <View
+                                style={styles.cardButton}
+                            >
+                                <Entypo name="phone" size={24} color={colors.primary} />
+                                <Text 
+                                    style={styles.cardText}
+                                    numberOfLines={1}
+                                >
+                                    Contact Us
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* End Contact Us */}
+
+                        {/* Terms and Conditions */}
+                        <TouchableOpacity
+                            style={{
+                                width: '50%',
+                                padding: 5
+                            }}
+                        >
+                            <View
+                                style={styles.cardButton}
+                            >
+                                <Entypo name="text-document" size={24} color={colors.primary} />
+                                <Text 
+                                    style={styles.cardText}
+                                    numberOfLines={1}
+                                >
+                                    Terms and Conditions
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* End Terms and Conditions */}
+
+                        {/* Return & Refund Policy */}
+                        <TouchableOpacity
+                            style={{
+                                width: '50%',
+                                padding: 5
+                            }}
+                        >
+                            <View
+                                style={styles.cardButton}
+                            >
+                                <Entypo name="back" size={24} color={colors.primary} />
+                                <Text 
+                                    style={styles.cardText}
+                                    numberOfLines={1}
+                                >
+                                    Return & Refund Policy
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* End Return & Refund Policy */}
+
+                        {/* Support Policy */}
+                        <TouchableOpacity
+                            style={{
+                                width: '50%',
+                                padding: 5
+                            }}
+                        >
+                            <View
+                                style={styles.cardButton}
+                            >
+                                <MaterialIcons name="support-agent" size={24} color={colors.primary} />
+                                <Text 
+                                    style={styles.cardText}
+                                    numberOfLines={1}
+                                >
+                                    Support Policy
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* End Support Policy */}
+
+                        {/* Privacy Policy */}
+                        <TouchableOpacity
+                            style={{
+                                width: '50%',
+                                padding: 5
+                            }}
+                        >
+                            <View
+                                style={styles.cardButton}
+                            >
+                                <MaterialIcons name="privacy-tip" size={24} color={colors.primary} />
+                                <Text 
+                                    style={styles.cardText}
+                                    numberOfLines={1}
+                                >
+                                    Privacy Policy
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/* End Privacy Policy */}
+
+                        
+                        
+                    </View>
                 </View>
 
                 <TouchableOpacity
@@ -151,16 +292,28 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.signOutButtonText}>{t('logout')}</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+    cardButton: {
+        alignItems: 'center',
+        paddingVertical: 15,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: colors.primary
+    },
+    cardText: {
+        color: 'gray',
+        fontSize: 14,
+        marginTop: 4,
+    },
     container: {
         flex: 1,
         padding: 16,
-        justifyContent: "flex-start",
-        alignItems: "center",
+        // justifyContent: "flex-start",
+        // alignItems: "center",
         backgroundColor: "#fff",
     },
     profileInfo: {
@@ -199,6 +352,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginTop: 16,
         alignItems: "center",
+        marginBottom: 30
     },
     signOutButtonText: {
         color: "#fff",
