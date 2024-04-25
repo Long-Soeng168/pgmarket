@@ -2,7 +2,7 @@
   "expo": {
     "name": "PG Market",
     "slug": "pgmarket",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/pgmarketLogo.png",
     "userInterfaceStyle": "light",
@@ -16,16 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.longsoeng.pgmarket",
-      "buildNumber": "6"
+      "bundleIdentifier": "com.longsoeng.pgmarket"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/pgmarketLogo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.longsoeng.pgmarket",
-      "versionCode": 6
+      "package": "com.longsoeng.pgmarket"
     },
     "web": {
       "favicon": "./assets/favicon.png"
