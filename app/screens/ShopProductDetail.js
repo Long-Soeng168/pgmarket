@@ -10,8 +10,10 @@ import {
     TouchableOpacity,
     View,
     Alert,
+    Dimensions
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import HTML from "react-native-render-html";
 
 import { Modal } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
@@ -25,6 +27,8 @@ import colors from "../config/colors";
 import HeaderText from "../components/HeaderText";
 import LoadingOverlay from "../components/LoadingOverlay";
 import { useTranslation } from "react-i18next";
+
+const screenWidth = Dimensions.get("window").width;
 
 export default function ShopProductDetail({ route, navigation }) {
     const item = route.params;
@@ -51,6 +55,7 @@ export default function ShopProductDetail({ route, navigation }) {
             "https://pgmarket.online/public/images/product/" + productInfo.thumbnail;
         var title = productInfo.pro_name;
         var descriptionNoHtml = stripHtmlTags(productInfo.description);
+        var htmlContent = productInfo.description;
         var price = parseFloat(productInfo.price).toFixed(2);
         var shipping = productInfo.shipping && parseFloat(productInfo.shipping).toFixed(2);
         var discount = productInfo.discount || '';
@@ -203,9 +208,10 @@ export default function ShopProductDetail({ route, navigation }) {
                         >
                             {t('description')} :
                         </Text>
-                        <Text style={styles.description}>
+                        <HTML source={{ html: htmlContent }} contentWidth={screenWidth} />
+                        {/* <Text style={styles.description}>
                             {descriptionNoHtml}
-                        </Text>
+                        </Text> */}
                     </View>
                 </View>
             </View>

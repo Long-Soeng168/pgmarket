@@ -11,7 +11,9 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    Dimensions
 } from "react-native";
+import HTML from "react-native-render-html";
 import { Feather } from "@expo/vector-icons";
 
 import { Modal } from "react-native";
@@ -31,6 +33,8 @@ import LoadingOverlay from "../components/LoadingOverlay";
 import ShopCardComponent from "../components/ShopCardComponent";
 import cartStorage from "../localStorage/cartStorage";
 import { useTranslation } from "react-i18next";
+
+const screenWidth = Dimensions.get("window").width;
 
 export default function ProductDetailScreen({ route, navigation }) {
     const item = route.params;
@@ -64,6 +68,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
     const title = item.pro_name;
     const descriptionNoHtml = stripHtmlTags(item.description);
+    const [htmlContent, setHtmlContent] = React.useState(item.description);
     const price = parseFloat(item.price).toFixed(2);
     const discount = parseFloat(item.discount);
 
@@ -399,9 +404,10 @@ export default function ProductDetailScreen({ route, navigation }) {
                         >
                             { t('productDescription') }
                         </Text>
-                        <Text style={styles.description}>
+                        <HTML source={{ html: htmlContent }} contentWidth={screenWidth} />
+                        {/* <Text style={styles.description}>
                             {descriptionNoHtml}
-                        </Text>
+                        </Text> */}
                     </View>
                 </View>
                 <View style={{ marginBottom: 30 }}>
