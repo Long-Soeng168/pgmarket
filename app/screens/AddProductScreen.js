@@ -194,8 +194,12 @@ const AddProductScreen = ({ navigation }) => {
     const renderLabelMain = () => {
         if (mainCategory || isFocusMain) {
             return (
-                <Text style={[styles.label, isFocusMain && { color: "blue" }]}>
-                    Main Category
+                <Text style={[
+                    styles.label, 
+                    isFocusMain && { color: "blue"},
+                    {marginBottom: 20}
+                ]}>
+                    {t('mainCate')}
                 </Text>
             );
         }
@@ -205,7 +209,7 @@ const AddProductScreen = ({ navigation }) => {
         if (category || isFocusCate) {
             return (
                 <Text style={[styles.label, isFocusCate && { color: "blue" }]}>
-                    Category
+                    {t('cate')}
                 </Text>
             );
         }
@@ -217,7 +221,7 @@ const AddProductScreen = ({ navigation }) => {
                 <Text
                     style={[styles.label, isFocusSubCate && { color: "blue" }]}
                 >
-                    Sub Category
+                    {t('subCate')}
                 </Text>
             );
         }
@@ -230,7 +234,7 @@ const AddProductScreen = ({ navigation }) => {
                 <Text
                     style={[styles.label, isFocusBrand && { color: "blue" }]}
                 >
-                    Brand
+                    {t('brand')}
                 </Text>
             );
         }
@@ -464,10 +468,11 @@ const AddProductScreen = ({ navigation }) => {
                             data={mainCate}
                             search
                             maxHeight={300}
-                            labelField="name_en"
+                            // labelField="name_en"
+                            labelField={ i18n.language == 'en' ? 'name_en' : 'name_kh' }
                             valueField="id"
                             placeholder={
-                                !isFocusMain ? "Select Main Category" : "..."
+                                !isFocusMain ? t('selectMainCate') : "..."
                             }
                             searchPlaceholder="Search..."
                             value={mainCategory}
@@ -511,10 +516,11 @@ const AddProductScreen = ({ navigation }) => {
                             data={filterCate}
                             search
                             maxHeight={300}
-                            labelField="name_en"
+                            // labelField="name_en"
+                            labelField={ i18n.language == 'en' ? 'name_en' : 'name_kh' }
                             valueField="id"
                             placeholder={
-                                !isFocusCate ? "Select Category" : "..."
+                                !isFocusCate ? t('selectCate') : "..."
                             }
                             searchPlaceholder="Search..."
                             value={category}
@@ -557,10 +563,10 @@ const AddProductScreen = ({ navigation }) => {
                             data={filterSubCate}
                             search
                             maxHeight={300}
-                            labelField="name_en"
+                            labelField={ i18n.language == 'en' ? 'name_en' : 'name_kh' }
                             valueField="id"
                             placeholder={
-                                !isFocusSubCate ? "Select Sub-Category" : "..."
+                                !isFocusSubCate ? t('selectSubCate') : "..."
                             }
                             searchPlaceholder="Search..."
                             value={subCategory}
@@ -605,7 +611,7 @@ const AddProductScreen = ({ navigation }) => {
                                 labelField="name"
                                 valueField="id"
                                 placeholder={
-                                    !isFocusBrand ? "Select Brand" : "..."
+                                    !isFocusBrand ? t('selectBrand') : "..."
                                 }
                                 searchPlaceholder="Search..."
                                 value={brand}
@@ -637,9 +643,9 @@ const AddProductScreen = ({ navigation }) => {
                             iconStyle={styles.iconStyle}
                             search
                             data={allColors}
-                            labelField="name"
+                            labelField={ i18n.language == 'en' ? 'name' : 'name_kh' }
                             valueField="id"
-                            placeholder="Select colors"
+                            placeholder={t('selectColor')}
                             searchPlaceholder="Search..."
                             //   value={selected}
                             value={selectedColors}
@@ -670,7 +676,7 @@ const AddProductScreen = ({ navigation }) => {
                             data={allSizes}
                             labelField="name"
                             valueField="id"
-                            placeholder="Select sizes"
+                            placeholder={t('selectSize')}
                             searchPlaceholder="Search..."
                             //   value={selected}
                             value={selectedSizes}
@@ -960,8 +966,9 @@ const styles = StyleSheet.create({
     label: {
         position: "absolute",
         backgroundColor: "white",
+        color: 'gray',
         left: 22,
-        top: 8,
+        top: -2,
         zIndex: 999,
         paddingHorizontal: 8,
         fontSize: 14,

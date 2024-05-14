@@ -12,6 +12,7 @@
     "noItem" : "មិនមានធាតុ",
     "brands" : "ម៉ាក",
     "brand" : "ម៉ាក",
+    "selectBrand" : "ជ្រើសរើស ម៉ាក",
     "favorite" : "ចូលចិត្ត",
     "cart" : "រទេះ",
     "account" : "គណនី",
@@ -33,7 +34,9 @@
     "totalPrice" : "តម្លៃសរុប",
     "note" : "ចំណាំ",
     "color" : "ពណ៌",
+    "selectColor" : "ជ្រើសរើស ពណ៌",
     "size" : "ទំហំ",
+    "selectSize" : "ជ្រើសរើស ទំហំ",
     "userInformation" : "ព័ត៌មានអ្នកប្រើប្រាស់",
     "name" : "ឈ្មោះ",
     "phone" : "លេខទូរស័ព្ទ",
@@ -89,5 +92,11 @@
     "userSuspended": "ហាងត្រូវបានផ្អាកដំណើរការ",
     "contactAdmin": "សូមទំនាក់ទំនងទៅកាន់អ្នកគ្រប់គ្រង PG Market",
     "inStock": "មានក្នុងស្តុក",
-    "outOfStock": "មិនមានក្នុងស្តុក"
+    "outOfStock": "មិនមានក្នុងស្តុក",
+    "mainCate": "ប្រភេទចម្បង",
+    "selectMainCate": "ជ្រើសរើស ប្រភេទចម្បង",
+    "cate": "ប្រភេទ",
+    "selectCate": "ជ្រើសរើស ប្រភេទ",
+    "subCate": "ប្រភេទរង",
+    "selectSubCate": "ជ្រើសរើស ប្រភេទរង"
 }

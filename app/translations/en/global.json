@@ -12,6 +12,7 @@
     "noItem" : "No Item",
     "brands" : "Brands",
     "brand" : "Brand",
+    "selectBrand" : "Select Brand",
     "favorite" : "Favorite",
     "cart" : "Cart",
     "account" : "Account",
@@ -33,7 +34,9 @@
     "totalPrice" : "Total Price",
     "note" : "Note",
     "color" : "Color",
+    "selectColor" : "Select Color",
     "size" : "Size",
+    "selectSize" : "Select Size",
     "userInformation" : "User Information",
     "name" : "Name",
     "phone" : "Phone",
@@ -89,5 +92,11 @@
     "userSuspended": "Shop Suspended",
     "contactAdmin": "Please contact PG Market administator",
     "inStock": "In Stock",
-    "outOfStock": "Out of Stock"
+    "outOfStock": "Out of Stock",
+    "mainCate": "Main Category",
+    "selectMainCate": "Select Main Category",
+    "cate": "Category",
+    "selectCate": "Select Category",
+    "subCate": "Sub Category",
+    "selectSubCate": "Select Sub Category"
 }
