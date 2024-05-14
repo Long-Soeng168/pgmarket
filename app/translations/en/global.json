@@ -85,5 +85,7 @@
     "terms": "Terms and Conditions",
     "return": "Return & Refund Policy",
     "support": "Support Policy",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "userSuspended": "Shop Suspended",
+    "contactAdmin": "Please contact PG Market administator"
 }

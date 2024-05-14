@@ -113,6 +113,27 @@ export default function ShopProfile({ navigation, route }) {
         >
             <View style={{ flex: 1 }}>
                 <ActivityIndicator visibility={isFetching} />
+                {
+                    shop.is_suspended == 1 
+                    &&
+                    <View
+                        style = {{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            opacity: 0.8,
+                            backgroundColor: colors.black,
+                            zIndex: 10000,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text style={{color: 'white', fontSize: 24, fontWeight: 'bold'}}>{t('userSuspended')}</Text>
+                        <Text style={{color: 'white'}}>{t('contactAdmin')}</Text>
+                    </View>
+                }
                 {!isFetching && (
                     <ScrollView>
                         <BackButton
