@@ -295,7 +295,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 },
                             ]}
                         >
-                            { productInfo.status == 1 ? 'In Stock' : 'Out of Stock' }
+                            { productInfo.status == 1 ? t('inStock') : t('outOfStock') }
                         </Text>
                     {isDiscount && (
                         <View style={{ alignItems: 'flex-start' }}>
