@@ -384,7 +384,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                     <View style={{ marginTop: 15, alignItems: "flex-start" }}>
                         {/* Video Play */}
                         {
-                            productInfo.video_url
+                            productInfo.video_url && productInfo.video_url != 'null'
                             &&
                             <TouchableOpacity
                                 style={{
