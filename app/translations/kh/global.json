@@ -87,5 +87,7 @@
     "support": "គោលនយោបាយគាំទ្រ",
     "privacyPolicy": "គោលការណ៍ឯកជនភាព",
     "userSuspended": "ហាងត្រូវបានផ្អាកដំណើរការ",
-    "contactAdmin": "សូមទំនាក់ទំនងទៅកាន់អ្នកគ្រប់គ្រង PG Market"
+    "contactAdmin": "សូមទំនាក់ទំនងទៅកាន់អ្នកគ្រប់គ្រង PG Market",
+    "inStock": "មានក្នុងស្តុក",
+    "outOfStock": "មិនមានក្នុងស្តុក"
 }

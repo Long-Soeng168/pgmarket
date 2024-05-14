@@ -87,5 +87,7 @@
     "support": "Support Policy",
     "privacyPolicy": "Privacy Policy",
     "userSuspended": "Shop Suspended",
-    "contactAdmin": "Please contact PG Market administator"
+    "contactAdmin": "Please contact PG Market administator",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock"
 }

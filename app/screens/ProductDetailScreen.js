@@ -11,7 +11,8 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    Dimensions
+    Dimensions,
+    Linking
 } from "react-native";
 import HTML from "react-native-render-html";
 import { Feather } from "@expo/vector-icons";
@@ -274,7 +275,6 @@ export default function ProductDetailScreen({ route, navigation }) {
                                 },
                             ]}
                         >
-                            {" "}
                             $ {price}{" "}
                         </Text>
                         {isDiscount && (
@@ -284,6 +284,19 @@ export default function ProductDetailScreen({ route, navigation }) {
                             </Text>
                         )}
                     </Text>
+                    <Text
+                            style={[
+                                styles.price,
+                                {
+                                    fontSize: 16,
+                                    marginVertical: 10,
+                                    marginBottom: 5, 
+                                    color: productInfo.status == 1 ? colors.primary : "red",
+                                },
+                            ]}
+                        >
+                            { productInfo.status == 1 ? 'In Stock' : 'Out of Stock' }
+                        </Text>
                     {isDiscount && (
                         <View style={{ alignItems: 'flex-start' }}>
                             <Text style={{
@@ -370,31 +383,36 @@ export default function ProductDetailScreen({ route, navigation }) {
 
                     <View style={{ marginTop: 15, alignItems: "flex-start" }}>
                         {/* Video Play */}
-                        {/* <View
-                            style={{
-                                backgroundColor: colors.secondary,
-                                borderRadius: 5,
-                                flexDirection: "row",
-                                alignItems: "center",
-                                padding: 10,
-                                marginBottom: 10,
-                            }}
-                        >
-                            <Feather
-                                name="play"
-                                size={24}
-                                color={colors.dark}
-                            />
-                            <Text
+                        {
+                            productInfo.video_url
+                            &&
+                            <TouchableOpacity
                                 style={{
-                                    color: colors.dark,
-                                    textAlign: "center",
-                                    fontSize: 16,
+                                    backgroundColor: colors.secondary,
+                                    borderRadius: 5,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    padding: 10,
+                                    marginBottom: 10,
                                 }}
+                                onPress={()=>{ Linking.openURL(productInfo.video_url); }}
                             >
-                                Video
-                            </Text>
-                        </View> */}
+                                <Feather
+                                    name="play"
+                                    size={24}
+                                    color={colors.dark}
+                                />
+                                <Text
+                                    style={{
+                                        color: colors.dark,
+                                        textAlign: "center",
+                                        fontSize: 16,
+                                    }}
+                                >
+                                    Video
+                                </Text>
+                            </TouchableOpacity>
+                        }
                         {/* <LabelValue label="" /> */}
                         <Text
                             style={{
