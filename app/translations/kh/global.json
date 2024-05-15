@@ -87,7 +87,7 @@
     "contactUs": "ទំនាក់ទំនង",
     "terms": "លក្ខខណ្ឌ",
     "return": "គោលការណ៍បង្វិលទំនិញ",
-    "support": "គោលនយោបាយគាំទ្រ",
+    "support": "គោលការណ៍គាំទ្រ",
     "privacyPolicy": "គោលការណ៍ឯកជនភាព",
     "userSuspended": "ហាងត្រូវបានផ្អាកដំណើរការ",
     "contactAdmin": "សូមទំនាក់ទំនងទៅកាន់អ្នកគ្រប់គ្រង PG Market",
@@ -98,5 +98,6 @@
     "cate": "ប្រភេទ",
     "selectCate": "ជ្រើសរើស ប្រភេទ",
     "subCate": "ប្រភេទរង",
-    "selectSubCate": "ជ្រើសរើស ប្រភេទរង"
+    "selectSubCate": "ជ្រើសរើស ប្រភេទរង",
+    "pgInfo": "ព័ត៌មាន PG Market"
 }

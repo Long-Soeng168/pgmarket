@@ -311,6 +311,22 @@ const ProfileScreen = ({ navigation }) => {
               </View>
             </TouchableOpacity>
             {/* End Privacy Policy */}
+            {userInfo.type_roles === "dealer" && (
+              <TouchableOpacity
+                style={{
+                  width: "100%",
+                  padding: 5,
+                }}
+                onPress={() => navigation.navigate("PgInfo")}
+              >
+                <View style={styles.cardButton}>
+                  <Entypo name="news" size={24} color={colors.primary} />
+                  <Text style={styles.cardText} numberOfLines={1}>
+                    {t("pgInfo")}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
