@@ -60,7 +60,7 @@ export default function ProductDetailScreen({ route, navigation }) {
     //     "https://pgmarket.online/public/images/product/" +
     //     item.thumbnail;
     const [imageUrl, setImageUrl] = React.useState(
-        "https://pgmarket.online/public/images/product/" +
+        "https://pgmarket.online/public/images/product/thumb/" +
             item.thumbnail
     );
     const handleImageUrlSelect = (url) => {
