@@ -40,6 +40,7 @@ export default function ShopProductDetail({ route, navigation }) {
     
     const [loading, setLoading] = React.useState(true);
     const [product, setProduct] = React.useState([]);
+    const [productStatus, setProductStatus] = React.useState(item.status);
     
     const productInfo = product ? product.product : null;
     const productMainCategory = product ? product.mainCategory : null;
@@ -73,7 +74,7 @@ export default function ShopProductDetail({ route, navigation }) {
             .then((result) => {
                 console.log(JSON.stringify(result, null, 2));
                 setProduct(result);
-
+                setProductStatus(result.product.status);
                 setLoading(false);
             })
             .catch((error) => console.error(error));
@@ -127,6 +128,48 @@ export default function ShopProductDetail({ route, navigation }) {
         );
     };
 
+    const updateStatus = () => {
+        console.log('Update status Product');
+        Alert.alert(
+            "Status Stock",
+            "Are you sure you want to update stock?",
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "Update",
+                    onPress: () => {
+                        console.log(`Update Order: ${item.id}`);
+                        const myHeaders = {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + userToken,
+                        };
+
+                        const requestOptions = {
+                            method: "PUT",
+                            headers: myHeaders,
+                            redirect: "follow",
+                        };
+
+                        fetch(
+                            "https://pgmarket.online/api/updateStatus/" +
+                            item.id,
+                            requestOptions
+                        )
+                            .then((response) => response.json())
+                            .then((result) => {
+                                console.log(JSON.stringify(result, null, 2)); 
+                                // navigation.pop();
+                                // navigation.replace('ShopProfile');
+                                setProductStatus(result.productStatus);
+                            })
+                            .catch((error) => console.log("error", error));
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
     const UpdateDetails = () => {
         console.log('Update Details');
         navigation.navigate('UpdateProductScreen' , product);
@@ -159,6 +202,37 @@ export default function ShopProductDetail({ route, navigation }) {
                     bgColor={colors.danger}
                     onPress={DeleteProduct}
                 />
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={()=>{updateStatus()}}
+                    style={{
+                        backgroundColor: colors.warning,
+                        alignItems: "center",
+                        justifyContent: 'center',
+                        padding: 10,
+                        borderRadius: 10,
+                        flex: 1,
+                    }}
+                >
+                    <View
+                        style={{ flexDirection: "row", gap: 10, alignItems: "center", }}
+                    >
+                        {/* <FontAwesome
+                            name="shopping-cart"
+                            size={24}
+                            color={colors.white}
+                        /> */}
+                        <Text
+                            style={{
+                                color: colors.white,
+                                fontSize: 16,
+                                fontWeight: "500",
+                            }}
+                        >
+                            { productStatus == 1 ?  t('inStock') : t('outOfStock')}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 <Button
                     title="updateDetails"
                     bgColor={colors.primary}
