@@ -450,7 +450,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                                     item={item}
                                     title={item.pro_name}
                                     imageUrl={
-                                        "https://pgmarket.online/public/images/product/" +
+                                        "https://pgmarket.online/public/images/product/thumb/" +
                                         item.thumbnail
                                     }
                                     description={item.description}

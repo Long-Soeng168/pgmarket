@@ -178,7 +178,7 @@ export default function ShopScreen({ navigation, route }) {
                                                 width={width}
                                                 title={item.pro_name}
                                                 imageUrl={
-                                                    "https://pgmarket.online/public/images/product/" +
+                                                    "https://pgmarket.online/public/images/product/thumb/" +
                                                     item.thumbnail
                                                 }
                                                 description={item.description}

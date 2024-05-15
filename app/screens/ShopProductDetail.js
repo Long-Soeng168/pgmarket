@@ -52,7 +52,7 @@ export default function ShopProductDetail({ route, navigation }) {
 
     if(productInfo) {
         var imageUrl =
-            "https://pgmarket.online/public/images/product/" + productInfo.thumbnail;
+            "https://pgmarket.online/public/images/product/thumb/" + productInfo.thumbnail;
         var title = productInfo.pro_name;
         var descriptionNoHtml = stripHtmlTags(productInfo.description);
         var htmlContent = productInfo.description;
