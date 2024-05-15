@@ -124,10 +124,7 @@ const PgInfo = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.orderContainer}>
-      <View style={styles.orderColumn}>
-        <Text style={styles.headerText}>{item.name}</Text>
-      </View>
-      <View style={styles.orderColumn}>
+      <View>
         <Text style={styles.orderText}>
           {new Date(item.created_at).getDate()}{" "}
           {new Date(item.created_at).toLocaleString("default", {
@@ -136,6 +133,11 @@ const PgInfo = ({ navigation }) => {
           {new Date(item.created_at).getFullYear()}
         </Text>
       </View>
+
+      <View style={styles.orderColumn}>
+        <Text style={styles.headerText}>{item.name}</Text>
+      </View>
+      
       <View style={styles.optionsContainer}>
         <TouchableOpacity onPress={() => Linking.openURL("https://pgmarket.online/public/images/seller_info/" + item.image)}>
           <MaterialCommunityIcons
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: "bold",
     fontSize: 16,
-    color: colors.dark,
+    color: "black",
   },
   orderContainer: {
     flexDirection: "row",
@@ -217,10 +219,13 @@ const styles = StyleSheet.create({
   orderText: {
     fontSize: 16,
     color: "#555",
+    marginRight: 20
   },
   optionsContainer: {
     flexDirection: "row",
     columnGap: 5,
+    marginLeft: 8,
+
   },
 });
 
