@@ -77,7 +77,7 @@ const AddProductScreen = ({ navigation, route }) => {
     const [mainCategory, setMainCategory] = useState(productInfo.main_cate_id);
     const [category, setCategory] = useState(productInfo.cate_id);
     const [subCategory, setSubCategory] = useState(productInfo.sub_cate_id);
-    const [brand, setBrand] = useState(productInfo.brand_id);
+    const [brand, setBrand] = useState(productInfo.brand_id || "");
     const [productName, setProductName] = useState(productInfo.pro_name);
     const [unitPrice, setUnitPrice] = useState(productInfo.price);
     const [discount, setDiscount] = useState(productInfo.discount || "0");
@@ -214,7 +214,7 @@ const AddProductScreen = ({ navigation, route }) => {
         if (mainCategory || isFocusMain) {
             return (
                 <Text style={[styles.label, isFocusMain && { color: "blue" }]}>
-                    Main Category
+                    {t('mainCate')}
                 </Text>
             );
         }
@@ -224,7 +224,7 @@ const AddProductScreen = ({ navigation, route }) => {
         if (category || isFocusCate) {
             return (
                 <Text style={[styles.label, isFocusCate && { color: "blue" }]}>
-                    Category
+                    {t('cate')}
                 </Text>
             );
         }
@@ -236,7 +236,7 @@ const AddProductScreen = ({ navigation, route }) => {
                 <Text
                     style={[styles.label, isFocusSubCate && { color: "blue" }]}
                 >
-                    Sub Category
+                    {t('subCate')}
                 </Text>
             );
         }
@@ -248,7 +248,7 @@ const AddProductScreen = ({ navigation, route }) => {
                 <Text
                     style={[styles.label, isFocusBrand && { color: "blue" }]}
                 >
-                    Brand
+                    {t('brand')}
                 </Text>
             );
         }
@@ -320,7 +320,7 @@ const AddProductScreen = ({ navigation, route }) => {
     };
 
     const addProduct = () => {
-        // console.log(selectedColors);
+        // console.log(brand);
         // Validate fields
         validateField("category", category);
         validateField("subCategory", subCategory);
@@ -359,8 +359,8 @@ const AddProductScreen = ({ navigation, route }) => {
         }
 
         if(discount !== "") formdata.append("discount", discount);
-        if(videoUrl !== "") formdata.append("video_url", videoUrl);
-        if(description !== "") formdata.append("description", description);
+        formdata.append("video_url", videoUrl);
+        formdata.append("description", description);
         if(shipping !== "") formdata.append("shipping", shipping);
         if(brand !== "") formdata.append("brand_id", brand);
         if(selectedColors.length > 0) formdata.append("colors", JSON.stringify(selectedColors));
@@ -479,10 +479,10 @@ const AddProductScreen = ({ navigation, route }) => {
                             data={mainCate}
                             search
                             maxHeight={300}
-                            labelField="name_en"
+                            labelField={ i18n.language == 'en' ? 'name_en' : 'name_kh' }
                             valueField="id"
                             placeholder={
-                                !isFocusMain ? "Select Main Category" : "..."
+                                !isFocusMain ? t('selectMainCate') : "..."
                             }
                             searchPlaceholder="Search..."
                             value={mainCategory}
@@ -526,10 +526,10 @@ const AddProductScreen = ({ navigation, route }) => {
                             data={filterCate}
                             search
                             maxHeight={300}
-                            labelField="name_en"
+                            labelField={ i18n.language == 'en' ? 'name_en' : 'name_kh' }
                             valueField="id"
                             placeholder={
-                                !isFocusCate ? "Select Category" : "..."
+                                !isFocusCate ? t('selectCate') : "..."
                             }
                             searchPlaceholder="Search..."
                             value={category}
@@ -572,10 +572,10 @@ const AddProductScreen = ({ navigation, route }) => {
                             data={filterSubCate}
                             search
                             maxHeight={300}
-                            labelField="name_en"
+                            labelField={ i18n.language == 'en' ? 'name_en' : 'name_kh' }
                             valueField="id"
                             placeholder={
-                                !isFocusSubCate ? "Select Sub-Category" : "..."
+                                !isFocusSubCate ? t('selectSubCate') : "..."
                             }
                             searchPlaceholder="Search..."
                             value={subCategory}
@@ -620,7 +620,7 @@ const AddProductScreen = ({ navigation, route }) => {
                                 labelField="name"
                                 valueField="id"
                                 placeholder={
-                                    !isFocusBrand ? "Select Brand" : "..."
+                                    !isFocusBrand ? t('selectBrand') : "..."
                                 }
                                 searchPlaceholder="Search..."
                                 value={brand}
@@ -654,7 +654,7 @@ const AddProductScreen = ({ navigation, route }) => {
                             data={allColors}
                             labelField="name"
                             valueField="id"
-                            placeholder="Select colors"
+                            placeholder={t('selectColor')}
                             searchPlaceholder="Search..."
                             //   value={selected}
                             value={selectedColors}
@@ -685,7 +685,7 @@ const AddProductScreen = ({ navigation, route }) => {
                             data={allSizes}
                             labelField="name"
                             valueField="id"
-                            placeholder="Select sizes"
+                            placeholder={t('selectSize')}
                             searchPlaceholder="Search..."
                             //   value={selected}
                             value={selectedSizes}
@@ -721,7 +721,7 @@ const AddProductScreen = ({ navigation, route }) => {
                         <InputField
                             placeholder="Unit Price"
                             headTitle="price"
-                            value={unitPrice}
+                            value={unitPrice ? parseFloat(unitPrice).toFixed(2) : ''}
                             onChangeText={(text) => {
                                 setUnitPrice(text);
                                 validateField("unitPrice", text);
@@ -793,7 +793,7 @@ const AddProductScreen = ({ navigation, route }) => {
                     <InputField
                         placeholder="Video URL"
                         headTitle="videoUrl"
-                        value={videoUrl}
+                        value={videoUrl !== "null" && videoUrl ? videoUrl : ''}
                         onChangeText={(text) => {
                             setVideoUrl(text);
                             validateField("videoUrl", text);
@@ -819,7 +819,7 @@ const AddProductScreen = ({ navigation, route }) => {
                         numberOfLines={10} 
                         style={[styles.input, {minHeight: 70, textAlignVertical: 'top'}]}
                         placeholder="Description"
-                        value={description}
+                        value={description !== "null" && description ? description : ''}
                         onChangeText={(text) => setDescription(text)}
                     />
 
@@ -972,8 +972,9 @@ const styles = StyleSheet.create({
     label: {
         position: "absolute",
         backgroundColor: "white",
+        color: 'gray',
         left: 22,
-        top: 8,
+        top: -2,
         zIndex: 999,
         paddingHorizontal: 8,
         fontSize: 14,
