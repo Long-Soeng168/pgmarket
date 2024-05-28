@@ -17,12 +17,14 @@ import * as ImagePicker from "expo-image-picker";
 import colors from "../../config/colors";
 import HeaderText from "../../components/HeaderText";
 import { userContext } from "../../../App";
+import { useTranslation } from "react-i18next";
 
 const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
     const [user, setUser] = React.useContext(userContext);
     const [reload, setReload] = React.useState(false);
     const userInfo = user ? user.user : null;
     // console.log(userInfo);
+    const [t, i18n] = useTranslation("global");
 
     const [name, setName] = useState(userInfo && userInfo.name);
     const [phoneNumber, setPhoneNumber] = useState(userInfo && userInfo.phone);
@@ -178,7 +180,7 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
                         >
                         <Ionicons name="close" size={28} color="white" />
                     </TouchableOpacity>
-                    <Text style={styles.label}>Username:</Text>
+                    <Text style={styles.label}>{t('name')}</Text>
                         <TextInput
                             style={styles.input}
                             placeholder="Name"
@@ -188,7 +190,7 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
                         {nameError && (
                             <Text style={styles.errorText}>{nameError}</Text>
                             )}
-                            <Text style={styles.label}>Phone:</Text>
+                            <Text style={styles.label}>{t('phone')}</Text>
                         <TextInput
                             style={styles.input}
                             placeholder="Phone Number"
@@ -199,7 +201,7 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
                         {phoneNumberError && (
                             <Text style={styles.errorText}>{phoneNumberError}</Text>
                             )}
-                            <Text style={styles.label}>Email:</Text>
+                            <Text style={styles.label}>{t('email')}</Text>
                         <TextInput
                             style={styles.input}
                             placeholder="Email"
@@ -211,7 +213,7 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
                         {emailError && (
                             <Text style={styles.errorText}>{emailError}</Text>
                             )}
-                            <Text style={styles.label}>Address:</Text>
+                            <Text style={styles.label}>{t('addressReceiveProduct')}</Text>
                         <TextInput
                             multiline
                             style={[styles.input,
@@ -236,7 +238,7 @@ const AccountDetailScreen = ({navigation, isVisible, setIsVisible}) => {
                             style={styles.button}
                             onPress={updateDetails}
                         >
-                            <Text style={styles.buttonText}>Update Details</Text>
+                            <Text style={styles.buttonText}>{t('update')}</Text>
                         </TouchableOpacity>
                 </View>
             </View>

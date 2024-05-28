@@ -353,7 +353,7 @@ const CheckoutProcess = ({ navigation }) => {
                                 {userInfo && userInfo.email}
                             </Text>
                             <Text style={styles.value}>
-                                <Text style={styles.label}>{t('address')}: </Text>
+                                <Text style={styles.label}>{t('addressReceiveProduct')}: </Text>
                                 {userInfo && userInfo.address}
                             </Text>
                         </TouchableOpacity>

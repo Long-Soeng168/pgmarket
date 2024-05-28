@@ -30,6 +30,7 @@ const RegisterScreenCart = () => {
   const [passwordMatchError, setPasswordMatchError] = useState(null);
   
   const [errors, setErrors] = useState(false);
+  const [errorsFromServer, setErrorsFromServer] = useState({});
 
   const validateField = (field, value) => {
     switch (field) {
@@ -128,6 +129,7 @@ const RegisterScreenCart = () => {
                   navigation.replace("CartScreen");
               } 
               if(result.errors) {
+                setErrorsFromServer(result.errors);
                 // console.log(JSON.stringify(result, null, 2)); 
                 setErrors(true);
               }
@@ -215,7 +217,7 @@ const RegisterScreenCart = () => {
                </View>
             {emailError && <Text style={styles.errorText}>{emailError}</Text>}
             <View style={{ width: '100%',  }}>
-              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('address')}</Text>
+              <Text style={{ fontWeight: 'bold', marginBottom: 3 }}>{t('addressReceiveProduct')}</Text>
             <TextInput
               style={styles.input}
               placeholder="Address"
@@ -267,7 +269,9 @@ const RegisterScreenCart = () => {
           {confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
           {passwordMatchError && <Text style={styles.errorText}>{passwordMatchError}</Text>}
       
-          {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>Phone or Email was Taken</Text>}
+          {errors && <Text style={[styles.errorText, {textAlign: 'center', width: '100%'}]}>
+            {errorsFromServer.phone[0]}
+            </Text>}
           <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text style={styles.buttonText}>{t('register')}</Text>
           </TouchableOpacity>

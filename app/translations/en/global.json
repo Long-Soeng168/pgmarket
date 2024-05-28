@@ -43,6 +43,7 @@
     "email" : "Email",
     "emailOrPhone" : "Email or Phone",
     "address" : "Address",
+    "addressReceiveProduct" : "Address Receive Product",
     "password" : "Password",
     "dontHasAcc" : "Don't have an account? Register here",
     "hasAcc" : "Already have an account? Login here",
