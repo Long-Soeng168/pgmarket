@@ -1,5 +1,5 @@
 {
-    "message" : "សួស្ដី ពិភពលោក",
+    "message" : "សារ",
     "digitalMarket" : "ផ្សារឌីជីថល",
     "newProduct" : "ផលិតផលថ្មី",
     "bestSelling" : "ផលិតផលលក់ដាច់",
@@ -39,6 +39,7 @@
     "selectSize" : "ជ្រើសរើស ទំហំ",
     "userInformation" : "ព័ត៌មានអ្នកប្រើប្រាស់",
     "name" : "ឈ្មោះ",
+    "productCode" : "កូដផលិតផល",
     "phone" : "លេខទូរស័ព្ទ",
     "email" : "អ៊ីម៉ែល",
     "emailOrPhone" : "អ៊ីម៉ែល ឬ លេខទូរស័ព្ទ",
@@ -100,5 +101,8 @@
     "selectCate": "ជ្រើសរើស ប្រភេទ",
     "subCate": "ប្រភេទរង",
     "selectSubCate": "ជ្រើសរើស ប្រភេទរង",
-    "pgInfo": "ព័ត៌មាន PG Market"
+    "pgInfo": "ព័ត៌មាន PG Market",
+    "differenceShopCannotBuy": "ហាងខុសគ្នាមិនអាចបន្ថែមទៅរទេះ!",
+    "dealerAccCannotBuy": "គណនីហាងមិនអាចទិញផលិតផលបានទេ!",
+    "outOfStockCannotAdd": "ទំនិញមិនមានក្នុងស្តុក!"
 }

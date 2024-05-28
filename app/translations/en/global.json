@@ -1,5 +1,5 @@
 {
-    "message" : "Hello World!",
+    "message" : "Message",
     "digitalMarket" : "Digital Market",
     "newProduct" : "New Product",
     "bestSelling" : "Best Selling",
@@ -39,6 +39,7 @@
     "selectSize" : "Select Size",
     "userInformation" : "User Information",
     "name" : "Name",
+    "productCode" : "Product Code",
     "phone" : "Phone",
     "email" : "Email",
     "emailOrPhone" : "Email or Phone",
@@ -100,5 +101,8 @@
     "selectCate": "Select Category",
     "subCate": "Sub Category",
     "selectSubCate": "Select Sub Category",
-    "pgInfo": "PG Market Informations"
+    "pgInfo": "PG Market Informations",
+    "differenceShopCannotBuy": "Difference shop cannot add to cart!",
+    "dealerAccCannotBuy": "Dealer account cannot buy!",
+    "outOfStockCannotAdd": "Off stock, Can't buy!"
 }

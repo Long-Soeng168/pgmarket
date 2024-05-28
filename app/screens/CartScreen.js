@@ -35,7 +35,7 @@ export default function CartScreen({navigation}) {
             ? 
             navigation.navigate('CheckoutProcess')
             :
-            Alert.alert('Message', 'Dealer account cannot buy!')
+            Alert.alert('Message', t('dealerAccCannotBuy'))
             
 
         }else {
