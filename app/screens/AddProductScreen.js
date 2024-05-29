@@ -698,8 +698,8 @@ const AddProductScreen = ({ navigation }) => {
 
                     {/* InputFields for Product Name, Unit Price, Discount, Video URL, and Shipping */}
                     <InputField
-                        placeholder="Product Name"
-                        headTitle="name"
+                        placeholder="Product Code"
+                        headTitle="productCode"
                         value={productName}
                         onChangeText={(text) => {
                             setProductName(text);
