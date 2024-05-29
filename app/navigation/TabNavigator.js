@@ -98,6 +98,8 @@ export default function TabNavigator() {
                   backgroundColor: colors.accent,
                   paddingHorizontal: 4,
                   borderRadius: 999,
+                  borderWidth: 1,
+                  borderColor: 'white'
                 }}
               >
                 <Text
