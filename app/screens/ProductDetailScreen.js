@@ -401,7 +401,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                     fontSize: 16,
                   }}
                 >
-                  Telegram's Shop
+                  {i18n.language == "en" ? "Telegram's Shop" : "តេឡេក្រាមហាង"}
                 </Text>
               </TouchableOpacity>
             )}
@@ -431,7 +431,7 @@ export default function ProductDetailScreen({ route, navigation }) {
                     fontSize: 16,
                   }}
                 >
-                  Video
+                  {i18n.language == "en" ? "Video" : "វីដេអូ"}
                 </Text>
               </TouchableOpacity>
             )}
