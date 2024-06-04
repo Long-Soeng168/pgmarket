@@ -1,20 +1,16 @@
 import React from "react";
 import {
   FlatList,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   View,
-  Platform,
   Text,
-  Image,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
 
 import ListHeader from "../components/ListHeader";
-import categories from "../config/categories";
 import Card from "../components/Card";
 import CategoryComponent from "../components/CategoryComponent";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -41,7 +37,7 @@ const fetchDataPage = async (url, page, setter) => {
   try {
     const response = await fetch(`${url}?page=${page}`);
     const data = await response.json();
-    setter((prevData) => [...prevData, ...data.data]); // Append new data to existing data
+    setter((prevData) => [...prevData, ...data.data]);
   } catch (error) {
     console.error(error);
   }
@@ -50,11 +46,19 @@ const fetchDataPage = async (url, page, setter) => {
 export default function HomeScreen({ navigation }) {
   const [isFetching, setIsFetching] = React.useState(true);
   const [categories, setCategories] = React.useState([]);
-
   const [slides, setSlides] = React.useState([]);
   const [banners, setBanners] = React.useState([]);
+  const [newProducts, setNewProducts] = React.useState([]);
+  const [newProductsPage, setNewProductsPage] = React.useState(1);
+  const [bestSellingProducts, setBestSellingProducts] = React.useState([]);
+  const [bestSellingPage, setBestSellingPage] = React.useState(1);
+  const [allProducts, setAllProducts] = React.useState([]);
+  const [allProductsPage, setAllProductsPage] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
+  const [noMoreProduct, setNoMoreProduct] = React.useState(false);
 
   const [t, i18n] = useTranslation("global");
+
   const handleChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
     storage.storeLanguage(lang);
@@ -62,13 +66,7 @@ export default function HomeScreen({ navigation }) {
 
   const restoreLanguage = async () => {
     const language = await storage.getLanguage("language");
-    // const token = JSON.parse(tokenString);
-    let initLng = "en";
-    if (language == "kh") {
-      initLng = "kh";
-    }
-    i18n.changeLanguage(initLng);
-    console.log(JSON.stringify(language, null, 2));
+    i18n.changeLanguage(language || "en");
   };
 
   React.useEffect(() => {
@@ -80,75 +78,66 @@ export default function HomeScreen({ navigation }) {
       );
       await fetchData("https://pgmarket.online/api/getslides", setSlides);
       await fetchData("https://pgmarket.online/api/getbanners", setBanners);
-
       setIsFetching(false);
     };
-
     fetchDataAsync();
   }, []);
 
-  const [newProducts, setNewProducts] = React.useState([]);
-  const [newProductsPage, setNewProductsPage] = React.useState(1);
   React.useEffect(() => {
-    const fetchDataAsync = async () => {
+    const fetchNewProducts = async () => {
       await fetchDataPage(
         "https://pgmarket.online/api/getnewproducts",
         newProductsPage,
         setNewProducts
       );
     };
-
-    fetchDataAsync();
+    fetchNewProducts();
   }, [newProductsPage]);
 
   const handleLoadMoreNewProduct = () => {
-    newProductsPage < 3 && setNewProductsPage((prevPage) => prevPage + 1); // Load next page
+    if (newProductsPage < 3) setNewProductsPage((prevPage) => prevPage + 1);
   };
 
-  const [bestSellingProducts, setBestSellingProducts] = React.useState([]);
-  const [bestSellingPage, setBestSellingPage] = React.useState(1);
   React.useEffect(() => {
-    const fetchDataAsync = async () => {
+    const fetchBestSellingProducts = async () => {
       await fetchDataPage(
         "https://pgmarket.online/api/getbestselling",
         bestSellingPage,
         setBestSellingProducts
       );
     };
-
-    fetchDataAsync();
+    fetchBestSellingProducts();
   }, [bestSellingPage]);
 
   const handleLoadMoreBestSelling = () => {
-    bestSellingPage < 3 && setBestSellingPage((prevPage) => prevPage + 1); // Load next page
+    if (bestSellingPage < 3) setBestSellingPage((prevPage) => prevPage + 1);
   };
-  // End Get New Product
 
-  const [allProducts, setAllProducts] = React.useState([]);
-  const [allProductsPage, setAllProductsPage] = React.useState(1);
-  const [loading, setLoading] = React.useState(false);
-  const [noMoreProduct, setNoMoreProduct] = React.useState(false);
   React.useEffect(() => {
-    fetch("https://pgmarket.online/api/getallproducts?page=" + allProductsPage)
-      .then((response) => response.json())
-      .then((result) => {
+    const fetchAllProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://pgmarket.online/api/getallproducts?page=${allProductsPage}`
+        );
+        const result = await response.json();
         if (result.data.length < 1) {
           setNoMoreProduct(true);
           return;
         }
-        setAllProducts((preProducts) => [...preProducts, ...result.data]);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+        setAllProducts((prevProducts) => [...prevProducts, ...result.data]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllProducts();
   }, [allProductsPage]);
 
   const handlePageLoad = () => {
-    setLoading(true);
-    setAllProductsPage((preValue) => preValue + 1);
+    setAllProductsPage((prevPage) => prevPage + 1);
   };
-
-  // console.log(JSON.stringify(categories, null, 2));
-  // console.log(JSON.stringify(banners, null, 2));
 
   return (
     <View style={{ flex: 1 }}>
@@ -166,7 +155,6 @@ export default function HomeScreen({ navigation }) {
               images={slides}
               endPoint="https://pgmarket.online/public/images/slide/"
             />
-            {/* Categories */}
             <Text
               style={{
                 marginLeft: 15,
@@ -189,9 +177,7 @@ export default function HomeScreen({ navigation }) {
                 padding: 10,
               }}
             />
-            {/* List items */}
             <View style={styles.listContainer}>
-              {/* New Products */}
               <View style={{ marginBottom: 30 }}>
                 <ListHeader
                   title="newProduct"
@@ -208,10 +194,7 @@ export default function HomeScreen({ navigation }) {
                     <Card
                       item={item}
                       title={item.pro_name}
-                      imageUrl={
-                        "https://pgmarket.online/public/images/product/thumb/" +
-                        item.thumbnail
-                      }
+                      imageUrl={`https://pgmarket.online/public/images/product/thumb/${item.thumbnail}`}
                       description={item.description}
                       price={item.price}
                     />
@@ -224,9 +207,6 @@ export default function HomeScreen({ navigation }) {
                   onEndReachedThreshold={0.1}
                 />
               </View>
-              {/* Banner 1 */}
-              {/* <BannerComponent /> */}
-
               <View style={{ marginBottom: 15 }}>
                 <Slider
                   addStyle={{
@@ -238,8 +218,6 @@ export default function HomeScreen({ navigation }) {
                   endPoint="https://pgmarket.online/public/images/banner/"
                 />
               </View>
-
-              {/* Best Selling */}
               {bestSellingProducts.length > 0 && (
                 <View style={{ marginBottom: 20 }}>
                   <ListHeader
@@ -256,10 +234,7 @@ export default function HomeScreen({ navigation }) {
                       <Card
                         item={item}
                         title={item.pro_name}
-                        imageUrl={
-                          "https://pgmarket.online/public/images/product/thumb/" +
-                          item.thumbnail
-                        }
+                        imageUrl={`https://pgmarket.online/public/images/product/thumb/${item.thumbnail}`}
                         description={item.description}
                         price={item.price}
                       />
@@ -274,10 +249,6 @@ export default function HomeScreen({ navigation }) {
                   />
                 </View>
               )}
-              {/* Banner 2 */}
-
-              {/* All Product */}
-
               {allProducts.length > 0 && (
                 <>
                   <View
@@ -325,10 +296,7 @@ export default function HomeScreen({ navigation }) {
                           item={item}
                           width={width}
                           title={item.pro_name}
-                          imageUrl={
-                            "https://pgmarket.online/public/images/product/thumb/" +
-                            item.thumbnail
-                          }
+                          imageUrl={`https://pgmarket.online/public/images/product/thumb/${item.thumbnail}`}
                           description={item.description}
                           price={item.price}
                         />
@@ -375,14 +343,11 @@ export default function HomeScreen({ navigation }) {
           </View>
         </ScrollView>
       )}
-
-      {/* <StatusBar /> */}
       <StatusBar backgroundColor="tomato" barStyle="light-content" />
     </View>
   );
 }
 
-//HomeScreen Style
 const styles = StyleSheet.create({
   body: {
     backgroundColor: colors.white,
@@ -393,25 +358,3 @@ const styles = StyleSheet.create({
     // paddingTop: 20,
   },
 });
-
-// Banner Component
-function BannerComponent() {
-  return (
-    <View
-      style={{
-        padding: 10,
-        marginBottom: 10,
-      }}
-    >
-      <Image
-        source={{ uri: "https://source.unsplash.com/2cFZ_FB08UM" }}
-        style={{
-          width: "100%",
-          height: 70,
-          objectFit: "cover",
-          borderRadius: 10,
-        }}
-      />
-    </View>
-  );
-}
