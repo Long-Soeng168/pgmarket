@@ -30,6 +30,7 @@
     "addToCart": "Add To Cart",
     "removeFromCart": "Remove From Cart",
     "productDescription": "Product Description",
+    "checkouted": "Checkout",
     "checkout": "Checkout",
     "totalPrice": "Total Price",
     "note": "Note",
@@ -105,5 +106,6 @@
     "pgInfo": "PG Market Informations",
     "differenceShopCannotBuy": "Difference shop cannot add to cart!",
     "dealerAccCannotBuy": "Dealer account cannot buy!",
+    "finishPayment": "When finish please click Checkout",
     "outOfStockCannotAdd": "Off stock, Can't buy!"
 }

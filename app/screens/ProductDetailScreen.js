@@ -378,6 +378,34 @@ export default function ProductDetailScreen({ route, navigation }) {
               description={shopInfo.shop_address}
             />
           </TouchableOpacity>
+          <View style={{ marginTop: 15, alignItems: "flex-start" }}>
+            {shopInfo.telegram_link && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#0088cc",
+                  borderRadius: 5,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 5,
+                  padding: 10,
+                }}
+                onPress={() => {
+                  Linking.openURL(shopInfo.telegram_link);
+                }}
+              >
+                <FontAwesome name="telegram" size={26} color="white" />
+                <Text
+                  style={{
+                    color: colors.white,
+                    textAlign: "center",
+                    fontSize: 16,
+                  }}
+                >
+                  Telegram's Shop
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
 
           <View style={{ marginTop: 15, alignItems: "flex-start" }}>
             {/* Video Play */}
